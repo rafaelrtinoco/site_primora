@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, ShieldCheck } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { Menu, X} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Logo from "/primora_horizontal.png";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -10,32 +11,33 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
-    { name: 'Soluções', href: '#solutions' },
-    { name: 'Como Funciona', href: '#process' },
-    { name: 'Planos', href: '#plans' },
-    { name: 'Quem Somos', href: '#about' }, // Assuming about might be added later or integrated
-    { name: 'Contato', href: '#cta' },
+    { name: "Soluções", href: "#solutions" },
+    { name: "Como Funciona", href: "#process" },
+    { name: "Planos", href: "#plans" },
+    { name: "Quem Somos", href: "#about" }, // Assuming about might be added later or integrated
+    { name: "Contato", href: "#cta" },
   ];
 
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+        scrolled
+          ? "bg-white/80 backdrop-blur-md shadow-sm py-4"
+          : "bg-transparent py-6"
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between">
-          
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
-            <ShieldCheck className="w-8 h-8 text-secondary" />
+          <a href="#" className="flex items-center gap-2">            
             <span className="font-bold text-xl tracking-tight text-primary">
-              Primora<span className="text-secondary">.</span>
+              {/* Substitua o {Logo} por isso: */}
+              <img src={Logo} alt="Logo Primora" className="h-16 w-auto" />
             </span>
           </a>
 
@@ -63,7 +65,11 @@ export default function Navbar() {
             className="md:hidden text-gray-600"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>

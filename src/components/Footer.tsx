@@ -1,4 +1,5 @@
 import { ShieldCheck, Camera, Share2, Mail, MapPin, Phone } from 'lucide-react';
+import P from '/somente_p.png'
 
 export default function Footer() {
   return (
@@ -9,9 +10,9 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <a href="#" className="flex items-center gap-2 mb-6">
-              <ShieldCheck className="w-8 h-8 text-secondary" />
+              
               <span className="font-bold text-xl tracking-tight text-white">
-                Primora<span className="text-secondary">.</span>
+               <img src={P} alt="Logo Primora" className="h-16 w-auto" />
               </span>
             </a>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">

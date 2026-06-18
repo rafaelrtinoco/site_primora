@@ -5,7 +5,7 @@ export default function CTA() {
   return (
     <section id="cta" className="py-24 relative overflow-hidden">
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#052b7a] to-secondary z-0" />
+      <div className="absolute inset-0 bg-linear-to-br from-primary via-[#052b7a] to-secondary z-0" />
       
       {/* Decorative Blur */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-[100px] z-0" />
@@ -80,7 +80,7 @@ export default function CTA() {
 
               <button 
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 mt-6"
+                className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-primary to-secondary text-white font-bold py-4 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 mt-6"
               >
                 Solicitar Contato
                 <ArrowRight className="w-5 h-5" />

@@ -84,7 +84,7 @@ export default function Plans() {
             >
               {plan.badge && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <span className="bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold uppercase tracking-wider py-1.5 px-4 rounded-full">
+                  <span className="bg-linear-to-r from-primary to-secondary text-white text-xs font-bold uppercase tracking-wider py-1.5 px-4 rounded-full">
                     {plan.badge}
                   </span>
                 </div>
@@ -110,7 +110,7 @@ export default function Plans() {
                 href="#cta"
                 className={`block w-full text-center py-4 rounded-xl font-bold transition-all ${
                   plan.highlighted
-                    ? 'bg-gradient-to-r from-primary to-secondary text-white hover:shadow-lg'
+                    ? 'bg-linear-to-r from-primary to-secondary text-white hover:shadow-lg'
                     : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                 }`}
               >

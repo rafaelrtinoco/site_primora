@@ -55,7 +55,7 @@ export default function Testimonials() {
               </div>
               <p className="text-gray-700 italic mb-8 relative z-10">"{testimonial.text}"</p>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center font-bold text-lg">
+                <div className="w-12 h-12 rounded-full bg-linear-to-br from-primary to-secondary text-white flex items-center justify-center font-bold text-lg">
                   {testimonial.avatar}
                 </div>
                 <div>

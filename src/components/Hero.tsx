@@ -7,8 +7,8 @@ export default function Hero() {
       
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-accent/10 blur-[120px]" />
-        <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[100px]" />
+        <div className="absolute top-[-20%] right-[10%] w-[70%] h-[70%] rounded-full bg-accent/10 blur-[120px]" />
+        <div className="absolute top-[20%] left-[10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[100px]" />
       </div>
 
       <div className="container mx-auto px-4 lg:px-8">
@@ -22,7 +22,7 @@ export default function Hero() {
             className="max-w-2xl"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight mb-6">
-              Potencialize sua <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent">presença digital.</span>
+              Potencialize sua <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-accent">presença digital.</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 font-medium mb-4">
               Marketing, tecnologia e automação para corretores que desejam crescer no ambiente digital.
@@ -34,7 +34,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
                 href="#cta" 
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-primary to-secondary text-white font-semibold hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
                 Agendar Diagnóstico
                 <ArrowRight className="w-5 h-5" />
@@ -49,7 +49,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Visual Mockups */}
-          <div className="relative h-[500px] w-full hidden md:block">
+          <div className="relative h-125 w-full hidden md:block">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -112,7 +112,7 @@ export default function Hero() {
               <motion.div 
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}
-                className="absolute top-32 right-[-20px] glass-card p-4 rounded-xl flex items-center gap-3 z-10"
+                className="absolute top-32 right[-20px] glass-card p-4 rounded-xl flex items-center gap-3 z-10"
               >
                 <div className="p-2 bg-green-100 text-green-600 rounded-lg">
                   <MessageCircle size={20} />
@@ -123,7 +123,7 @@ export default function Hero() {
               <motion.div 
                 animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 1.5 }}
-                className="absolute bottom-32 left-[-10px] glass-card p-4 rounded-xl flex items-center gap-3 z-10"
+                className="absolute bottom-32 left[-10px] glass-card p-4 rounded-xl flex items-center gap-3 z-10"
               >
                 <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
                   <Globe size={20} />

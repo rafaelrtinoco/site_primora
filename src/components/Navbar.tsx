@@ -52,7 +52,7 @@ export default function Navbar() {
             ))}
             <a
               href="#cta"
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+              className="px-6 py-2.5 rounded-full bg-linear-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
             >
               Diagnóstico Gratuito
             </a>

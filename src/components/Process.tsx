@@ -26,7 +26,7 @@ export default function Process() {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary -translate-y-1/2 hidden md:block origin-left" 
+            className="absolute top-1/2 left-0 w-full h-1 bg-linear-to-r from-primary to-secondary -translate-y-1/2 hidden md:block origin-left" 
           />
 
           <div className="grid md:grid-cols-5 gap-8">

@@ -9,6 +9,8 @@ import Testimonials from '../components/Testimonials';
 import Faq from '../components/Faq';
 import CTA from '../components/CTA';
 import Footer from '../components/Footer';
+import Sinistros from '../components/Sinistros';
+import FreeAudit from '../components/FreeAudit';
 
 export default function Home() {
   return (
@@ -17,12 +19,14 @@ export default function Home() {
       <main>
         <Hero />
         <Partner />
-        <DigitalStructure />
         <Solutions />
+        <Sinistros />
+        <DigitalStructure />
         <Process />
         <Plans />
         <Testimonials />
         <Faq />
+        <FreeAudit />
         <CTA />
       </main>
       <Footer />

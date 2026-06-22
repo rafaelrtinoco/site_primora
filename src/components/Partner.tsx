@@ -13,7 +13,7 @@ export default function Partner() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-8 backdrop-blur-sm">
             <ShieldCheck className="w-5 h-5 text-accent" />
-            <span className="text-sm font-semibold tracking-wide text-blue-100 uppercase">
+            <span className="text-sm font-semibold title-secondary text-blue-100 uppercase">
               Parceiro Estratégico ABA Seguros
             </span>
           </div>

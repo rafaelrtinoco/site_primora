@@ -6,7 +6,7 @@
   --color-accent: #6EC6FF;
   --color-background: #F7FAFC;
   --color-text: #1F2937;
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Montserrat", sans-serif;
 }
 
 @layer base {
@@ -14,7 +14,20 @@
     background-color: var(--color-background);
     color: var(--color-text);
     font-family: var(--font-sans);
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
+  }
+
+  h1, .title-primary {
+    font-weight: 800;
+  }
+
+  h2, h3, h4, h5, h6, .text-main {
+    font-weight: 600;
+  }
+
+  .title-secondary {
+    letter-spacing: 0.3em;
   }
 }
 

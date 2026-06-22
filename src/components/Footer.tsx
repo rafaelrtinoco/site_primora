@@ -20,7 +20,7 @@ export default function Footer() {
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/5 border border-white/10">
               <ShieldCheck className="w-4 h-4 text-accent" />
-              <span className="text-xs font-semibold text-blue-100 uppercase">Parceiro ABA Seguros</span>
+              <span className="text-xs font-semibold text-blue-100 uppercase title-secondary">Parceiro ABA Seguros</span>
             </div>
           </div>
 

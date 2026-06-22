@@ -25,10 +25,10 @@ export default function Hero() {
               Potencialize sua <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-accent">presença digital.</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 font-medium mb-4">
-              Marketing, tecnologia e automação para corretores que desejam crescer no ambiente digital.
+              Parceira de crescimento digital para corretores. Estrutura digital e operacional para corretoras modernas.
             </p>
             <p className="text-lg text-gray-500 mb-8 leading-relaxed">
-              Transformamos a presença digital de corretores de seguros em uma estrutura profissional capaz de atrair clientes, gerar autoridade e automatizar atendimentos.
+              Marketing, tecnologia, inteligência artificial e suporte operacional em um único parceiro. Nosso objetivo é ajudar corretores a captar clientes, otimizar processos e oferecer uma experiência diferenciada aos segurados.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">

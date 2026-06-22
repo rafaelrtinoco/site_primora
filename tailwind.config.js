@@ -14,7 +14,7 @@ export default {
         text: '#1F2937',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Montserrat', 'sans-serif'],
       },
     },
   },

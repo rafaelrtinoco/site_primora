@@ -84,7 +84,7 @@ export default function Plans() {
             >
               {plan.badge && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <span className="bg-linear-to-r from-primary to-secondary text-white text-xs font-bold uppercase tracking-wider py-1.5 px-4 rounded-full">
+                  <span className="bg-linear-to-r from-primary to-secondary text-white text-xs font-bold uppercase tracking-widest whitespace-nowrap py-1.5 px-4 rounded-full">
                     {plan.badge}
                   </span>
                 </div>

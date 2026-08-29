@@ -1,107 +1,136 @@
-import { useState, useEffect } from "react";
-import { Menu, X} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import Logo from "/primora_horizontal.png";
+import { useEffect, useState } from 'react';
+import { List, X } from '@phosphor-icons/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Button from './ui/Button';
+import Logo from '/primora_horizontal.png';
+
+const navLinks = [
+  { name: 'Marketing', href: '#solutions' },
+  { name: 'Assessoria', href: '#assessoria' },
+  { name: 'Como Funciona', href: '#process' },
+  { name: 'Planos', href: '#plans' },
+  { name: 'FAQ', href: '#faq' },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "Soluções", href: "#solutions" },
-    { name: "Como Funciona", href: "#process" },
-    { name: "Planos", href: "#plans" },
-    { name: "Quem Somos", href: "#about" }, // Assuming about might be added later or integrated
-    { name: "Contato", href: "#cta" },
-  ];
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileMenuOpen]);
+
+  /* Sobre o Hero escuro o menu é transparente; ao rolar vira sólido claro.
+     O logo é azul-marinho, então precisa ser invertido para branco enquanto
+     está sobre o fundo escuro — senão fica ilegível. */
+  const overHero = !scrolled && !mobileMenuOpen;
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/80 backdrop-blur-md shadow-sm py-4"
-          : "bg-transparent py-6"
+      className={`fixed top-0 z-50 w-full transition-[background-color,box-shadow,padding] duration-300 ${
+        overHero
+          ? 'bg-transparent py-5'
+          : 'bg-surface/90 py-3 shadow-e1 backdrop-blur-md'
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-2">            
-            <span className="font-bold text-xl tracking-tight text-primary">
-              {/* Substitua o {Logo} por isso: */}
-              <img src={Logo} alt="Logo Primora" className="h-16 w-auto" />
-            </span>
+        <div className="flex items-center justify-between gap-6">
+          <a href="#hero" className="flex items-center" aria-label="Primora Soluções — início">
+            <img
+              src={Logo}
+              alt="Primora Soluções"
+              className={`h-10 w-auto transition-[filter] duration-300 ${
+                overHero ? 'brightness-0 invert' : ''
+              }`}
+            />
           </a>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav aria-label="Principal" className="hidden items-center gap-7 lg:flex">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-gray-600 hover:text-secondary transition-colors"
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  overHero
+                    ? 'text-on-dark-body hover:text-on-dark'
+                    : 'text-ink-muted hover:text-ink-brand'
+                }`}
               >
                 {link.name}
               </a>
             ))}
-            <a
+            <Button
               href="#cta"
-              className="px-6 py-2.5 rounded-full bg-linear-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+              size="md"
+              variant={overHero ? 'inverse' : 'primary'}
             >
-              Diagnóstico Gratuito
-            </a>
+              Diagnóstico gratuito
+            </Button>
           </nav>
 
-          {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden text-gray-600"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            type="button"
+            aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+            className={`lg:hidden ${overHero ? 'text-on-dark' : 'text-ink-strong'}`}
+            onClick={() => setMobileMenuOpen((open) => !open)}
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X size={26} weight="bold" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <List size={26} weight="bold" />
             )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl md:hidden"
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2 }}
+            className="absolute left-0 top-full w-full border-b border-line bg-surface shadow-e2 lg:hidden"
           >
-            <div className="flex flex-col px-4 py-6 gap-4">
+            <nav
+              aria-label="Principal (mobile)"
+              className="flex flex-col gap-1 px-4 py-5"
+            >
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-medium text-gray-700 hover:text-secondary"
+                  className="rounded-frame px-3 py-3 text-base font-medium text-ink-body transition-colors duration-200 hover:bg-brand-50 hover:text-ink-brand"
                 >
                   {link.name}
                 </a>
               ))}
-              <a
+              <Button
                 href="#cta"
+                size="md"
+                fullWidth
+                className="mt-3"
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-4 text-center px-6 py-3 rounded-full bg-primary text-white font-medium"
               >
-                Diagnóstico Gratuito
-              </a>
-            </div>
+                Diagnóstico gratuito
+              </Button>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>

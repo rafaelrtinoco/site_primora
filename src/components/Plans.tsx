@@ -1,125 +1,150 @@
-import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { ArrowRight } from '@phosphor-icons/react';
+import Section from './ui/Section';
+import SectionHeader from './ui/SectionHeader';
+import { Reveal, RevealGroup, RevealItem } from './ui/Reveal';
+import { site } from '../content/site';
+import { PLANO_EVENT } from '../lib/planoSelecionado';
+
+const formatPreco = (valor: number) =>
+  valor.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 
 export default function Plans() {
-  const plans = [
-    {
-      name: 'START',
-      description: 'Ideal para corretores iniciantes',
-      features: [
-        'Instagram otimizado',
-        '8 posts por mês',
-        '8 stories',
-        'Landing Page',
-        'Suporte básico'
-      ],
-      highlighted: false
-    },
-    {
-      name: 'GROWTH',
-      description: 'Plano recomendado',
-      badge: 'Mais Escolhido',
-      features: [
-        '12 posts por mês',
-        '12 stories',
-        '2 vídeos',
-        'Site profissional',
-        'Chat IA',
-        'Consultoria mensal'
-      ],
-      highlighted: true
-    },
-    {
-      name: 'PRIMORA PRO',
-      description: 'Estrutura máxima para alta performance',
-      features: [
-        '16 posts por mês',
-        '16 stories',
-        '4 vídeos',
-        'Site completo',
-        'IA treinada',
-        'Automação',
-        'Consultoria estratégica'
-      ],
-      highlighted: false
-    }
-  ];
+  /* Os três botões eram "Selecionar Plano" apontando para o mesmo #cta, sem
+     informar qual plano foi escolhido — nem para o usuário, nem para o leitor
+     de tela, nem para quem recebe o lead. */
+  const selecionar = (nome: string) => {
+    window.dispatchEvent(new CustomEvent(PLANO_EVENT, { detail: nome }));
+  };
 
   return (
-    <section id="plans" className="py-24 bg-background">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-primary mb-6"
-          >
-            Escolha a solução ideal para sua fase profissional
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-gray-500"
-          >
-            Planos criados estrategicamente para atender corretores em diferentes estágios do mercado.
-          </motion.p>
-        </div>
+    <Section id="plans" labelledBy="plans-title">
+      <SectionHeader
+        id="plans-title"
+        eyebrow="Planos"
+        title="Escolha a solução ideal para sua fase profissional"
+        description="Planos criados estrategicamente para atender corretores em diferentes estágios do mercado."
+      />
 
-        <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
-              className={`relative rounded-3xl p-8 bg-white transition-all duration-300 ${
-                plan.highlighted 
-                  ? 'ring-2 ring-secondary shadow-2xl scale-100 lg:scale-105 z-10' 
-                  : 'border border-gray-100 shadow-sm hover:shadow-md'
+      {/* items-start em vez de items-center: com o card do meio em scale, o
+          items-center desalinhava o topo dos três. */}
+      <RevealGroup
+        as="ul"
+        stagger={0.08}
+        /* 4 planos: 2x2 até 1280px e só então 4 colunas. Quatro cards lado a
+           lado em 1024px deixariam ~230px úteis cada um. */
+        className="mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-4"
+      >
+        {site.planos.map((plano) => (
+          <RevealItem
+            key={plano.nome}
+            as="li"
+            className={`relative flex h-full flex-col rounded-card p-7 ${
+              plano.destaque
+                ? 'z-10 bg-surface shadow-e3 ring-2 ring-brand-600'
+                : plano.precoInicial === null
+                  ? /* Plano sob medida: borda tracejada sinaliza que é um
+                       recorte aberto, não mais um degrau da escada. */
+                    'border-2 border-dashed border-line-brand bg-brand-50/40'
+                  : 'border border-line bg-surface shadow-e1'
+            }`}
+          >
+            {plano.badge && (
+              <span className="absolute -top-3 left-8 rounded-control bg-brand-700 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white">
+                {plano.badge}
+              </span>
+            )}
+
+            <h3
+              className={`eyebrow ${
+                plano.destaque ? 'text-brand-700' : 'text-ink-brand'
               }`}
             >
-              {plan.badge && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <span className="bg-linear-to-r from-primary to-secondary text-white text-xs font-bold uppercase tracking-widest whitespace-nowrap py-1.5 px-4 rounded-full">
-                    {plan.badge}
+              {plano.nome}
+            </h3>
+
+            {/* A frase de resultado é o que o cliente lê primeiro. */}
+            <p className="mt-3 text-lg font-semibold leading-snug text-ink-strong">
+              {plano.chamada}
+            </p>
+
+            <div className="mt-6 border-t border-line pt-6">
+              {plano.precoInicial === null ? (
+                <p className="text-2xl font-bold text-ink-strong">
+                  Sob medida
+                </p>
+              ) : (
+                <p>
+                  <span className="text-sm text-ink-muted">a partir de </span>
+                  <span className="text-3xl font-bold text-ink-strong">
+                    {formatPreco(plano.precoInicial)}
                   </span>
-                </div>
+                  <span className="text-sm text-ink-muted">/mês</span>
+                </p>
               )}
-              
-              <div className="text-center mb-8">
-                <h3 className={`text-2xl font-bold mb-2 ${plan.highlighted ? 'text-secondary' : 'text-primary'}`}>
-                  {plan.name}
-                </h3>
-                <p className="text-sm text-gray-500">{plan.description}</p>
-              </div>
+            </div>
 
-              <div className="space-y-4 mb-8">
-                {plan.features.map((feature) => (
-                  <div key={feature} className="flex items-start gap-3">
-                    <Check className={`w-5 h-5 shrink-0 ${plan.highlighted ? 'text-secondary' : 'text-gray-400'}`} />
-                    <span className="text-gray-600 font-medium">{feature}</span>
-                  </div>
-                ))}
-              </div>
+            {/* Especificação como lastro, em corpo menor — as quantidades
+                seguem declaradas, mas não são a promessa do plano. */}
+            <p className="mt-6 grow text-sm leading-relaxed text-ink-muted">
+              <span className="font-semibold text-ink-body">Inclui: </span>
+              {plano.inclui}
+            </p>
 
-              <a
-                href="#cta"
-                className={`block w-full text-center py-4 rounded-xl font-bold transition-all ${
-                  plan.highlighted
-                    ? 'bg-linear-to-r from-primary to-secondary text-white hover:shadow-lg'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Selecionar Plano
-              </a>
-            </motion.div>
-          ))}
+            <a
+              href="#cta"
+              onClick={() => selecionar(plano.nome)}
+              aria-label={
+                plano.precoInicial === null
+                  ? 'Solicitar contato para montar um plano personalizado'
+                  : `Solicitar contato sobre o plano ${plano.nome}`
+              }
+              className={`mt-8 block rounded-control py-4 text-center font-bold transition-[background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 ${
+                plano.destaque
+                  ? 'bg-brand-700 text-white shadow-e1 hover:bg-brand-800 hover:shadow-e2'
+                  : 'bg-brand-50 text-ink-brand hover:bg-brand-100'
+              }`}
+            >
+              {plano.precoInicial === null
+                ? 'Montar meu plano'
+                : `Selecionar ${plano.nome}`}
+            </a>
+          </RevealItem>
+        ))}
+      </RevealGroup>
+
+      {/* A assessoria aparece aqui como complemento, não como item de plano:
+          quem só quer marketing não é confrontado com o preço dela. */}
+      <Reveal>
+        <div className="mx-auto mt-12 max-w-3xl rounded-card border border-line-brand bg-brand-50 p-7 text-center">
+          <p className="eyebrow text-ink-brand">Complemento opcional</p>
+          <p className="mt-3 text-lg font-semibold text-ink-strong">
+            Precisa também de ajuda com a demanda operacional?
+          </p>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink-muted">
+            A assessoria operacional é contratada à parte, porque o valor dela
+            acompanha o tamanho da sua carteira, não o volume de conteúdo.
+            Pode entrar junto de qualquer um dos planos acima ou sozinha.
+          </p>
+          <a
+            href="#assessoria"
+            className="mt-5 inline-flex items-center gap-2 font-semibold text-ink-brand underline underline-offset-4"
+          >
+            Ver a assessoria operacional
+            <ArrowRight size={16} weight="bold" aria-hidden="true" />
+          </a>
         </div>
-      </div>
-    </section>
+      </Reveal>
+
+      <Reveal as="p" className="mx-auto mt-8 max-w-2xl text-center text-sm text-ink-muted">
+        Os valores acima são o ponto de partida de cada plano. O escopo final —
+        volume de conteúdo e páginas do site — é fechado junto com você no
+        diagnóstico gratuito.
+      </Reveal>
+    </Section>
   );
 }

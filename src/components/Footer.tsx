@@ -1,81 +1,162 @@
-import { ShieldCheck, Camera, Share2, Mail, MapPin, Phone } from 'lucide-react';
-import P from '/somente_p.png'
+import {
+  Envelope,
+  MapPin,
+  Phone,
+  InstagramLogo,
+  LinkedinLogo,
+} from '@phosphor-icons/react';
+import Logo from '/primora_horizontal.png';
+import { site } from '../content/site';
+import { abrirPreferencias } from '../lib/consent';
+
+const navegacao = [
+  { name: 'Marketing', href: '#solutions' },
+  { name: 'Assessoria', href: '#assessoria' },
+  { name: 'Como Funciona', href: '#process' },
+  { name: 'Planos', href: '#plans' },
+  { name: 'FAQ', href: '#faq' },
+];
+
+type Rede = {
+  name: string;
+  href: string | null;
+  Icon: typeof InstagramLogo;
+};
+
+const redes = (
+  [
+    { name: 'Instagram', href: site.redes.instagram, Icon: InstagramLogo },
+    { name: 'LinkedIn', href: site.redes.linkedin, Icon: LinkedinLogo },
+  ] satisfies Rede[]
+).filter((rede) => Boolean(rede.href));
 
 export default function Footer() {
   return (
-    <footer className="bg-primary pt-20 pb-10 border-t border-white/10">
+    <footer className="border-t border-white/10 bg-surface-invert pb-10 pt-20">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <a href="#" className="flex items-center gap-2 mb-6">
-              
-              <span className="font-bold text-xl tracking-tight text-white">
-               <img src={P} alt="Logo Primora" className="h-16 w-auto" />
-              </span>
+        <div className="mb-16 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <a
+              href="#hero"
+              className="mb-6 inline-flex items-center"
+              aria-label="Primora Soluções — início"
+            >
+              {/* O logo é azul-marinho; sobre o fundo escuro precisa ser
+                  invertido para branco, senão desaparece. */}
+              <img
+                src={Logo}
+                alt="Primora Soluções"
+                className="h-10 w-auto brightness-0 invert"
+              />
             </a>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Parceira de crescimento digital para corretores de seguros. Elevando o padrão de autoridade no mercado segurador.
+            <p className="text-sm leading-relaxed text-on-dark-muted">
+              Marketing e assessoria operacional para corretoras de seguros.
+              Você vende, a gente cuida do operacional.
             </p>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/5 border border-white/10">
-              <ShieldCheck className="w-4 h-4 text-accent" />
-              <span className="text-xs font-semibold text-blue-100 uppercase title-secondary">Parceiro ABA Seguros</span>
-            </div>
           </div>
 
-          {/* Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-6">Navegação</h4>
+          <nav aria-labelledby="footer-nav">
+            <h2 id="footer-nav" className="mb-6 font-semibold text-on-dark">
+              Navegação
+            </h2>
             <ul className="space-y-4">
-              <li><a href="#solutions" className="text-gray-400 hover:text-secondary transition-colors text-sm">Soluções</a></li>
-              <li><a href="#process" className="text-gray-400 hover:text-secondary transition-colors text-sm">Como Funciona</a></li>
-              <li><a href="#plans" className="text-gray-400 hover:text-secondary transition-colors text-sm">Planos</a></li>
-              <li><a href="#faq" className="text-gray-400 hover:text-secondary transition-colors text-sm">FAQ</a></li>
+              {navegacao.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-sm text-on-dark-muted transition-colors duration-200 hover:text-on-dark"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div>
+            <h2 className="mb-6 font-semibold text-on-dark">Contato</h2>
+            <ul className="space-y-4 text-sm text-on-dark-muted">
+              <li className="flex items-center gap-3">
+                <Envelope size={18} weight="duotone" className="shrink-0 text-on-dark-accent" aria-hidden="true" />
+                <a
+                  href={`mailto:${site.contato.email}`}
+                  className="transition-colors duration-200 hover:text-on-dark"
+                >
+                  {site.contato.email}
+                </a>
+              </li>
+              {/* Só renderiza com telefone real. Antes era "(11) 99999-9999". */}
+              {site.contato.telefone && (
+                <li className="flex items-center gap-3">
+                  <Phone size={18} weight="duotone" className="shrink-0 text-on-dark-accent" aria-hidden="true" />
+                  <a
+                    href={`tel:${site.contato.telefone.replace(/\D/g, '')}`}
+                    className="transition-colors duration-200 hover:text-on-dark"
+                  >
+                    {site.contato.telefone}
+                  </a>
+                </li>
+              )}
+              <li className="flex items-start gap-3">
+                <MapPin size={18} weight="duotone" className="mt-0.5 shrink-0 text-on-dark-accent" aria-hidden="true" />
+                <span>{site.contato.cidade}</span>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h4 className="text-white font-semibold mb-6">Contato</h4>
-            <ul className="space-y-4">
-              <li className="flex items-center gap-3 text-gray-400 text-sm">
-                <Mail className="w-4 h-4 text-secondary" />
-                <span>contato@primorasolucoes.com.br</span>
-              </li>
-              <li className="flex items-center gap-3 text-gray-400 text-sm">
-                <Phone className="w-4 h-4 text-secondary" />
-                <span>(11) 99999-9999</span>
-              </li>
-              <li className="flex items-start gap-3 text-gray-400 text-sm">
-                <MapPin className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
-                <span>São Paulo, SP<br/>Brasil</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div>
-            <h4 className="text-white font-semibold mb-6">Redes Sociais</h4>
-            <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-secondary hover:text-white hover:border-secondary transition-all">
-                <Camera className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-secondary hover:text-white hover:border-secondary transition-all">
-                <Share2 className="w-5 h-5" />
-              </a>
+          {/* Só renderiza quando houver URL real: antes eram dois href="#"
+              com ícones de câmera e compartilhamento, sem rótulo acessível. */}
+          {redes.length > 0 && (
+            <div>
+              <h2 className="mb-6 font-semibold text-on-dark">Redes sociais</h2>
+              <ul className="flex items-center gap-3">
+                {redes.map((rede) => (
+                  <li key={rede.name}>
+                    <a
+                      href={rede.href ?? undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Primora no ${rede.name}`}
+                      className="inline-flex size-10 items-center justify-center rounded-frame border border-white/15 bg-white/5 text-on-dark-muted transition-colors duration-200 hover:bg-white/10 hover:text-on-dark"
+                    >
+                      <rede.Icon size={20} weight="fill" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-
+          )}
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Primora Soluções. Todos os direitos reservados.
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
+          {/* Era text-gray-500 sobre o fundo escuro: 3,42:1, reprovado em AA.
+              Agora 9,25:1. */}
+          <p className="text-sm text-on-dark-muted">
+            © {new Date().getFullYear()} {site.nome}. Todos os direitos
+            reservados.
           </p>
           <div className="flex gap-6 text-sm">
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Termos de Uso</a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Privacidade</a>
+            <a
+              href="/termos.html"
+              className="text-on-dark-muted transition-colors duration-200 hover:text-on-dark"
+            >
+              Termos de Uso
+            </a>
+            <a
+              href="/privacidade.html"
+              className="text-on-dark-muted transition-colors duration-200 hover:text-on-dark"
+            >
+              Privacidade
+            </a>
+            {/* A LGPD exige que revogar o consentimento seja tão fácil
+                quanto concedê-lo. */}
+            <button
+              type="button"
+              onClick={abrirPreferencias}
+              className="text-on-dark-muted transition-colors duration-200 hover:text-on-dark"
+            >
+              Preferências de privacidade
+            </button>
           </div>
         </div>
       </div>

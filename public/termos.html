@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Termos de Uso | Primora Soluções</title>
+    <link rel="icon" type="image/png" href="/somente_p.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --brand-900: #031b4e;
+        --brand-700: #0b47a0;
+        --ink-body: #2b3a55;
+        --ink-muted: #51607a;
+        --surface-muted: #f7fafc;
+        --line: #dce5f0;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Montserrat, sans-serif;
+        color: var(--ink-body);
+        background: var(--surface-muted);
+        line-height: 1.7;
+      }
+      header { background: var(--brand-900); padding: 1.5rem 1rem; }
+      header a { display: inline-block; max-width: 68rem; margin: 0 auto; }
+      header img { height: 2.5rem; filter: brightness(0) invert(1); display: block; }
+      .wrap { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+      h1 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); color: var(--brand-900); letter-spacing: -.02em; margin: 0 0 .5rem; }
+      h2 { font-size: 1.15rem; color: var(--brand-900); margin: 2.5rem 0 .75rem; }
+      .meta { color: var(--ink-muted); font-size: .9rem; margin-bottom: 2.5rem; }
+      a { color: var(--brand-700); }
+      .todo {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+        font-size: .95rem;
+      }
+      .todo strong { color: #92400e; }
+      .back { display: inline-block; margin-top: 3rem; font-weight: 600; }
+      footer { border-top: 1px solid var(--line); padding: 2rem 1.25rem; text-align: center; color: var(--ink-muted); font-size: .875rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/" aria-label="Primora Soluções — início">
+        <img src="/primora_horizontal.png" alt="Primora Soluções" />
+      </a>
+    </header>
+
+    <main class="wrap">
+      <h1>Termos de Uso</h1>
+      <p class="meta">Última atualização: 28 de agosto de 2026</p>
+
+      <div class="todo">
+        <strong>Pendente de revisão jurídica.</strong> Preencha os campos
+        marcados como <em>[A DEFINIR]</em> e submeta o texto à revisão de um
+        advogado antes de publicar.
+      </div>
+
+      <h2>1. Objeto</h2>
+      <p>
+        Este site é de propriedade da Primora Soluções, CNPJ
+        <em>[A DEFINIR]</em>, e tem finalidade exclusivamente informativa:
+        apresentar nossos serviços de marketing, tecnologia, inteligência
+        artificial e suporte operacional para corretores de seguros, e permitir
+        que você solicite contato.
+      </p>
+
+      <h2>2. Uso do site</h2>
+      <p>
+        Você concorda em utilizar este site de forma lícita, sem tentar obter
+        acesso não autorizado a sistemas, sem enviar dados falsos ou de
+        terceiros sem autorização, e sem praticar atos que prejudiquem seu
+        funcionamento.
+      </p>
+
+      <h2>3. Solicitações de contato</h2>
+      <p>
+        O envio do formulário não configura contratação de serviço nem gera
+        obrigação de prestação. Trata-se de manifestação de interesse: nossa
+        equipe entrará em contato para apresentar condições, que serão
+        formalizadas em proposta e contrato próprios.
+      </p>
+
+      <h2>4. Propriedade intelectual</h2>
+      <p>
+        A marca, o logotipo, os textos, o layout e demais elementos deste site
+        pertencem à Primora Soluções. É vedada a reprodução, total ou parcial,
+        sem autorização prévia por escrito.
+      </p>
+
+      <h2>5. Conteúdo e disponibilidade</h2>
+      <p>
+        As informações aqui publicadas podem ser alteradas a qualquer momento.
+        Empenhamo-nos para mantê-las corretas e atualizadas, mas não garantimos
+        disponibilidade ininterrupta do site.
+      </p>
+
+      <h2>6. Links externos</h2>
+      <p>
+        Este site pode conter links para serviços de terceiros. Não nos
+        responsabilizamos pelo conteúdo, pelas práticas de privacidade ou pela
+        disponibilidade desses serviços.
+      </p>
+
+      <h2>7. Privacidade</h2>
+      <p>
+        O tratamento de dados pessoais está descrito na
+        <a href="/privacidade.html">Política de Privacidade</a>, que é parte
+        integrante destes Termos.
+      </p>
+
+      <h2>8. Foro</h2>
+      <p>
+        Estes Termos são regidos pela legislação brasileira. Fica eleito o foro
+        da comarca de <em>[A DEFINIR]</em> para dirimir eventuais controvérsias.
+      </p>
+
+      <a class="back" href="/">← Voltar ao site</a>
+    </main>
+
+    <footer>© <span id="ano"></span> Primora Soluções</footer>
+    <script>
+      document.getElementById('ano').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

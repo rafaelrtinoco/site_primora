@@ -1,84 +1,152 @@
-import { motion } from 'framer-motion';
-import { Share2, Video, Laptop, TrendingUp } from 'lucide-react';
+import { Megaphone, Browsers, PenNib } from '@phosphor-icons/react';
+import Section from './ui/Section';
+import SectionHeader from './ui/SectionHeader';
+import IconFrame from './ui/IconFrame';
+import { RevealGroup, RevealItem } from './ui/Reveal';
+
+const socialMedia = [
+  {
+    grupo: 'Estratégia e planejamento',
+    itens: [
+      'Estratégia de conteúdo',
+      'Planejamento editorial mensal',
+      'Calendário de publicações',
+      'Campanhas sazonais',
+    ],
+  },
+  {
+    grupo: 'Produção de conteúdo',
+    itens: [
+      'Instagram, Facebook e demais redes',
+      'Conteúdos institucionais',
+      'Roteiros para vídeos e Reels',
+      'Ideias e roteiros para Stories',
+    ],
+  },
+  {
+    grupo: 'Gestão das redes',
+    itens: [
+      'Programação e publicação',
+      'Organização do feed',
+      'Gestão de Stories',
+      'Comentários e mensagens recebidas',
+    ],
+  },
+  {
+    grupo: 'Análise e otimização',
+    itens: [
+      'Alcance, engajamento e crescimento',
+      'Formatos com melhor desempenho',
+      'Relatórios periódicos',
+      'Ajustes na estratégia',
+    ],
+  },
+];
+
+const sites = [
+  'Site institucional',
+  'Landing pages',
+  'Páginas para geração de leads',
+  'Formulários e canais de contato',
+  'Otimização da experiência do usuário',
+  'Atualização de conteúdos',
+];
+
+const artes = [
+  'Artes para redes sociais',
+  'Stories e Reels',
+  'Banners digitais e para sites',
+  'Materiais para campanhas comerciais',
+  'Artes para WhatsApp',
+  'Apresentações comerciais',
+  'Materiais institucionais',
+  'Peças para datas comemorativas',
+];
+
+function Bullet({ children }: { children: string }) {
+  return (
+    <li className="flex items-start gap-2.5 text-sm text-ink-muted">
+      <span
+        className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-400"
+        aria-hidden="true"
+      />
+      {children}
+    </li>
+  );
+}
 
 export default function Solutions() {
-  const solutions = [
-    {
-      title: 'Gestão de Redes Sociais',
-      icon: <Share2 className="w-8 h-8" />,
-      features: ['Planejamento editorial', 'Calendário mensal', 'Posts estratégicos', 'Stories', 'Relatórios'],
-      color: 'bg-blue-50 text-blue-600'
-    },
-    {
-      title: 'Produção de Vídeos',
-      icon: <Video className="w-8 h-8" />,
-      features: ['Captação profissional', 'Reels', 'Stories', 'Motion graphics', 'Legendas'],
-      color: 'bg-indigo-50 text-indigo-600'
-    },
-    {
-      title: 'Site Inteligente',
-      icon: <Laptop className="w-8 h-8" />,
-      features: ['Landing Page', 'Site institucional', 'Chat IA', 'Integração WhatsApp', 'Agendamento'],
-      color: 'bg-cyan-50 text-cyan-600'
-    },
-    {
-      title: 'Consultoria Estratégica',
-      icon: <TrendingUp className="w-8 h-8" />,
-      features: ['Diagnóstico digital', 'Posicionamento', 'Funil comercial', 'Treinamento'],
-      color: 'bg-emerald-50 text-emerald-600'
-    }
-  ];
-
   return (
-    <section id="solutions" className="py-24 bg-white relative">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-primary mb-6"
-          >
-            Soluções completas para corretores modernos
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-gray-500"
-          >
-            Tudo o que você precisa para se destacar no ambiente digital, centralizado em um só lugar com tecnologia e acompanhamento profissional.
-          </motion.p>
-        </div>
+    <Section id="solutions" labelledBy="solutions-title">
+      <SectionHeader
+        id="solutions-title"
+        eyebrow="Marketing"
+        title="Presença digital que constrói autoridade"
+        description="Planejamento, produção e acompanhamento — não é postar por postar, é construir reputação no mercado segurador."
+      />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {solutions.map((solution, index) => (
-            <motion.div
-              key={solution.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -8 }}
-              className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
-            >
-              <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${solution.color}`}>
-                {solution.icon}
+      {/* Layout assimétrico de propósito: um grid uniforme de 4 cards iguais
+          trata assuntos de pesos diferentes como se fossem equivalentes. */}
+      <RevealGroup className="grid gap-6 lg:grid-cols-3">
+        <RevealItem className="card p-8 lg:col-span-2">
+          <IconFrame icon={Megaphone} size="lg" />
+          <h3 className="mb-2 mt-6 text-xl font-bold text-ink-strong">
+            Social Media completo
+          </h3>
+          <p className="mb-8 text-sm text-ink-muted">
+            Todo o processo de planejamento, produção, publicação e
+            acompanhamento das redes da corretora.
+          </p>
+
+          <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+            {socialMedia.map((bloco) => (
+              <div key={bloco.grupo}>
+                <h4 className="eyebrow mb-3 text-ink-brand">{bloco.grupo}</h4>
+                <ul className="space-y-2">
+                  {bloco.itens.map((item) => (
+                    <Bullet key={item}>{item}</Bullet>
+                  ))}
+                </ul>
               </div>
-              <h3 className="text-xl font-bold text-primary mb-4">{solution.title}</h3>
-              <ul className="space-y-3">
-                {solution.features.map((feature) => (
-                  <li key={feature} className="flex items-center text-gray-600">
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary mr-3" />
-                    {feature}
-                  </li>
+            ))}
+          </div>
+        </RevealItem>
+
+        <RevealItem className="card flex flex-col p-8">
+          <IconFrame icon={Browsers} size="lg" />
+          <h3 className="mb-2 mt-6 text-xl font-bold text-ink-strong">
+            Sites e Landing Pages
+          </h3>
+          <p className="mb-6 text-sm text-ink-muted">
+            Páginas construídas para transformar visita em contato.
+          </p>
+          <ul className="space-y-2">
+            {sites.map((item) => (
+              <Bullet key={item}>{item}</Bullet>
+            ))}
+          </ul>
+        </RevealItem>
+
+        <RevealItem className="card p-8 lg:col-span-3">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+            <IconFrame icon={PenNib} size="lg" />
+            <div className="grow">
+              <h3 className="mb-2 text-xl font-bold text-ink-strong">
+                Artes digitais
+              </h3>
+              <p className="mb-6 max-w-2xl text-sm text-ink-muted">
+                Peças sob medida para cada canal, mantendo a identidade da
+                corretora consistente em todos os pontos de contato.
+              </p>
+              <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-4">
+                {artes.map((item) => (
+                  <Bullet key={item}>{item}</Bullet>
                 ))}
               </ul>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+            </div>
+          </div>
+        </RevealItem>
+      </RevealGroup>
+    </Section>
   );
 }

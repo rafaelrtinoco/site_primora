@@ -41,8 +41,8 @@ export const staggerContainer = (stagger = 0.06): Variants => ({
 });
 
 /**
- * Atraso com teto. Sinistros tem 10 cards com `delay: index * 0.1`, então o
- * último aparecia 0,9s depois — atraso perceptível. Aqui nunca passa de 0,30s.
+ * Atraso com teto. Uma grade de 10 cards com `delay: index * 0.1` fazia o
+ * último aparecer 0,9s depois — atraso perceptível. Aqui nunca passa de 0,30s.
  */
 export const staggerDelay = (index = 0, step = 0.06, max = 5) =>
   Math.min(index, max) * step;

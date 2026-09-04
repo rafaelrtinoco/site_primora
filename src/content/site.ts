@@ -24,6 +24,16 @@ export type Depoimento = {
   empresa: string;
 };
 
+export type Setor = {
+  nome: string;
+  /**
+   * O detalhe regulatório do segmento. É o que separa "atendemos advogados" de
+   * "sabemos anunciar para advogados" — e é verificável, ao contrário de uma
+   * promessa de resultado.
+   */
+  nota: string;
+};
+
 export type Plano = {
   nome: string;
   /**
@@ -32,14 +42,14 @@ export type Plano = {
    * negócio dele, não como cesta de unidades.
    */
   chamada: string;
-  /** Em reais. `null` exibe "Sob consulta" em vez de omitir o preço. */
+  /** Em reais. `null` exibe "Sob medida" em vez de omitir o preço. */
   precoInicial: number | null;
   /**
    * Especificação em prosa, exibida em corpo menor.
    * As quantidades continuam declaradas — sem elas o cliente não consegue
    * julgar o preço —, mas como lastro do valor, não como argumento de venda.
-   * Contar posts na chamada principal colocaria a Primora competindo em
-   * volume com freelancer, que é o jogo errado.
+   * Contar posts na chamada principal colocaria a Praxis competindo em volume
+   * com freelancer, que é o jogo errado.
    */
   inclui: string;
   destaque?: boolean;
@@ -47,11 +57,16 @@ export type Plano = {
 };
 
 export const site = {
-  nome: 'Primora Soluções',
+  nome: 'Praxis Digital',
 
   contato: {
-    email: 'contato@primorasolucoes.com.br',
-    /** TODO(dono): telefone real. Era "(11) 99999-9999", um placeholder. */
+    /**
+     * Sem e-mail por decisão: o atendimento é todo por WhatsApp. Enquanto for
+     * `null`, o bloco de e-mail do rodapé e o link do CTA não são renderizados.
+     * A Política de Privacidade aponta o WhatsApp como canal do titular.
+     */
+    email: null as string | null,
+    /** TODO(dono): telefone fixo, se houver. */
     telefone: null as string | null,
     /**
      * Formato internacional, só dígitos: 55 + DDD + número.
@@ -61,28 +76,55 @@ export const site = {
     whatsapp: '5511976487829' as string | null,
     /** Mensagem que já vem escrita quando o visitante abre a conversa. */
     whatsappMensagem:
-      'Olá! Vim pelo site da Primora e gostaria de saber mais sobre os planos.',
+      'Olá! Vim pelo site da Praxis Digital e gostaria de saber mais sobre os planos.',
     cidade: 'São Paulo, SP',
   },
 
   redes: {
-    /** TODO(dono): URLs reais. Os links eram href="#". */
+    /** TODO(dono): URLs reais. Enquanto `null`, o bloco não é renderizado. */
     instagram: null as string | null,
     linkedin: null as string | null,
   },
 
-  /**
-   * Prazo de entrega. Existia contradição no site: o FAQ dizia "15 a 20 dias"
-   * e a seção de estrutura digital dizia "poucos dias". Valor único aqui.
-   */
+  /** Prazo de entrega. Valor único, consumido pelo FAQ e pelo Como Funciona. */
   prazoEntrega: '15 a 20 dias',
+
+  /**
+   * Segmentos atendidos. Alimentam a faixa em loop do Hero e o bloco de
+   * setores da seção de tráfego.
+   *
+   * As notas não são enfeite: cada um desses mercados tem regra própria de
+   * publicidade, e violar a da OAB custa processo disciplinar ao cliente.
+   */
+  setores: [
+    {
+      nome: 'Corretoras de seguros',
+      nota: 'produto que ninguém procura por impulso — a campanha precisa educar antes de vender',
+    },
+    {
+      nome: 'Imobiliárias',
+      nota: 'CRECI visível no criativo, como manda a Resolução COFECI 1.065/2007',
+    },
+    {
+      nome: 'Contabilidade',
+      nota: 'publicidade informativa, técnica e moderada, no espírito da NBC PG 01',
+    },
+    {
+      nome: 'Advocacia',
+      nota: 'anúncios que informam, não captam — Provimento 205/2021 da OAB',
+    },
+    {
+      nome: 'Serviços administrativos',
+      nota: 'venda consultiva e ciclo longo, com conteúdo que sustenta a decisão',
+    },
+  ] as Setor[],
 
   /**
    * Faixa de métricas do Hero.
    *
-   * Vazia de propósito: os números que apareceram no esboço de layout
-   * (+120 corretores, 8 anos, 4.9★) eram ilustrativos e não foram confirmados.
-   * Enquanto estiver vazia, o Hero exibe o fallback qualitativo abaixo.
+   * Vazia de propósito: os números do esboço original (+120 clientes, 8 anos,
+   * 4.9★) eram ilustrativos e nunca foram confirmados. Enquanto estiver vazia,
+   * o Hero exibe a faixa de setores no lugar.
    *
    * Atenção ao incluir uma nota do tipo "4.9 ★": sem `source` apontando para um
    * perfil público verificável, isso é publicidade enganosa (CDC art. 37),
@@ -90,19 +132,9 @@ export const site = {
    */
   metricas: [] as Stat[],
 
-  /** Exibido no lugar da faixa de métricas enquanto não houver números reais. */
-  diferenciais: [
-    'Operacional completo',
-    'Renovações sob controle',
-    'Sinistros acompanhados',
-    'Suporte em horário comercial',
-  ],
-
   /**
    * TODO(dono): 2 ou 3 depoimentos reais (nome, cargo, empresa).
-   * Os anteriores eram fictícios — "João Silva" era, inclusive, o mesmo nome
-   * usado como placeholder do campo de nome no formulário.
-   * Enquanto vazio, a seção inteira não é renderizada.
+   * Os anteriores eram fictícios. Enquanto vazio, a seção não é renderizada.
    */
   depoimentos: [] as Depoimento[],
 
@@ -112,7 +144,7 @@ export const site = {
       chamada: 'Para quem está montando a presença digital agora.',
       precoInicial: 497,
       inclui:
-        'Instagram otimizado, 8 posts e 8 stories por mês, landing page e suporte.',
+        'Perfis otimizados, 8 posts e 8 stories por mês, landing page e suporte.',
     },
     {
       nome: 'GROWTH',
@@ -122,42 +154,50 @@ export const site = {
       destaque: true,
       badge: 'Mais completo',
       inclui:
-        '12 posts e 12 stories por mês, 2 vídeos, site profissional, chat automatizado no WhatsApp e consultoria mensal.',
+        '12 posts e 12 stories por mês, 2 vídeos, site profissional, atendimento automatizado no WhatsApp e consultoria mensal.',
     },
     {
-      nome: 'PRIMORA PRO',
+      nome: 'PRO',
       chamada:
         'Para quem quer volume e consistência em todos os canais, com estratégia acompanhada de perto.',
       precoInicial: 1997,
       inclui:
-        '16 posts e 16 stories por mês, 4 vídeos, site completo, chat automatizado no WhatsApp e consultoria estratégica.',
+        '16 posts e 16 stories por mês, 4 vídeos, site completo, atendimento automatizado no WhatsApp e consultoria estratégica.',
     },
     {
       nome: 'PERSONALIZADO',
-      chamada:
-        'Para quem precisa de um recorte diferente dos três.',
+      chamada: 'Para quem precisa de um recorte diferente dos três.',
       /* Sem preço de partida de propósito: o valor sai do escopo, e não o
          contrário. */
       precoInicial: null,
       inclui:
-        'Conteúdo, site, chat automatizado, consultoria e assessoria operacional combinados na medida da sua corretora — inclusive só uma dessas frentes.',
+        'Conteúdo, site, atendimento automatizado, consultoria e gestão de tráfego combinados na medida da sua operação — inclusive só uma dessas frentes.',
     },
   ] as Plano[],
 
   /**
-   * Assessoria operacional — serviço próprio, e não item embutido num plano.
+   * Gestão de tráfego pago — serviço próprio, e não item embutido num plano.
    *
-   * O motivo é estrutural: a assessoria escala por tamanho de carteira, o
-   * marketing escala por volume de conteúdo. São eixos diferentes. Embutir a
-   * assessoria no plano mais caro obrigava a cobrar o pior caso de carteira de
-   * todo mundo — e afastava o cliente que só quer marketing.
+   * O motivo é estrutural, o mesmo que separava a antiga assessoria: o tráfego
+   * escala por número de plataformas e volume de mídia, o conteúdo escala por
+   * volume de peças. São eixos diferentes. Embutir o tráfego no plano mais caro
+   * obrigaria a cobrá-lo de quem só quer conteúdo.
    */
-  assessoria: {
+  trafego: {
     faixas: [
-      { apolices: 30, preco: 1500 },
-      { apolices: 60, preco: 1700 },
-      { apolices: 90, preco: 1900 },
-      { apolices: 120, preco: 2100 },
-    ] as { apolices: number; preco: number }[],
+      { escopo: 'Google Ads ou Meta Ads', preco: 897 },
+      { escopo: 'Google Ads + Meta Ads', preco: 1297 },
+      { escopo: '+ criativos e landing pages dedicadas', preco: 1797 },
+    ] as { escopo: string; preco: number }[],
+
+    /**
+     * Verba mínima recomendada, em reais por mês.
+     *
+     * Fica escrito na página de propósito. Abaixo disso o algoritmo não junta
+     * dado suficiente para sair do aprendizado, e o fee pesa demais sobre o
+     * retorno. Dizer isso na página afasta parte dos leads; não dizer os afasta
+     * na reunião, depois de terem ancorado nos R$ 897.
+     */
+    verbaMinima: 1500,
   },
 };

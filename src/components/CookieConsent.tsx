@@ -99,7 +99,7 @@ export default function CookieConsent() {
                 size={32}
                 weight="duotone"
                 aria-hidden="true"
-                className="hidden shrink-0 text-brand-600 lg:block"
+                className="hidden shrink-0 text-ink-accent lg:block"
               />
 
               <p className="grow text-sm leading-relaxed text-ink-muted">
@@ -109,7 +109,7 @@ export default function CookieConsent() {
                 quando quiser.{' '}
                 <a
                   href="/privacidade.html"
-                  className="font-semibold text-ink-brand underline underline-offset-2"
+                  className="font-semibold text-ink-accent underline underline-offset-2"
                 >
                   Política de Privacidade
                 </a>
@@ -119,21 +119,21 @@ export default function CookieConsent() {
                 <button
                   type="button"
                   onClick={abrirPainel}
-                  className="rounded-control px-5 py-3 text-sm font-semibold text-ink-brand transition-colors duration-200 hover:bg-brand-50"
+                  className="rounded-control px-5 py-3 text-sm font-semibold text-ink-accent transition-colors duration-200 hover:bg-surface-muted"
                 >
                   Personalizar
                 </button>
                 <button
                   type="button"
                   onClick={() => decidir({ analise: false, marketing: false })}
-                  className="rounded-control border border-line-strong px-5 py-3 text-sm font-semibold text-ink-body transition-colors duration-200 hover:border-brand-400 hover:text-ink-brand"
+                  className="rounded-control border border-line-strong px-5 py-3 text-sm font-semibold text-ink-body transition-colors duration-200 hover:border-moss-700 hover:text-ink-accent"
                 >
                   Rejeitar não essenciais
                 </button>
                 <button
                   type="button"
                   onClick={() => decidir({ analise: true, marketing: true })}
-                  className="rounded-control bg-brand-700 px-5 py-3 text-sm font-semibold text-white shadow-e1 transition-colors duration-200 hover:bg-brand-800"
+                  className="rounded-control bg-acid-400 px-5 py-3 text-sm font-semibold text-carbon-950 shadow-e1 transition-colors duration-200 hover:bg-acid-500"
                 >
                   Aceitar todos
                 </button>
@@ -149,7 +149,7 @@ export default function CookieConsent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[95] flex items-end justify-center bg-brand-950/50 p-4 sm:items-center"
+            className="fixed inset-0 z-[95] flex items-end justify-center bg-carbon-950/70 p-4 sm:items-center"
             onClick={(e) => {
               if (e.target === e.currentTarget) fecharPainel();
             }}
@@ -176,7 +176,7 @@ export default function CookieConsent() {
                   type="button"
                   onClick={fecharPainel}
                   aria-label="Fechar preferências"
-                  className="-m-2 rounded-frame p-2 text-ink-muted transition-colors hover:bg-brand-50 hover:text-ink-brand"
+                  className="-m-2 rounded-frame p-2 text-ink-muted transition-colors hover:bg-surface-muted hover:text-ink-accent"
                 >
                   <X size={20} weight="bold" />
                 </button>
@@ -188,7 +188,9 @@ export default function CookieConsent() {
                     <h3 className="font-semibold text-ink-strong">
                       Essenciais
                     </h3>
-                    <span className="rounded-control bg-brand-100 px-3 py-1 text-xs font-semibold text-ink-brand">
+                    {/* Limão sobre moss: 9.33:1. O ink-accent das demais peças claras
+                        daria 2.07:1 aqui, porque o fundo é escuro. */}
+                    <span className="rounded-control bg-moss-700 px-3 py-1 text-xs font-semibold text-acid-400">
                       Sempre ativos
                     </span>
                   </div>
@@ -220,7 +222,7 @@ export default function CookieConsent() {
                           type="checkbox"
                           checked={ativo}
                           onChange={(e) => setAtivo(e.target.checked)}
-                          className="mt-1 size-5 shrink-0 rounded border-line-strong text-brand-700"
+                          className="mt-1 size-5 shrink-0 rounded border-line-strong text-moss-700"
                         />
                       </div>
                       <p className="mt-2 text-sm text-ink-muted">
@@ -237,7 +239,7 @@ export default function CookieConsent() {
                 automaticamente caso alguma seja adotada. Detalhes na{' '}
                 <a
                   href="/privacidade.html"
-                  className="font-semibold text-ink-brand underline underline-offset-2"
+                  className="font-semibold text-ink-accent underline underline-offset-2"
                 >
                   Política de Privacidade
                 </a>
@@ -248,14 +250,14 @@ export default function CookieConsent() {
                 <button
                   type="button"
                   onClick={() => decidir({ analise: false, marketing: false })}
-                  className="grow rounded-control border border-line-strong px-5 py-3 text-sm font-semibold text-ink-body transition-colors duration-200 hover:border-brand-400 hover:text-ink-brand"
+                  className="grow rounded-control border border-line-strong px-5 py-3 text-sm font-semibold text-ink-body transition-colors duration-200 hover:border-moss-700 hover:text-ink-accent"
                 >
                   Rejeitar não essenciais
                 </button>
                 <button
                   type="button"
                   onClick={() => decidir({ analise, marketing })}
-                  className="grow rounded-control bg-brand-700 px-5 py-3 text-sm font-semibold text-white shadow-e1 transition-colors duration-200 hover:bg-brand-800"
+                  className="grow rounded-control bg-acid-400 px-5 py-3 text-sm font-semibold text-carbon-950 shadow-e1 transition-colors duration-200 hover:bg-acid-500"
                 >
                   Salvar preferências
                 </button>

@@ -14,7 +14,7 @@ const formatPreco = (valor: number) =>
   });
 
 export default function Plans() {
-  /* Os três botões eram "Selecionar Plano" apontando para o mesmo #cta, sem
+  /* Os botões eram "Selecionar Plano" apontando para o mesmo #cta, sem
      informar qual plano foi escolhido — nem para o usuário, nem para o leitor
      de tela, nem para quem recebe o lead. */
   const selecionar = (nome: string) => {
@@ -22,16 +22,14 @@ export default function Plans() {
   };
 
   return (
-    <Section id="plans" labelledBy="plans-title">
+    <Section id="plans" tone="dark" labelledBy="plans-title">
       <SectionHeader
         id="plans-title"
-        eyebrow="Planos"
-        title="Escolha a solução ideal para sua fase profissional"
-        description="Planos criados estrategicamente para atender corretores em diferentes estágios do mercado."
+        eyebrow="Planos de conteúdo"
+        title="Escolha a solução ideal para a sua fase"
+        description="Planos pensados para negócios em estágios diferentes — do primeiro perfil organizado à operação com presença consistente em todos os canais."
       />
 
-      {/* items-start em vez de items-center: com o card do meio em scale, o
-          items-center desalinhava o topo dos três. */}
       <RevealGroup
         as="ul"
         stagger={0.08}
@@ -45,53 +43,47 @@ export default function Plans() {
             as="li"
             className={`relative flex h-full flex-col rounded-card p-7 ${
               plano.destaque
-                ? 'z-10 bg-surface shadow-e3 ring-2 ring-brand-600'
+                ? 'z-10 bg-white/[0.08] ring-2 ring-acid-400'
                 : plano.precoInicial === null
                   ? /* Plano sob medida: borda tracejada sinaliza que é um
                        recorte aberto, não mais um degrau da escada. */
-                    'border-2 border-dashed border-line-brand bg-brand-50/40'
-                  : 'border border-line bg-surface shadow-e1'
+                    'border-2 border-dashed border-white/25 bg-white/[0.02]'
+                  : 'card-dark'
             }`}
           >
             {plano.badge && (
-              <span className="absolute -top-3 left-8 rounded-control bg-brand-700 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white">
+              <span className="absolute -top-3 left-8 rounded-control bg-acid-400 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-carbon-950">
                 {plano.badge}
               </span>
             )}
 
-            <h3
-              className={`eyebrow ${
-                plano.destaque ? 'text-brand-700' : 'text-ink-brand'
-              }`}
-            >
-              {plano.nome}
-            </h3>
+            <h3 className="eyebrow text-on-dark-accent">{plano.nome}</h3>
 
             {/* A frase de resultado é o que o cliente lê primeiro. */}
-            <p className="mt-3 text-lg font-semibold leading-snug text-ink-strong">
+            <p className="mt-3 text-lg font-semibold leading-snug text-on-dark">
               {plano.chamada}
             </p>
 
-            <div className="mt-6 border-t border-line pt-6">
+            <div className="mt-6 border-t border-white/10 pt-6">
               {plano.precoInicial === null ? (
-                <p className="text-2xl font-bold text-ink-strong">
-                  Sob medida
-                </p>
+                <p className="text-2xl font-bold text-on-dark">Sob medida</p>
               ) : (
                 <p>
-                  <span className="text-sm text-ink-muted">a partir de </span>
-                  <span className="text-3xl font-bold text-ink-strong">
+                  <span className="text-sm text-on-dark-muted">
+                    a partir de{' '}
+                  </span>
+                  <span className="text-3xl font-bold text-on-dark">
                     {formatPreco(plano.precoInicial)}
                   </span>
-                  <span className="text-sm text-ink-muted">/mês</span>
+                  <span className="text-sm text-on-dark-muted">/mês</span>
                 </p>
               )}
             </div>
 
             {/* Especificação como lastro, em corpo menor — as quantidades
                 seguem declaradas, mas não são a promessa do plano. */}
-            <p className="mt-6 grow text-sm leading-relaxed text-ink-muted">
-              <span className="font-semibold text-ink-body">Inclui: </span>
+            <p className="mt-6 grow text-sm leading-relaxed text-on-dark-muted">
+              <span className="font-semibold text-on-dark-body">Inclui: </span>
               {plano.inclui}
             </p>
 
@@ -103,10 +95,10 @@ export default function Plans() {
                   ? 'Solicitar contato para montar um plano personalizado'
                   : `Solicitar contato sobre o plano ${plano.nome}`
               }
-              className={`mt-8 block rounded-control py-4 text-center font-bold transition-[background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 ${
+              className={`mt-8 block rounded-control py-4 text-center font-bold transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 ${
                 plano.destaque
-                  ? 'bg-brand-700 text-white shadow-e1 hover:bg-brand-800 hover:shadow-e2'
-                  : 'bg-brand-50 text-ink-brand hover:bg-brand-100'
+                  ? 'bg-acid-400 text-carbon-950 shadow-e1 hover:bg-acid-500 hover:shadow-e2'
+                  : 'border border-white/20 text-on-dark hover:border-acid-400 hover:text-acid-400'
               }`}
             >
               {plano.precoInicial === null
@@ -117,30 +109,34 @@ export default function Plans() {
         ))}
       </RevealGroup>
 
-      {/* A assessoria aparece aqui como complemento, não como item de plano:
-          quem só quer marketing não é confrontado com o preço dela. */}
+      {/* O tráfego aparece aqui como complemento, não como item de plano: quem
+          só quer conteúdo não é confrontado com o preço dele. */}
       <Reveal>
-        <div className="mx-auto mt-12 max-w-3xl rounded-card border border-line-brand bg-brand-50 p-7 text-center">
-          <p className="eyebrow text-ink-brand">Complemento opcional</p>
-          <p className="mt-3 text-lg font-semibold text-ink-strong">
-            Precisa também de ajuda com a demanda operacional?
+        <div className="mx-auto mt-12 max-w-3xl rounded-card border border-white/15 bg-white/[0.05] p-7 text-center">
+          <p className="eyebrow text-on-dark-accent">Complemento opcional</p>
+          <p className="mt-3 text-lg font-semibold text-on-dark">
+            Precisa de resultado antes do conteúdo amadurecer?
           </p>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink-muted">
-            A assessoria operacional é contratada à parte, porque o valor dela
-            acompanha o tamanho da sua carteira, não o volume de conteúdo.
-            Pode entrar junto de qualquer um dos planos acima ou sozinha.
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-on-dark-muted">
+            A gestão de tráfego pago é contratada à parte, porque o valor dela
+            acompanha o número de plataformas e o volume de mídia, não o volume
+            de conteúdo. Pode entrar junto de qualquer um dos planos acima ou
+            sozinha.
           </p>
           <a
-            href="#assessoria"
-            className="mt-5 inline-flex items-center gap-2 font-semibold text-ink-brand underline underline-offset-4"
+            href="#trafego"
+            className="mt-5 inline-flex items-center gap-2 font-semibold text-on-dark-accent underline underline-offset-4"
           >
-            Ver a assessoria operacional
+            Ver a gestão de tráfego
             <ArrowRight size={16} weight="bold" aria-hidden="true" />
           </a>
         </div>
       </Reveal>
 
-      <Reveal as="p" className="mx-auto mt-8 max-w-2xl text-center text-sm text-ink-muted">
+      <Reveal
+        as="p"
+        className="mx-auto mt-8 max-w-2xl text-center text-sm text-on-dark-muted"
+      >
         Os valores acima são o ponto de partida de cada plano. O escopo final —
         volume de conteúdo e páginas do site — é fechado junto com você no
         diagnóstico gratuito.

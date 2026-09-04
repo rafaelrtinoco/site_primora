@@ -6,6 +6,9 @@ import { site } from '../content/site';
 /**
  * Botão flutuante de WhatsApp.
  *
+ * O texto sobre o verde é escuro: branco sobre #25D366 dá 1.98:1 e reprova,
+ * mesmo sendo a combinação da própria marca do WhatsApp.
+ *
  * Só é renderizado quando existe um número real em `site.contato.whatsapp` —
  * um botão de contato que não leva a lugar nenhum é pior que a ausência dele.
  */
@@ -38,12 +41,12 @@ export default function WhatsAppFab() {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Falar com a Primora no WhatsApp"
+          aria-label="Falar com a Praxis Digital no WhatsApp"
           initial={{ opacity: 0, scale: 0.8, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 12 }}
           transition={{ duration: 0.25 }}
-          className="group fixed bottom-5 right-5 z-[85] flex items-center gap-0 overflow-hidden rounded-control bg-[#25D366] py-4 pl-4 pr-4 text-white shadow-e3 transition-[gap,padding,background-color] duration-300 hover:bg-[#1DA851] md:hover:gap-2.5 md:hover:pr-5"
+          className="group fixed bottom-5 right-5 z-[85] flex items-center gap-0 overflow-hidden rounded-control bg-[#25D366] py-4 pl-4 pr-4 text-carbon-950 shadow-e3 transition-[gap,padding,background-color] duration-300 hover:bg-[#1DA851] md:hover:gap-2.5 md:hover:pr-5"
         >
           <WhatsAppIcon size={26} />
           {/* O rótulo se revela no hover em telas grandes; no toque, o ícone

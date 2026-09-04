@@ -1,7 +1,8 @@
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Solutions from '../components/Solutions';
-import Assessoria from '../components/Assessoria';
+import Trafego from '../components/Trafego';
+import Ia from '../components/Ia';
 import Process from '../components/Process';
 import Plans from '../components/Plans';
 import Testimonials from '../components/Testimonials';
@@ -13,21 +14,25 @@ import WhatsAppFab from '../components/WhatsAppFab';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-surface-muted">
+    <div className="min-h-screen bg-surface-dark">
       {/* Primeiro alvo do Tab: permite pular a navegação repetida */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-frame focus:bg-surface focus:px-5 focus:py-3 focus:font-semibold focus:text-ink-brand focus:shadow-e3"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-frame focus:bg-acid-400 focus:px-5 focus:py-3 focus:font-semibold focus:text-carbon-950 focus:shadow-e3"
       >
         Pular para o conteúdo
       </a>
 
       <Navbar />
 
+      {/* A ordem conta a história na sequência em que o cliente decide:
+          o que fazemos → o que traz gente hoje → como produzimos →
+          em quantas etapas → quanto custa → o que ainda ficou em dúvida. */}
       <main id="main" tabIndex={-1}>
         <Hero />
         <Solutions />
-        <Assessoria />
+        <Trafego />
+        <Ia />
         <Process />
         <Plans />
         <Testimonials />

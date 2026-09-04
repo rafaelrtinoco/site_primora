@@ -67,7 +67,7 @@ function Bullet({ children }: { children: string }) {
   return (
     <li className="flex items-start gap-2.5 text-sm text-ink-muted">
       <span
-        className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-400"
+        className="mt-2 size-1.5 shrink-0 rounded-full bg-acid-800"
         aria-hidden="true"
       />
       {children}
@@ -77,12 +77,13 @@ function Bullet({ children }: { children: string }) {
 
 export default function Solutions() {
   return (
-    <Section id="solutions" labelledBy="solutions-title">
+    <Section id="solutions" tone="light" labelledBy="solutions-title">
       <SectionHeader
         id="solutions-title"
-        eyebrow="Marketing"
+        tone="light"
+        eyebrow="Marketing e conteúdo"
         title="Presença digital que constrói autoridade"
-        description="Planejamento, produção e acompanhamento — não é postar por postar, é construir reputação no mercado segurador."
+        description="Planejamento, produção e acompanhamento. Não é postar por postar: é construir a reputação que faz alguém escolher você antes de comparar preço."
       />
 
       {/* Layout assimétrico de propósito: um grid uniforme de 4 cards iguais
@@ -95,13 +96,13 @@ export default function Solutions() {
           </h3>
           <p className="mb-8 text-sm text-ink-muted">
             Todo o processo de planejamento, produção, publicação e
-            acompanhamento das redes da corretora.
+            acompanhamento das suas redes.
           </p>
 
           <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
             {socialMedia.map((bloco) => (
               <div key={bloco.grupo}>
-                <h4 className="eyebrow mb-3 text-ink-brand">{bloco.grupo}</h4>
+                <h4 className="eyebrow mb-3 text-ink-accent">{bloco.grupo}</h4>
                 <ul className="space-y-2">
                   {bloco.itens.map((item) => (
                     <Bullet key={item}>{item}</Bullet>
@@ -135,8 +136,8 @@ export default function Solutions() {
                 Artes digitais
               </h3>
               <p className="mb-6 max-w-2xl text-sm text-ink-muted">
-                Peças sob medida para cada canal, mantendo a identidade da
-                corretora consistente em todos os pontos de contato.
+                Peças sob medida para cada canal, mantendo a sua identidade
+                consistente em todos os pontos de contato.
               </p>
               <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-4">
                 {artes.map((item) => (

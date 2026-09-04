@@ -1,79 +1,72 @@
 @import "tailwindcss";
 
 @theme {
-  /* ---- Escala de azul da marca -------------------------------------------
-     Os três azuis originais da Primora ocupam as posições 300 / 600 / 900.
-     A escala completa dispensa uma segunda cor: a hierarquia vem de
-     profundidade e contraste, não de matiz.
-     Namespace próprio (brand-*) e não blue-*: sobrescrever blue-* repintaria
-     em silêncio os text-blue-50/100 do código legado. Assim, todo blue-*
-     remanescente continua visível num grep. */
-  --color-brand-50: #eef5ff;
-  --color-brand-100: #d9e8ff;
-  --color-brand-200: #b6d6ff;
-  --color-brand-300: #6ec6ff; /* = accent original */
-  --color-brand-400: #3e9bf0;
-  --color-brand-500: #1b78e0;
-  --color-brand-600: #0f5fcb; /* = secondary original */
-  --color-brand-700: #0b47a0;
-  --color-brand-800: #073272;
-  --color-brand-900: #031b4e; /* = primary original */
-  --color-brand-950: #01102f;
+  /* ---- Cores da marca -----------------------------------------------------
+     A paleta da Praxis tem cinco cores: #ffffff, #171915, #2e3823, #070905 e
+     #DBEB17. As quatro derivadas abaixo (carbon-800, moss-600, acid-500,
+     acid-800) existem porque a paleta não fornece tons de borda e hover — sem
+     elas, todo estado de interação teria que saltar direto para o limão.
 
-  /* ---- Texto sobre fundo claro (contrastes verificados vs #F7FAFC) ---- */
-  --color-ink-strong: #031b4e; /* 15.77:1 */
-  --color-ink-body: #2b3a55; /*  10.89:1 */
-  --color-ink-muted: #51607a; /*   6.06:1 — substitui todo text-gray-500 */
-  --color-ink-brand: #0b47a0; /*   8.67:1 no branco */
+     Namespace próprio (carbon, moss, acid) e não os `lime` ou `stone` do
+     Tailwind: sobrescrever um namespace nativo repintaria em silêncio qualquer
+     classe legada. Assim todo `brand-` remanescente da paleta azul continua
+     aparecendo num grep. */
+  --color-carbon-950: #070905; /* fundo principal */
+  --color-carbon-900: #171915; /* superfície elevada */
+  --color-carbon-800: #22261e; /* derivada: borda e hover no escuro */
+  --color-moss-700: #2e3823;
+  --color-moss-600: #3d4a2e; /* derivada: hover */
+  --color-acid-400: #dbeb17;
+  --color-acid-500: #c3d20c; /* derivada: hover de botão limão */
+  --color-acid-800: #5a6b00; /* derivada: acento textual sobre branco */
 
-  /* ---- Texto sobre fundo escuro (contrastes vs brand-900) ---- */
-  --color-on-dark: #ffffff; /* 16.53:1 */
-  --color-on-dark-body: #c6d8f2; /* 11.42:1 */
-  --color-on-dark-muted: #a9c4e8; /*  9.25:1 — corrige o 3.42:1 do rodapé */
-  --color-on-dark-accent: #6ec6ff; /*  8.80:1 */
+  /* ---- Texto sobre fundo claro (contrastes vs #ffffff) ---- */
+  --color-ink-strong: #070905; /* 19.99:1 */
+  --color-ink-body: #2e3823; /* 12.31:1 */
+  --color-ink-muted: #5b6353; /*  6.26:1 — e 5.77:1 sobre surface-muted */
+  --color-ink-accent: #5a6b00; /*  5.94:1 — o acento no claro NÃO é o limão */
+
+  /* ---- Texto sobre fundo escuro ----
+     Verificados nas três superfícies escuras, a pior sendo moss-700:
+     on-dark 12.31:1 · body 8.65:1 · muted 5.46:1 · accent 9.33:1 */
+  --color-on-dark: #ffffff;
+  --color-on-dark-body: #d5dacf;
+  --color-on-dark-muted: #a8afa0;
+  --color-on-dark-accent: #dbeb17;
 
   /* ---- Superfícies ---- */
   --color-surface: #ffffff;
-  --color-surface-muted: #f7fafc;
-  --color-surface-tint: #eef5ff;
-  --color-surface-invert: #031b4e;
-  --color-surface-invert-alt: #073272;
+  --color-surface-muted: #f5f6f2;
+  --color-surface-dark: #070905;
+  --color-surface-dark-alt: #171915;
+  --color-surface-moss: #2e3823;
 
   /* ---- Estado de erro ----
-     Única cor fora do azul, e por necessidade semântica: vermelho para erro
-     é convenção que não se deve contrariar. Nunca decorativo.
-     #B42318 sobre #FEF3F2 = 7.6:1. */
+     Única cor fora da paleta, e por necessidade semântica: vermelho para erro
+     é convenção que não se deve contrariar. Nunca decorativo. */
   --color-danger-surface: #fef3f2;
   --color-danger-border: #fecdca;
   --color-danger-ink: #b42318;
 
   /* ---- Linhas ---- */
-  --color-line: #dce5f0;
-  --color-line-strong: #cfdbea;
-  --color-line-brand: #b6d6ff;
-
-  /* ---- Aliases legados: mantêm o código atual funcionando durante a migração ---- */
-  --color-primary: var(--color-brand-900);
-  --color-secondary: var(--color-brand-600);
-  --color-accent: var(--color-brand-300);
-  --color-background: var(--color-surface-muted);
-  --color-text: var(--color-ink-body);
+  --color-line: #e4e6df;
+  --color-line-strong: #cdd1c4;
 
   /* ---- Raio ----
      Nomes próprios de propósito: redefinir --radius-lg mudaria o rounded-lg
      do código legado sem aparecer no diff. */
   --radius-control: 9999px; /* botões, badges */
   --radius-frame: 14px; /* molduras de ícone */
-  --radius-card: 18px; /* card padrão — substitui a mistura xl/2xl/3xl */
-  --radius-panel: 24px; /* formulário, plano destacado */
+  --radius-card: 18px; /* card padrão */
+  --radius-panel: 24px; /* formulário, painel de preço */
 
-  /* ---- Elevação: azulada e discreta, nada acima de e3 (mata shadow-2xl) ---- */
+  /* ---- Elevação: escura e discreta, nada acima de e3 (mata shadow-2xl) ---- */
   --shadow-e1:
-    0 1px 2px 0 rgb(3 27 78 / 0.04), 0 1px 3px 0 rgb(3 27 78 / 0.06);
+    0 1px 2px 0 rgb(7 9 5 / 0.06), 0 1px 3px 0 rgb(7 9 5 / 0.08);
   --shadow-e2:
-    0 2px 4px -1px rgb(3 27 78 / 0.05), 0 6px 12px -2px rgb(3 27 78 / 0.08);
+    0 2px 4px -1px rgb(7 9 5 / 0.07), 0 6px 12px -2px rgb(7 9 5 / 0.1);
   --shadow-e3:
-    0 8px 16px -4px rgb(3 27 78 / 0.08), 0 20px 32px -8px rgb(3 27 78 / 0.1);
+    0 8px 16px -4px rgb(7 9 5 / 0.1), 0 20px 32px -8px rgb(7 9 5 / 0.14);
 
   --font-sans: "Montserrat", sans-serif;
 }
@@ -82,6 +75,8 @@
   html {
     /* Compensa o header fixo para o título da seção não ficar escondido */
     scroll-padding-top: 7rem;
+    /* O fundo do site é escuro: sem isso, o overscroll do iOS mostra branco */
+    background-color: var(--color-carbon-950);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -91,7 +86,7 @@
   }
 
   body {
-    background-color: var(--color-surface-muted);
+    background-color: var(--color-carbon-950);
     color: var(--color-ink-body);
     font-family: var(--font-sans);
     font-weight: 400;
@@ -112,11 +107,14 @@
     letter-spacing: -0.01em;
   }
 
-  /* Foco visível global. Neutraliza o focus:outline-none do acordeão do FAQ
-     mesmo antes daquele arquivo ser corrigido. */
+  /* Foco visível global. O limão é o anel mais legível que a paleta permite
+     sobre os fundos escuros, que agora são a maioria da página; sobre branco
+     ele sozinho daria 1.32:1, por isso vem acompanhado de uma sombra escura
+     que garante a borda visível nos dois casos. */
   :focus-visible {
-    outline: 2px solid var(--color-brand-600);
+    outline: 2px solid var(--color-acid-400);
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgb(7 9 5 / 0.65);
     border-radius: 2px;
   }
 }
@@ -130,8 +128,8 @@
     text-transform: uppercase;
   }
 
-  /* Card padrão. Transiciona apenas transform/sombra/borda — nunca `all`,
-     que é o que causa jank nos hovers atuais. */
+  /* Card sobre fundo claro. Transiciona apenas transform/sombra/borda — nunca
+     `all`, que é o que causa jank nos hovers. */
   .card {
     background-color: var(--color-surface);
     border: 1px solid var(--color-line);
@@ -143,31 +141,50 @@
       border-color 200ms ease-out;
   }
 
+  /* Card sobre fundo escuro. Sombra não funciona no escuro — a separação vem
+     da borda e de um fundo levemente mais claro que a seção. */
+  .card-dark {
+    background-color: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: var(--radius-card);
+    transition:
+      transform 200ms ease-out,
+      background-color 200ms ease-out,
+      border-color 200ms ease-out;
+  }
+
   @media (hover: hover) {
     .card:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-e2);
-      border-color: var(--color-line-brand);
+      border-color: var(--color-line-strong);
+    }
+
+    .card-dark:hover {
+      transform: translateY(-2px);
+      background-color: rgb(255 255 255 / 0.07);
+      border-color: rgb(219 235 23 / 0.35);
     }
   }
 }
 
 @layer utilities {
   /* ---- Malha de gradiente do Hero ----
-     Sem filter: blur(). O blur de 100px+ usado hoje em 7 lugares força um
-     buffer offscreen repintado a cada frame (é o que trava no celular) e é a
-     assinatura visual de UI gerada por IA. Aqui o gradiente é pintado uma vez
-     e só `transform` anima, o que roda no compositor. */
+     Sem filter: blur(). Um blur de 100px+ força um buffer offscreen repintado
+     a cada frame (é o que trava no celular) e é a assinatura visual de UI
+     gerada por IA. Aqui o gradiente é pintado uma vez e só `transform` anima,
+     o que roda no compositor.
+     O limão entra em opacidade baixa: a 100% ele domina o Hero inteiro. */
   .hero-mesh {
     position: absolute;
     inset: -20%;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.55;
     background:
-      radial-gradient(38% 42% at 22% 18%, #0f5fcb 0%, transparent 62%),
-      radial-gradient(34% 38% at 78% 12%, #6ec6ff 0%, transparent 60%),
-      radial-gradient(45% 50% at 60% 78%, #01102f 0%, transparent 65%);
+      radial-gradient(36% 40% at 18% 16%, #2e3823 0%, transparent 62%),
+      radial-gradient(30% 34% at 82% 10%, rgb(219 235 23 / 0.22) 0%, transparent 60%),
+      radial-gradient(46% 52% at 62% 82%, #171915 0%, transparent 66%);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -181,14 +198,48 @@
   .hero-grid {
     position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
     background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+      linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
     background-size: 72px 72px;
     -webkit-mask-image: radial-gradient(70% 60% at 50% 35%, #000, transparent);
     mask-image: radial-gradient(70% 60% at 50% 35%, #000, transparent);
+  }
+
+  /* Símbolo da marca girando atrás do título.
+     A rotação é CSS, então o MotionConfig do App.tsx não a alcança — daí o
+     media query explícito abaixo. */
+  .hero-symbol {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    /* 0.14 e não menos: o símbolo é majoritariamente escuro, e sobre o
+       carbon-950 só a meia-lua limão realmente aparece. Abaixo disso ele
+       some por completo. */
+    opacity: 0.14;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-symbol {
+      animation: slow-spin 48s linear infinite;
+    }
+  }
+
+  /* Faixa de setores em loop. O conteúdo é duplicado no JSX e o trilho anda
+     -50%, então a emenda cai exatamente onde a cópia começa. */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee-track {
+      animation: marquee 42s linear infinite;
+    }
   }
 
   /* Headline editorial. A Montserrat tem tracking largo demais nesse corpo —
@@ -210,5 +261,17 @@
 @keyframes mesh-drift {
   to {
     transform: translate3d(-3%, 2%, 0) scale(1.06);
+  }
+}
+
+@keyframes slow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }

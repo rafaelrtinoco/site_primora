@@ -11,7 +11,7 @@ export default function Testimonials() {
   if (site.depoimentos.length === 0) return null;
 
   return (
-    <Section id="testimonials" tone="muted" labelledBy="testimonials-title">
+    <Section id="testimonials" tone="darkAlt" labelledBy="testimonials-title">
       <SectionHeader
         id="testimonials-title"
         eyebrow="Clientes"
@@ -20,19 +20,19 @@ export default function Testimonials() {
 
       <RevealGroup className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {site.depoimentos.map((depoimento) => (
-          <RevealItem key={depoimento.nome} className="card relative p-8">
+          <RevealItem key={depoimento.nome} className="card-dark relative p-8">
             <Quotes
               size={36}
               weight="fill"
               aria-hidden="true"
-              className="absolute right-6 top-6 text-brand-100"
+              className="absolute right-6 top-6 text-white/10"
             />
-            <blockquote className="relative z-10 text-ink-body">
+            <blockquote className="relative z-10 text-on-dark-body">
               <p>{depoimento.quote}</p>
             </blockquote>
-            <figcaption className="mt-8 border-t border-line pt-5">
-              <p className="font-bold text-ink-strong">{depoimento.nome}</p>
-              <p className="text-sm text-ink-muted">
+            <figcaption className="mt-8 border-t border-white/10 pt-5">
+              <p className="font-bold text-on-dark">{depoimento.nome}</p>
+              <p className="text-sm text-on-dark-muted">
                 {depoimento.cargo} · {depoimento.empresa}
               </p>
             </figcaption>

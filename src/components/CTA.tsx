@@ -4,16 +4,16 @@ import WhatsAppIcon from './ui/WhatsAppIcon';
 import Section from './ui/Section';
 import { RevealGroup, RevealItem } from './ui/Reveal';
 import { site } from '../content/site';
-import { PLANO_EVENT, INTERESSE_ASSESSORIA } from '../lib/planoSelecionado';
+import { PLANO_EVENT, INTERESSE_TRAFEGO } from '../lib/planoSelecionado';
 
 /* Checklist que era a seção FreeAudit inteira: ela ficava imediatamente antes
    desta, com a mesma mensagem, e seu único CTA rolava 300px até aqui. */
 const checklist = [
-  'Instagram otimizado',
+  'Perfis e presença nas redes',
   'Posicionamento da marca',
-  'Oportunidades de automação',
-  'Funil de captação',
-  'Experiência do cliente',
+  'Site e páginas de captação',
+  'Campanhas de anúncio ativas',
+  'De onde vêm os seus leads hoje',
 ];
 
 type Status = 'idle' | 'sucesso';
@@ -23,11 +23,18 @@ type Status = 'idle' | 'sucesso';
    campos onde ele mais importa. */
 const campoClasses =
   'w-full rounded-frame border border-line bg-surface px-4 py-3 text-ink-body ' +
-  'placeholder:text-ink-muted/70 transition-colors duration-200 focus:border-brand-500';
+  'placeholder:text-ink-muted/70 transition-colors duration-200 focus:border-moss-700';
+
+/* Verde do WhatsApp. É a terceira cor fora da paleta (junto do vermelho de
+   erro) e existe pelo mesmo motivo: comunica o destino da ação, não decora.
+   O texto por cima é escuro nos dois estados: branco daria 1.98:1 sobre
+   #25D366 e 3.10:1 sobre o #1DA851 do hover, reprovando em ambos. */
+const BOTAO_WHATSAPP =
+  'bg-[#25D366] text-carbon-950 hover:bg-[#1DA851]';
 
 /**
  * Monta a mensagem em primeira pessoa: quem envia é o lead, do WhatsApp dele
- * para o da Primora. Conversa iniciada pelo usuário não depende de API, não
+ * para o da Praxis. Conversa iniciada pelo usuário não depende de API, não
  * precisa de template aprovado e não corre risco de banimento do número.
  */
 function montarMensagem(dados: FormData): string {
@@ -35,7 +42,7 @@ function montarMensagem(dados: FormData): string {
   const interesse = valor('plano') || 'Ainda não sei';
 
   return [
-    'Olá! Vim pelo site da Primora e quero agendar um diagnóstico.',
+    'Olá! Vim pelo site da Praxis Digital e quero agendar um diagnóstico.',
     '',
     `*Nome:* ${valor('name')}`,
     `*E-mail:* ${valor('email')}`,
@@ -93,7 +100,7 @@ export default function CTA() {
   }
 
   return (
-    <Section id="cta" tone="invert" labelledBy="cta-title">
+    <Section id="cta" tone="dark" labelledBy="cta-title">
       <div className="grid items-start gap-12 md:grid-cols-2 md:gap-10 lg:gap-16">
         <RevealGroup>
           <RevealItem>
@@ -106,15 +113,18 @@ export default function CTA() {
           </RevealItem>
 
           <RevealItem as="p" className="mt-6 max-w-lg text-lg text-on-dark-body">
-            Fazemos um diagnóstico gratuito para identificar oportunidades de
-            crescimento, automação e fortalecimento da sua autoridade digital.
+            Fazemos um diagnóstico gratuito para identificar onde você está
+            perdendo cliente hoje — no conteúdo, no site ou na campanha.
           </RevealItem>
 
           <RevealItem>
             <p className="eyebrow mt-10 text-on-dark-accent">O que analisamos</p>
             <ul className="mt-5 space-y-3">
               {checklist.map((item) => (
-                <li key={item} className="flex items-center gap-3 text-on-dark-body">
+                <li
+                  key={item}
+                  className="flex items-center gap-3 text-on-dark-body"
+                >
                   <CheckCircle
                     size={20}
                     weight="duotone"
@@ -127,15 +137,19 @@ export default function CTA() {
             </ul>
           </RevealItem>
 
-          <RevealItem>
-            <a
-              href={`mailto:${site.contato.email}`}
-              className="mt-10 inline-flex items-center gap-3 text-on-dark-body underline-offset-4 transition-colors hover:text-on-dark hover:underline"
-            >
-              <Envelope size={20} weight="duotone" aria-hidden="true" />
-              {site.contato.email}
-            </a>
-          </RevealItem>
+          {/* Só renderiza com e-mail real. Hoje o atendimento é todo por
+              WhatsApp e `site.contato.email` é null, então o bloco some. */}
+          {site.contato.email && (
+            <RevealItem>
+              <a
+                href={`mailto:${site.contato.email}`}
+                className="mt-10 inline-flex items-center gap-3 text-on-dark-body underline-offset-4 transition-colors hover:text-on-dark hover:underline"
+              >
+                <Envelope size={20} weight="duotone" aria-hidden="true" />
+                {site.contato.email}
+              </a>
+            </RevealItem>
+          )}
         </RevealGroup>
 
         <RevealItem className="rounded-panel bg-surface p-6 shadow-e3 sm:p-8">
@@ -147,12 +161,12 @@ export default function CTA() {
           </p>
 
           {status === 'sucesso' ? (
-            <div className="mt-8 rounded-frame border border-brand-200 bg-brand-50 p-6 text-center">
+            <div className="mt-8 rounded-frame border border-line bg-surface-muted p-6 text-center">
               <CheckCircle
                 size={32}
                 weight="duotone"
                 aria-hidden="true"
-                className="mx-auto text-brand-700"
+                className="mx-auto text-ink-accent"
               />
 
               {linkWhatsApp ? (
@@ -174,8 +188,8 @@ export default function CTA() {
                     rel="noopener noreferrer"
                     className={`mt-5 inline-flex items-center justify-center gap-2 rounded-control px-6 py-3 font-semibold transition-colors duration-200 ${
                       popupBloqueado
-                        ? 'bg-[#25D366] text-white hover:bg-[#1DA851]'
-                        : 'border border-line-strong text-ink-brand hover:border-brand-400'
+                        ? BOTAO_WHATSAPP
+                        : 'border border-line-strong text-ink-body hover:border-moss-700 hover:text-ink-strong'
                     }`}
                   >
                     <WhatsAppIcon size={20} />
@@ -200,7 +214,7 @@ export default function CTA() {
                   setLinkWhatsApp(null);
                   setPopupBloqueado(false);
                 }}
-                className="mt-5 block w-full text-sm font-semibold text-ink-brand underline underline-offset-4"
+                className="mt-5 block w-full text-sm font-semibold text-ink-accent underline underline-offset-4"
               >
                 Enviar outra solicitação
               </button>
@@ -293,14 +307,12 @@ export default function CTA() {
                     <option key={p.nome} value={p.nome}>
                       {p.precoInicial === null
                         ? 'Plano personalizado'
-                        : `Marketing · ${p.nome}`}
+                        : `Conteúdo · ${p.nome}`}
                     </option>
                   ))}
-                  <option value={INTERESSE_ASSESSORIA}>
-                    {INTERESSE_ASSESSORIA}
-                  </option>
-                  <option value="Marketing + assessoria operacional">
-                    Marketing + assessoria operacional
+                  <option value={INTERESSE_TRAFEGO}>{INTERESSE_TRAFEGO}</option>
+                  <option value="Conteúdo + tráfego pago">
+                    Conteúdo + tráfego pago
                   </option>
                 </select>
               </div>
@@ -312,14 +324,14 @@ export default function CTA() {
                   type="checkbox"
                   required
                   value="Sim"
-                  className="mt-1 size-4 shrink-0 rounded border-line-strong text-brand-700 focus:ring-brand-500"
+                  className="mt-1 size-4 shrink-0 rounded border-line-strong text-moss-700"
                 />
                 <label htmlFor="consentimento" className="text-sm text-ink-muted">
-                  Autorizo a Primora a usar meus dados para entrar em contato,
-                  conforme a{' '}
+                  Autorizo a Praxis Digital a usar meus dados para entrar em
+                  contato, conforme a{' '}
                   <a
                     href="/privacidade.html"
-                    className="font-medium text-ink-brand underline underline-offset-2"
+                    className="font-medium text-ink-accent underline underline-offset-2"
                   >
                     Política de Privacidade
                   </a>
@@ -329,7 +341,7 @@ export default function CTA() {
 
               <button
                 type="submit"
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-control bg-[#25D366] py-4 font-bold text-white shadow-e1 transition-[background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:bg-[#1DA851] hover:shadow-e2"
+                className={`mt-2 flex w-full items-center justify-center gap-2 rounded-control py-4 font-bold shadow-e1 transition-[background-color,color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-e2 ${BOTAO_WHATSAPP}`}
               >
                 {/* O rótulo avisa que uma conversa vai abrir — clicar em
                     "Solicitar contato" e cair no WhatsApp seria surpresa. */}

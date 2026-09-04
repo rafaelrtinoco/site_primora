@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Icon, IconWeight } from '@phosphor-icons/react';
 
 type Size = 'sm' | 'md' | 'lg';
-type Tone = 'brand' | 'solid' | 'outline' | 'invert';
+type Tone = 'brand' | 'acid' | 'invert' | 'outlineDark';
 
 /**
  * Phosphor no peso `duotone`: a camada secundária é pintada com a mesma
@@ -15,12 +15,14 @@ const SIZES: Record<Size, { frame: string; icon: number }> = {
   lg: { frame: 'size-16', icon: 30 },
 };
 
-/* Hierarquia por profundidade, não por matiz. */
+/* Hierarquia por profundidade, não por matiz — a paleta tem um acento só.
+   Sobre fundo claro a moldura é escura com ícone limão (9.33:1); o inverso,
+   ícone limão direto sobre branco, daria 1.32:1 e é proibido no sistema. */
 const TONES: Record<Tone, string> = {
-  brand: 'bg-brand-50 text-brand-700 ring-1 ring-inset ring-brand-100',
-  solid: 'bg-brand-700 text-white',
-  outline: 'bg-surface text-brand-700 ring-1 ring-inset ring-line',
-  invert: 'bg-white/10 text-brand-300 ring-1 ring-inset ring-white/15',
+  brand: 'bg-moss-700 text-acid-400',
+  acid: 'bg-acid-400 text-carbon-950',
+  invert: 'bg-white/8 text-acid-400 ring-1 ring-inset ring-white/12',
+  outlineDark: 'bg-carbon-950 text-acid-400 ring-1 ring-inset ring-white/15',
 };
 
 type IconFrameProps = {

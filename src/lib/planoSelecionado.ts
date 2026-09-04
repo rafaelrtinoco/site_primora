@@ -5,7 +5,7 @@
  * Um evento de janela resolve sem dependência nova — e o campo continua sendo
  * um <select> normal, então funciona mesmo que o evento não chegue.
  */
-export const PLANO_EVENT = 'primora:plano-selecionado';
+export const PLANO_EVENT = 'praxis:plano-selecionado';
 
-/** Valor usado quando o visitante chega pelo bloco de assessoria operacional. */
-export const INTERESSE_ASSESSORIA = 'Assessoria operacional';
+/** Valor usado quando o visitante chega pelo bloco de tráfego pago. */
+export const INTERESSE_TRAFEGO = 'Gestão de tráfego pago';

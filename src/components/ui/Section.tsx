@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 
-type Tone = 'default' | 'muted' | 'tint' | 'invert';
+type Tone = 'light' | 'muted' | 'dark' | 'darkAlt' | 'moss';
 
 const TONES: Record<Tone, string> = {
-  default: 'bg-surface',
-  muted: 'bg-surface-muted',
-  tint: 'bg-surface-tint',
-  invert: 'bg-surface-invert text-on-dark-body',
+  light: 'bg-surface text-ink-body',
+  muted: 'bg-surface-muted text-ink-body',
+  dark: 'bg-surface-dark text-on-dark-body',
+  darkAlt: 'bg-surface-dark-alt text-on-dark-body',
+  moss: 'bg-surface-moss text-on-dark-body',
 };
 
 type SectionProps = {
@@ -23,15 +24,17 @@ type SectionProps = {
 /**
  * Wrapper único de seção.
  *
- * Resolve de uma vez, nas 12 seções: o ritmo vertical (que hoje varia entre
- * py-20, py-24 e pt-32 pb-20), o `scroll-mt` que compensa a navbar fixa de
- * ~112px (sem ele todo link de menu esconde o título da seção), o
- * aria-labelledby e a alternância de fundo.
+ * Resolve de uma vez, em todas as seções: o ritmo vertical, o `scroll-mt` que
+ * compensa a navbar fixa de ~112px (sem ele todo link de menu esconde o título
+ * da seção), o aria-labelledby e a alternância de fundo.
+ *
+ * O padrão é `dark` porque a página passou a ser escura na maior parte: as
+ * seções claras (Serviços e FAQ) é que são a exceção declarada.
  */
 export default function Section({
   id,
   children,
-  tone = 'default',
+  tone = 'dark',
   labelledBy,
   className = '',
   bleed = false,

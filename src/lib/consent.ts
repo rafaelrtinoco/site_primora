@@ -18,13 +18,15 @@ export type Consentimento = {
   marketing: boolean;
   /** ISO. A LGPD exige poder comprovar quando o consentimento foi dado. */
   data: string;
-  /** Suba a versão quando as categorias mudarem: invalida escolhas antigas. */
+  /** Suba a versão quando as categorias mudarem: invalida escolhas antigas.
+   *  Foi para 2 no rebrand: mudou o controlador dos dados, então o
+   *  consentimento dado à Primora não vale para a Praxis. */
   versao: number;
 };
 
-export const VERSAO_CONSENTIMENTO = 1;
-const STORAGE_KEY = 'primora:consentimento';
-export const CONSENT_EVENT = 'primora:consentimento-alterado';
+export const VERSAO_CONSENTIMENTO = 2;
+const STORAGE_KEY = 'praxis:consentimento';
+export const CONSENT_EVENT = 'praxis:consentimento-alterado';
 
 export const CATEGORIAS: {
   id: Exclude<Categoria, 'essenciais'>;
@@ -41,7 +43,7 @@ export const CATEGORIAS: {
     id: 'marketing',
     nome: 'Marketing',
     descricao:
-      'Permitem medir o resultado de anúncios e exibir conteúdo relacionado à Primora em outras plataformas.',
+      'Permitem medir o resultado de anúncios e exibir conteúdo relacionado à Praxis Digital em outras plataformas.',
   },
 ];
 
@@ -92,7 +94,7 @@ export function getConsent(categoria: Categoria): boolean {
 }
 
 /** Abre o painel de preferências a partir de qualquer lugar (ex.: rodapé). */
-export const ABRIR_PREFERENCIAS_EVENT = 'primora:abrir-preferencias';
+export const ABRIR_PREFERENCIAS_EVENT = 'praxis:abrir-preferencias';
 
 export function abrirPreferencias() {
   window.dispatchEvent(new Event(ABRIR_PREFERENCIAS_EVENT));

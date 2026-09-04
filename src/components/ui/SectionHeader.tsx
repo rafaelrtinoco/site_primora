@@ -22,7 +22,7 @@ export default function SectionHeader({
   eyebrow,
   id,
   align = 'center',
-  tone = 'light',
+  tone = 'dark',
 }: SectionHeaderProps) {
   const dark = tone === 'dark';
 
@@ -35,7 +35,7 @@ export default function SectionHeader({
       {eyebrow && (
         <RevealItem
           as="p"
-          className={`eyebrow mb-4 ${dark ? 'text-on-dark-accent' : 'text-ink-brand'}`}
+          className={`eyebrow mb-4 ${dark ? 'text-on-dark-accent' : 'text-ink-accent'}`}
         >
           {eyebrow}
         </RevealItem>

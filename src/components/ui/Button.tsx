@@ -1,17 +1,22 @@
 import type { ComponentProps, ReactNode } from 'react';
 import type { Icon } from '@phosphor-icons/react';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'inverse';
+type Variant = 'primary' | 'dark' | 'outline' | 'outlineDark';
 type Size = 'md' | 'lg';
 
 /* Fundo sólido, sem gradiente: o gradiente em botão é justamente o que faz o
-   site ler como template gerado. Branco sobre brand-700 dá 8.67:1. */
+   site ler como template gerado.
+
+   `primary` é o botão limão, e ele funciona nas duas famílias de fundo porque
+   o texto é carbon-950 sobre #DBEB17 — 15.15:1. O limão só é seguro assim,
+   como preenchimento: como cor de texto sobre branco ele daria 1.32:1. */
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand-700 text-white hover:bg-brand-800 shadow-e1 hover:shadow-e2',
-  secondary:
-    'bg-surface text-ink-brand border border-line-strong hover:border-brand-400 hover:text-brand-800',
-  ghost: 'bg-brand-50 text-ink-brand hover:bg-brand-100',
-  inverse: 'bg-white text-brand-900 hover:bg-brand-50 shadow-e2',
+  primary: 'bg-acid-400 text-carbon-950 hover:bg-acid-500 shadow-e1 hover:shadow-e2',
+  dark: 'bg-carbon-950 text-on-dark hover:bg-moss-700 shadow-e1 hover:shadow-e2',
+  outline:
+    'border border-line-strong text-ink-body hover:border-moss-700 hover:text-ink-strong',
+  outlineDark:
+    'border border-white/25 text-on-dark hover:border-acid-400 hover:text-acid-400',
 };
 
 const SIZES: Record<Size, string> = {

@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { List, X } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
-import Logo from '/primora_horizontal.png';
+import Logo from '/praxis-horizontal-lime.png';
 
 const navLinks = [
-  { name: 'Marketing', href: '#solutions' },
-  { name: 'Assessoria', href: '#assessoria' },
+  { name: 'Serviços', href: '#solutions' },
+  { name: 'Tráfego pago', href: '#trafego' },
+  { name: 'IA', href: '#ia' },
   { name: 'Como Funciona', href: '#process' },
   { name: 'Planos', href: '#plans' },
   { name: 'FAQ', href: '#faq' },
@@ -32,50 +33,45 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [mobileMenuOpen]);
 
-  /* Sobre o Hero escuro o menu é transparente; ao rolar vira sólido claro.
-     O logo é azul-marinho, então precisa ser invertido para branco enquanto
-     está sobre o fundo escuro — senão fica ilegível. */
-  const overHero = !scrolled && !mobileMenuOpen;
+  /* A barra é sempre escura depois do scroll, inclusive por cima das seções
+     claras. Isso mantém um único arquivo de logo em uso — o horizontal limão —
+     e evita a troca de imagem no meio da rolagem.
+     O logo novo é colorido: nada de `brightness-0 invert`, que achataria o
+     degradê do símbolo numa mancha branca. */
+  const transparente = !scrolled && !mobileMenuOpen;
 
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-[background-color,box-shadow,padding] duration-300 ${
-        overHero
+        transparente
           ? 'bg-transparent py-5'
-          : 'bg-surface/90 py-3 shadow-e1 backdrop-blur-md'
+          : 'bg-carbon-900/95 py-3 shadow-e2 backdrop-blur-md'
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between gap-6">
-          <a href="#hero" className="flex items-center" aria-label="Primora Soluções — início">
-            <img
-              src={Logo}
-              alt="Primora Soluções"
-              className={`h-10 w-auto transition-[filter] duration-300 ${
-                overHero ? 'brightness-0 invert' : ''
-              }`}
-            />
+          <a
+            href="#hero"
+            className="flex items-center"
+            aria-label="Praxis Digital — início"
+          >
+            <img src={Logo} alt="Praxis Digital" className="h-9 w-auto md:h-10" />
           </a>
 
-          <nav aria-label="Principal" className="hidden items-center gap-7 lg:flex">
+          <nav
+            aria-label="Principal"
+            className="hidden items-center gap-5 lg:flex xl:gap-7"
+          >
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  overHero
-                    ? 'text-on-dark-body hover:text-on-dark'
-                    : 'text-ink-muted hover:text-ink-brand'
-                }`}
+                className="text-sm font-medium text-on-dark-body transition-colors duration-200 hover:text-acid-400"
               >
                 {link.name}
               </a>
             ))}
-            <Button
-              href="#cta"
-              size="md"
-              variant={overHero ? 'inverse' : 'primary'}
-            >
+            <Button href="#cta" size="md">
               Diagnóstico gratuito
             </Button>
           </nav>
@@ -85,7 +81,7 @@ export default function Navbar() {
             aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
-            className={`lg:hidden ${overHero ? 'text-on-dark' : 'text-ink-strong'}`}
+            className="text-on-dark lg:hidden"
             onClick={() => setMobileMenuOpen((open) => !open)}
           >
             {mobileMenuOpen ? (
@@ -105,7 +101,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full w-full border-b border-line bg-surface shadow-e2 lg:hidden"
+            className="absolute left-0 top-full w-full border-b border-white/10 bg-carbon-900 shadow-e3 lg:hidden"
           >
             <nav
               aria-label="Principal (mobile)"
@@ -116,7 +112,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-frame px-3 py-3 text-base font-medium text-ink-body transition-colors duration-200 hover:bg-brand-50 hover:text-ink-brand"
+                  className="rounded-frame px-3 py-3 text-base font-medium text-on-dark-body transition-colors duration-200 hover:bg-white/5 hover:text-acid-400"
                 >
                   {link.name}
                 </a>

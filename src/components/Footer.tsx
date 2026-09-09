@@ -40,7 +40,7 @@ export default function Footer() {
             <a
               href="#hero"
               className="mb-6 inline-flex items-center"
-              aria-label="Praxis Digital — início"
+              aria-label="Praxis Digital, início"
             >
               {/* Logo colorido: nada de `brightness-0 invert`, que era o que o
                   logo azul-marinho antigo precisava e que aqui destruiria o

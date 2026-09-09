@@ -14,9 +14,10 @@ Services sold: content/social media, sites and landing pages, digital art, and *
 
 ```bash
 npm install
-npm run dev       # Vite dev server
-npm run build     # tsc -b && vite build (type-checks first)
-npm run lint      # eslint .
+npm run dev         # Vite dev server
+npm run build       # tsc -b && check:copy && vite build (type-checks first)
+npm run check:copy  # scripts/check-copy.mjs: no em dash / banned jargon in visible text
+npm run lint        # eslint .
 npm run preview
 ```
 
@@ -33,15 +34,34 @@ Two layers under `src/components/`:
 
 `src/lib/motion.ts` holds the animation variants, easing and viewport config. `src/content/site.ts` holds all disputed content (contact details, sectors, metrics, testimonials, plan and traffic prices).
 
+### No backend, no router
+
+**The contact form is a `wa.me` deep link, not a submission.** `CTA.tsx`'s `handleSubmit` builds the message text with `montarMensagem` and calls `window.open` *synchronously inside the click handler* — no `await` may sit before that call, or the browser blocks the popup. The resulting URL is also kept in state, so a blocked popup degrades to a manual "open WhatsApp" button instead of a dead end. A honeypot field (`_honey`) sits off-screen via absolute positioning rather than `display:none`, since some bots special-case the latter. No data leaves the visitor's browser until they press send inside WhatsApp itself — the Política de Privacidade is written on that premise, so it isn't just a UX choice.
+
+**Cross-section communication is namespaced window `CustomEvent`s**, because there's no router and no shared store. Two `src/lib/` modules exist purely as event contracts:
+
+- `planoSelecionado.ts` — `PLANO_EVENT` (`praxis:plano-selecionado`), dispatched from Plans and Trafego when a plan/traffic tier is clicked, consumed by CTA to pre-fill the form's plan `<select>`.
+- `consent.ts` — `ABRIR_PREFERENCIAS_EVENT`, dispatched from the footer's "cookie preferences" link, consumed by `CookieConsent` to reopen its panel.
+
+The event is always an enhancement, never a dependency: the CTA `<select>` stays a fully usable manual control if the event never fires. Keep new cross-component signals on this pattern, with the same `praxis:` prefix.
+
+**Overlay z-index ladder** — collisions here are invisible until two overlays actually stack, so keep new fixed/sticky elements off these values: navbar (`z-50`) → WhatsApp FAB (`z-[85]`) → cookie banner (`z-[90]`) → cookie preferences dialog (`z-[95]`) → skip-to-content link (`z-[100]`).
+
 ### Rules that matter here
 
 **Styling is Tailwind v4, CSS-first.** All tokens live in the `@theme` block of `src/index.css`. There is no `tailwind.config.js` and none should be added — v4 with `@tailwindcss/postcss` does not auto-load one, so a config file would be silently dead and become a second source of truth.
 
-**The palette is five brand colours plus four derived tones.** `#ffffff`, `#171915`, `#2e3823`, `#070905`, `#DBEB17`, exposed as `carbon-950/900/800`, `moss-700/600` and `acid-400/500/800`, with semantic tokens on top (`ink-strong/body/muted/accent`, `on-dark*`, `surface*`, `line*`). The namespaces deliberately avoid Tailwind's own `lime-*`/`stone-*`: overriding a native namespace would silently repaint legacy classes, whereas any surviving `brand-*`/`blue-*`/`gray-*` is legacy that greps cleanly. `--color-danger-*` is the only colour outside the palette other than the WhatsApp green, and both are functional, never decorative.
+**The palette is five brand colours plus four derived tones.** `#ffffff`, `#171915`, `#2e3823`, `#070905`, `#DBEB17`, exposed as `carbon-950/900/800`, `moss-700/600` and `acid-400/500/800`, with semantic tokens on top (`ink-strong/body/muted/accent`, `on-dark*`, `surface*`, `line*`). The namespaces deliberately avoid Tailwind's own `lime-*`/`stone-*`: overriding a native namespace would silently repaint legacy classes, whereas any surviving `brand-*`/`blue-*`/`gray-*` is legacy that greps cleanly. `--color-danger-*` is the only colour outside the palette, and it's functional (error states), never decorative.
 
 **The single most important colour rule: `#DBEB17` is 1.32:1 on white.** On light sections it is never text, never a thin icon, never a border — it appears only as a *fill* with `carbon-950` on top (15.15:1). The textual accent on light is `ink-accent` (#5a6b00, 5.94:1) or `moss-700` (12.31:1). On the dark surfaces the lime is 15.15:1 / 13.86:1 / 9.33:1 and is the accent everywhere.
 
-**The page is dark-dominant.** `Section` defaults to `tone="dark"`; Serviços and FAQ are the declared light exceptions. `<html>` and `<body>` carry the dark background so iOS overscroll doesn't flash white.
+**WhatsApp action buttons use the theme's lime, not WhatsApp's brand green.** `CTA.tsx`'s `BOTAO_WHATSAPP` constant and the FAB in `WhatsAppFab.tsx` were originally hardcoded to `#25D366`/`#1DA851`, a sixth colour outside the palette; both now use `bg-acid-400 text-carbon-950 hover:bg-acid-500`, the same combination as the primary `Button` variant (15.15:1 contrast). This was a deliberate choice to keep every action button inside the five-colour palette, even though it drops the widely-recognized WhatsApp-green affordance — don't reintroduce `#25D366` to "restore brand accuracy" without checking with the project owner first.
+
+**Brand logos are the one deliberate exception to the five-colour palette, and it's scoped to a single section.** `Ferramentas.tsx` extrudes the real logo of each day-to-day tool (Instagram, Facebook, Meta Ads, Google Ads, Canva, CapCut, WhatsApp) onto a 3D tile, in that brand's own official hex — including `#25D366` for the WhatsApp glyph there, which is fine precisely because it's identifying a tool, not a call-to-action button. This is treated like `--color-danger-*`: a colour outside the palette, admitted only because it's functional. The containment rule: brand colour shows up **only in the logo glyph itself** (`src/lib/brandGlyphs.ts`, generated, see below). Tile face, bevel, rim light, chip background, section background, every other pixel stays `carbon-*`/`moss-*`/`acid-*`. Don't extend this exception elsewhere without checking with the project owner.
+
+**The page is dark-dominant.** `Section` defaults to `tone="dark"`; Serviços and FAQ are the declared light exceptions. `Section` has five tones total — `light`, `muted`, `dark`, `darkAlt`, `moss` — used for subtle variation between consecutive dark sections (Process, Testimonials and Trafego use `darkAlt`; Ia uses `moss`). `<html>` and `<body>` carry the dark background so iOS overscroll doesn't flash white.
+
+**Radius and elevation are also bespoke tokens**, for the same reason as the colour namespaces: redefining `--radius-lg` would silently repaint legacy `rounded-lg` without showing in a diff. `--radius-control` (pill, for buttons/badges), `--radius-frame` (14px, icon frames and inputs), `--radius-card` (18px) and `--radius-panel` (24px) are the only radii to use. Elevation is `--shadow-e1/e2/e3`, and **nothing goes above e3** — that ceiling is what makes `shadow-2xl` a rule violation rather than a taste call. `.card` (light) and `.card-dark` (dark) in `@layer components` are the standard card surfaces; on dark, separation comes from border + a slightly lighter background rather than shadow, because shadow doesn't read against `carbon-950`.
 
 **The logo files are full-colour** (lime wordmark + gradient "P"). The old Primora logo was flat navy and needed `brightness-0 invert` over dark surfaces; **applying that filter to these files flattens the gradient into a white blob.** Pick the file that suits the surface instead: `praxis-horizontal-lime.png` on dark, `praxis-horizontal-escuro.png` on light.
 
@@ -57,7 +77,19 @@ Do not introduce: gradients on buttons or text, `filter: blur()` backdrops, `rou
 
 `Counter` is the other exception: it reads `useReducedMotion()` directly, because it must jump to the final value rather than animate slower.
 
+The Ferramentas 3D scene is a further exception: its `requestAnimationFrame` loop is plain JS driven by Three.js, not framer-motion, so `MotionConfig` doesn't touch it either. See "The Ferramentas 3D scene" below for how it's paused instead.
+
 **Spacing and anchors** are owned by `<Section>`: it sets the vertical rhythm and the `scroll-mt` that compensates the fixed navbar. Don't set `py-*` on a section directly.
+
+### The Ferramentas 3D scene
+
+`Ferramentas.tsx` (between `Ia` and `Process`) is the one section with a WebGL canvas: the seven tools the agency operates day to day, as logos extruded onto tiles that orbit slowly, built with vanilla Three.js rather than react-three-fiber, one dependency instead of three, and direct control of the render loop, which is exactly what has to stop under reduced motion, offscreen, and with the tab hidden.
+
+**`three` must never land in the main bundle.** `src/components/ferramentas/CenaFerramentas.tsx` is the only file that imports `three`, and `Ferramentas.tsx` reaches it only through `React.lazy(() => import(...))`, gated on `useInView`, `!useReducedMotion()` and a WebGL feature check. After touching anything here, confirm with `npm run build && grep -c WebGLRenderer dist/assets/index-*.js`, which must print `0`. The symbol should only exist in the separate `CenaFerramentas-*.js` chunk.
+
+**`src/lib/brandGlyphs.ts` is generated, not hand-written.** `npm run gen:glyphs` (`scripts/gen-brand-glyphs.mjs`) pulls each brand's official SVG path and hex from the `simple-icons` devDependency (CC0-1.0 licensed), and falls back to a Phosphor `weight="fill"` glyph, coloured with the theme's `acid-400` instead of a brand hex, for tools absent from that package (Canva and CapCut today). Re-run the script after bumping either `simple-icons` or `@phosphor-icons/react`; it throws rather than silently emitting a blank tile if a slug it expects has disappeared. Never hand-edit the generated file.
+
+**Dispose is not optional.** React 19's StrictMode double-mounts every component in dev. Without the explicit `renderer.dispose()` / `forceContextLoss()` / geometry-and-material disposal that `construirCena.ts` runs in the `dispose()` it returns, that mounts two WebGL contexts and leaks the first one.
 
 ### Content policy
 
@@ -72,6 +104,16 @@ Two claims must stay precisely worded:
 
 Legal pages are static HTML in `public/` (`privacidade.html`, `termos.html`), since adding a router for two text pages is disproportionate. Both still contain `[A DEFINIR]` fields and need a lawyer's review.
 
+**Voice.** Copy is pt-BR, second person (`você`), short sentences, no em dash in anything a visitor reads (JSX text, `alt`, `aria-label`, `meta description`). Code comments are exempt — they aren't visible text. `scripts/check-copy.mjs` (`npm run check:copy`, wired into `build`) enforces the em-dash rule plus a banned-jargon list ("solução completa", "excelência", "parceiro estratégico"...) across `src/**/*.{ts,tsx}` and `index.html`, skipping comment lines. Two subagents in `.claude/agents/` carry the fuller ruleset: `copywriter-conversao` for rewriting copy, `landing-page-cro` for section-level conversion structure (promessa → prova → oferta → objeção → ação). Both know the two non-negotiable claims below and the empty-proof-social rule, so invoking them doesn't require repeating this file.
+
+`README.md` is the unmodified Vite + React template scaffolding; it documents nothing about this project and should be ignored.
+
+### Consent (LGPD)
+
+`src/lib/consent.ts` is a gate built ahead of what it gates: the site currently loads **zero** analytics and zero pixels, and `CookieConsent.tsx` says so to the user. The rule from the module's own header still applies to any future addition: **no script in an optional category (`analise`, `marketing`) may load before `getConsent(categoria)` returns `true` for it.** Adding GA or the Meta Pixel is therefore never a `<script>` tag dropped into `index.html` — it's a consent-conditional load gated on `getConsent`.
+
+`VERSAO_CONSENTIMENTO` must be bumped whenever the tracked categories change; bumping it invalidates every stored choice, which is correct — a consent given under an old category set (or, as happened at the Primora→Praxis rebrand, under a different data controller) doesn't carry forward. `lerConsentimento` treats a blocked/unavailable `localStorage` as "hasn't decided yet" rather than throwing, so the banner simply reappears next visit instead of breaking the page. The preferences panel is a real modal — focus trap, `Esc` to close, focus restored to the opener on close.
+
 ## Manual verification
 
 ```bash
@@ -84,6 +126,21 @@ grep -rnE 'blur-\[|transition-all|rounded-3xl|href="#"' src/
 
 # every hit must sit on a dark surface — read them, don't just count
 grep -rn "text-acid\|border-acid\|ring-acid" src/
+
+# WhatsApp numbers must come from site.contato.whatsapp, never inlined
+grep -rn "wa.me/[0-9]" src/
+
+# no analytics/pixel outside the consent gate in src/lib/consent.ts
+grep -rniE "gtag|googletagmanager|fbq|analytics|pixel" src/ index.html
 ```
 
-Then: logo legible in the navbar before *and* after scroll; Tab from top to bottom (the lime focus ring must be visible over dark *and* over white, FAQ opens, `Esc` closes the mobile menu, clicking a label focuses its input); widths 320/768/1024/1440 with no horizontal scroll (watch the marquee, which bleeds by design); DevTools → Rendering → emulate `prefers-reduced-motion: reduce` and confirm the hero mesh **and the rotating symbol and the marquee** all stop, counters show final values, and the FAQ still opens.
+```bash
+npm run check:copy   # zero em dash / banned jargon in visible text
+```
+
+```bash
+# three.js must stay out of the main chunk, only load when Ferramentas nears the viewport
+npm run build && grep -c WebGLRenderer dist/assets/index-*.js   # must print 0
+```
+
+Then: logo legible in the navbar before *and* after scroll; Tab from top to bottom (the lime focus ring must be visible over dark *and* over white, FAQ opens, `Esc` closes the mobile menu, clicking a label focuses its input); widths 320/768/1024/1440 with no horizontal scroll (watch the marquee, which bleeds by design); DevTools → Rendering → emulate `prefers-reduced-motion: reduce` and confirm the hero mesh, the rotating symbol, the marquee **and the Ferramentas 3D scene** all stop (the scene should never even load its chunk under reduced motion, check Network), counters show final values, and the FAQ still opens.

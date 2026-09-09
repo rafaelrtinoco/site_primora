@@ -53,7 +53,7 @@ export default function Navbar() {
           <a
             href="#hero"
             className="flex items-center"
-            aria-label="Praxis Digital — início"
+            aria-label="Praxis Digital, início"
           >
             <img src={Logo} alt="Praxis Digital" className="h-9 w-auto md:h-10" />
           </a>

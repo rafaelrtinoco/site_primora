@@ -6,19 +6,17 @@ import { RevealGroup, RevealItem } from './ui/Reveal';
 
 const socialMedia = [
   {
-    grupo: 'Estratégia e planejamento',
+    grupo: 'Estratégia',
     itens: [
-      'Estratégia de conteúdo',
-      'Planejamento editorial mensal',
-      'Calendário de publicações',
+      'Planejamento de conteúdo',
+      'Calendário editorial mensal',
       'Campanhas sazonais',
     ],
   },
   {
-    grupo: 'Produção de conteúdo',
+    grupo: 'Produção',
     itens: [
-      'Instagram, Facebook e demais redes',
-      'Conteúdos institucionais',
+      'Posts para Instagram e Facebook',
       'Roteiros para vídeos e Reels',
       'Ideias e roteiros para Stories',
     ],
@@ -26,19 +24,17 @@ const socialMedia = [
   {
     grupo: 'Gestão das redes',
     itens: [
-      'Programação e publicação',
+      'Publicação programada',
       'Organização do feed',
-      'Gestão de Stories',
-      'Comentários e mensagens recebidas',
+      'Resposta a comentários e mensagens',
     ],
   },
   {
-    grupo: 'Análise e otimização',
+    grupo: 'Análise',
     itens: [
-      'Alcance, engajamento e crescimento',
-      'Formatos com melhor desempenho',
-      'Relatórios periódicos',
-      'Ajustes na estratégia',
+      'Acompanhamento de alcance e engajamento',
+      'Relatório periódico',
+      'Ajuste de estratégia',
     ],
   },
 ];
@@ -46,20 +42,16 @@ const socialMedia = [
 const sites = [
   'Site institucional',
   'Landing pages',
-  'Páginas para geração de leads',
-  'Formulários e canais de contato',
-  'Otimização da experiência do usuário',
-  'Atualização de conteúdos',
+  'Páginas para captar leads',
+  'Formulário de contato',
+  'Experiência otimizada para quem visita',
 ];
 
 const artes = [
   'Artes para redes sociais',
   'Stories e Reels',
-  'Banners digitais e para sites',
-  'Materiais para campanhas comerciais',
+  'Banners para sites e campanhas',
   'Artes para WhatsApp',
-  'Apresentações comerciais',
-  'Materiais institucionais',
   'Peças para datas comemorativas',
 ];
 
@@ -82,8 +74,8 @@ export default function Solutions() {
         id="solutions-title"
         tone="light"
         eyebrow="Marketing e conteúdo"
-        title="Presença digital que constrói autoridade"
-        description="Planejamento, produção e acompanhamento. Não é postar por postar: é construir a reputação que faz alguém escolher você antes de comparar preço."
+        title="Sua marca presente todo dia, sem você lembrar disso"
+        description="A gente planeja, produz e publica. Você aparece com consistência para quem ainda vai decidir entre você e o concorrente."
       />
 
       {/* Layout assimétrico de propósito: um grid uniforme de 4 cards iguais
@@ -95,8 +87,8 @@ export default function Solutions() {
             Social Media completo
           </h3>
           <p className="mb-8 text-sm text-ink-muted">
-            Todo o processo de planejamento, produção, publicação e
-            acompanhamento das suas redes.
+            Planejamos, produzimos, publicamos e acompanhamos os resultados
+            das suas redes.
           </p>
 
           <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
@@ -119,7 +111,7 @@ export default function Solutions() {
             Sites e Landing Pages
           </h3>
           <p className="mb-6 text-sm text-ink-muted">
-            Páginas construídas para transformar visita em contato.
+            Páginas feitas para transformar visita em contato.
           </p>
           <ul className="space-y-2">
             {sites.map((item) => (
@@ -136,8 +128,8 @@ export default function Solutions() {
                 Artes digitais
               </h3>
               <p className="mb-6 max-w-2xl text-sm text-ink-muted">
-                Peças sob medida para cada canal, mantendo a sua identidade
-                consistente em todos os pontos de contato.
+                Peças sob medida para cada canal, com a sua identidade
+                mantida em todo ponto de contato.
               </p>
               <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-4">
                 {artes.map((item) => (

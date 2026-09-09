@@ -10,27 +10,27 @@ const steps = [
   {
     number: '01',
     title: 'Diagnóstico',
-    desc: 'Analisamos sua presença digital, seu funil e seu momento de mercado.',
+    desc: 'Analisamos sua presença digital e seu momento de mercado.',
   },
   {
     number: '02',
     title: 'Planejamento',
-    desc: 'Definimos posicionamento, canais e metas para os próximos ciclos.',
+    desc: 'Definimos posicionamento, canais e metas.',
   },
   {
     number: '03',
     title: 'Produção',
-    desc: 'Construímos site, conteúdo e campanhas da sua estrutura.',
+    desc: 'Construímos site, conteúdo e campanhas.',
   },
   {
     number: '04',
     title: 'Entrega',
-    desc: 'Colocamos tudo no ar e treinamos você para operar o dia a dia.',
+    desc: 'Colocamos tudo no ar e treinamos você.',
   },
   {
     number: '05',
     title: 'Otimização',
-    desc: 'Acompanhamos os números e ajustamos a estratégia todo mês.',
+    desc: 'Acompanhamos os números todo mês.',
   },
 ];
 
@@ -40,8 +40,8 @@ export default function Process() {
       <SectionHeader
         id="process-title"
         eyebrow="Como funciona"
-        title="Um processo transparente, do diagnóstico à otimização"
-        description={`Cada etapa tem entregável e prazo definidos. Sua estrutura de base entra no ar em ${site.prazoEntrega}.`}
+        title="Do primeiro papo ao primeiro resultado"
+        description={`Cada etapa tem entregável e prazo definidos. Sua estrutura entra no ar em ${site.prazoEntrega}.`}
       />
 
       <div className="relative mx-auto max-w-5xl">

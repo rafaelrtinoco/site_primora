@@ -14,23 +14,20 @@ const etapas = [
   {
     icon: Lightbulb,
     titulo: 'Pesquisa e estratégia',
-    ia: 'Levanta concorrentes, termos de busca, objeções recorrentes e ângulos de campanha em horas, não em semanas.',
-    humano:
-      'Escolhemos o posicionamento, descartamos o que não combina com o seu mercado e definimos a prioridade do trimestre.',
+    ia: 'Levanta concorrentes, termos de busca e objeções comuns em horas.',
+    humano: 'A gente escolhe o posicionamento e prioriza o trimestre.',
   },
   {
     icon: PencilLine,
     titulo: 'Produção de texto e arte',
-    ia: 'Gera as primeiras versões de legenda, roteiro, variação de anúncio e referência visual, em volume.',
-    humano:
-      'Editamos, cortamos o que soa genérico, checamos cada afirmação e aprovamos peça por peça antes de publicar.',
+    ia: 'Gera as primeiras versões de legenda, roteiro e arte, em volume.',
+    humano: 'A gente edita, checa os fatos e aprova peça por peça.',
   },
   {
     icon: ChartBar,
     titulo: 'Leitura de resultado',
-    ia: 'Cruza os números das plataformas e aponta padrões de desempenho que passariam despercebidos na planilha.',
-    humano:
-      'Interpretamos o porquê, decidimos o que muda no mês seguinte e explicamos em reunião, sem jargão.',
+    ia: 'Cruza os números das plataformas e aponta padrões de desempenho.',
+    humano: 'A gente interpreta, decide o próximo passo e te explica sem jargão.',
   },
 ];
 
@@ -46,7 +43,7 @@ export default function Ia() {
             <span className="text-on-dark-accent">Gente na decisão.</span>
           </>
         }
-        description="Usamos inteligência artificial em toda a cadeia — da pesquisa à leitura dos números. O que ela nos dá é velocidade e volume de opções. O que vai ao ar continua passando por uma pessoa."
+        description="Usamos inteligência artificial da pesquisa à leitura dos números. Ela nos dá velocidade e volume de opções. O que vai ao ar continua passando por uma pessoa."
       />
 
       <RevealGroup
@@ -89,11 +86,11 @@ export default function Ia() {
             <span className="font-semibold text-on-dark">
               Uma distinção honesta:
             </span>{' '}
-            a IA é ferramenta nossa, de bastidor. O atendimento automatizado no
-            WhatsApp que acompanha os planos funciona com respostas fixas — o
-            cliente escolhe uma opção do menu e recebe a informação na hora.
-            Quando a dúvida sai do roteiro, a conversa vai para uma pessoa. Não
-            vendemos agente autônomo.
+            a IA é ferramenta nossa, de bastidor. O atendimento automatizado
+            no WhatsApp funciona com respostas fixas: o cliente escolhe uma
+            opção do menu e recebe a informação na hora. Quando a dúvida sai
+            do roteiro, a conversa vai para uma pessoa. Não vendemos agente
+            autônomo.
           </p>
         </div>
       </Reveal>

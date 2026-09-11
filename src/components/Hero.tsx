@@ -113,17 +113,17 @@ export default function Hero() {
         {/* Sem animação de opacidade: este h1 é o elemento de LCP da página e
             animá-lo a partir de 0 atrasaria a métrica. */}
         <h1 id="hero-title" className="hero-title text-on-dark">
-          <span className="block">Marketing digital</span>
-          <span className="block">para quem depende</span>
+          <span className="block">Seu cliente pesquisa</span>
+          <span className="block">você antes de ligar.</span>
           <span className="block text-on-dark-accent">
-            de confiança para vender.
+            O que ele encontra?
           </span>
         </h1>
 
         <motion.p {...enter(0.12)} className="hero-sub mt-8 text-on-dark-body">
-          Conteúdo, site e anúncio para corretoras, imobiliárias, escritórios de
-          contabilidade e advocacia — com IA no processo e gente decidindo o que
-          vai ao ar.
+          A gente cuida disso: conteúdo, site e anúncio para corretoras,
+          imobiliárias, contabilidade e advocacia. Com IA no processo e uma
+          pessoa aprovando tudo que vai ao ar.
         </motion.p>
 
         <motion.div
@@ -131,7 +131,7 @@ export default function Hero() {
           className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
         >
           <Button href="#cta" size="lg" icon={ArrowRight}>
-            Agendar diagnóstico
+            Quero um diagnóstico gratuito
           </Button>
           <a
             href="#plans"

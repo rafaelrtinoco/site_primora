@@ -17,44 +17,44 @@ const formatPreco = (valor: number) =>
 const faqs = [
   {
     q: 'Preciso já ter um site?',
-    a: 'Não. Construímos sua estrutura digital do zero, incluindo um site focado em conversão e ajustado ao vocabulário do seu segmento.',
+    a: 'Não. Construímos sua estrutura digital do zero, com um site focado em conversão e no vocabulário do seu segmento.',
   },
   {
     q: 'Posso contratar só o conteúdo, ou só o tráfego pago?',
-    a: 'Pode. São dois serviços separados justamente por isso: o conteúdo é cobrado por volume de peças e o tráfego, por número de plataformas e volume de mídia. Contratar os dois costuma render mais, mas nenhum depende do outro para funcionar.',
+    a: 'Pode. São dois serviços separados: o conteúdo é cobrado por volume de peças, o tráfego por número de plataformas e volume de mídia. Contratar os dois costuma render mais, mas nenhum depende do outro.',
   },
   {
     q: 'A verba dos anúncios está incluída no valor da gestão?',
     /* É a dúvida que mais gera atrito na contratação de tráfego. */
-    a: `Não, e essa separação é proposital. O valor da gestão é o nosso trabalho; a verba é o que vai para o Google e para a Meta, paga por você direto a eles. A conta de anúncios fica no seu nome, com o seu histórico — se um dia trocar de agência, ele vai com você. Recomendamos ao menos ${formatPreco(site.trafego.verbaMinima)} por mês de verba para as campanhas saírem do modo de aprendizado.`,
+    a: `Não. O valor da gestão é o nosso trabalho. A verba vai para o Google e para a Meta, paga por você direto a eles. A conta de anúncios fica no seu nome: se trocar de agência um dia, ela vai com você. Recomendamos ao menos ${formatPreco(site.trafego.verbaMinima)} por mês de verba para as campanhas saírem do modo de aprendizado.`,
   },
   {
     q: 'Vocês atendem o meu segmento?',
-    a: 'Atendemos corretoras de seguros, imobiliárias, escritórios de contabilidade e de advocacia e empresas de serviços administrativos. São mercados de venda consultiva, em que a decisão passa por confiança — e quatro deles têm regra própria de publicidade, que respeitamos na hora de montar as campanhas.',
+    a: 'Atendemos corretoras de seguros, imobiliárias, escritórios de contabilidade e de advocacia e empresas de serviços administrativos. São mercados de venda consultiva, e quatro desses segmentos têm regra própria de publicidade, que respeitamos ao montar as campanhas.',
   },
   {
     q: 'Vocês usam IA para produzir o meu conteúdo?',
     /* A resposta precisa ser afirmativa e delimitada: negar seria falso, e
        afirmar sem limite sugere conteúdo publicado sem revisão. */
-    a: 'Usamos, em toda a cadeia: pesquisa, primeiras versões de texto e arte e leitura dos números. O que a IA entrega é velocidade e volume de opções, nunca a palavra final. Toda peça é editada, checada e aprovada por uma pessoa antes de ir ao ar.',
+    a: 'Usamos, em toda a cadeia: pesquisa, primeiras versões de texto e arte, e leitura dos números. A IA entrega velocidade e volume de opções, nunca a palavra final. Toda peça é editada, checada e aprovada por uma pessoa antes de ir ao ar.',
   },
   {
     q: 'Como funciona o atendimento automatizado no WhatsApp?',
     /* Não trabalhamos com agente de IA — o atendimento é por fluxo de
        respostas pré-definidas, e a página não pode sugerir o contrário. */
-    a: 'É um atendimento com respostas fixas: o cliente escolhe uma opção do menu e recebe na hora informações sobre serviços, documentos necessários e canais de contato. Quando a dúvida sai do roteiro, a conversa é direcionada para você ou para a nossa equipe. Não é um agente de IA.',
+    a: 'É um atendimento com respostas fixas: o cliente escolhe uma opção do menu e recebe na hora informações sobre serviços, documentos e canais de contato. Quando a dúvida sai do roteiro, a conversa vai para você ou para a nossa equipe. Não é um agente de IA.',
   },
   {
     q: 'Vocês produzem vídeos presenciais?',
-    a: 'Nossa produção de vídeo foca na edição profissional e na captação guiada, em que orientamos você a gravar. Para produção presencial, atuamos apenas em algumas regiões.',
+    a: 'Nossa produção foca em edição profissional e captação guiada, em que orientamos você a gravar. Para produção presencial, atuamos só em algumas regiões.',
   },
   {
     q: 'Existe fidelidade?',
-    a: 'Não trabalhamos com contratos de fidelidade rígidos, mas recomendamos ciclos de 6 meses: tanto conteúdo quanto tráfego levam algumas semanas até estabilizar, e trocar de estratégia antes disso costuma jogar fora o aprendizado.',
+    a: 'Não trabalhamos com contrato de fidelidade rígido, mas recomendamos ciclos de 6 meses. Conteúdo e tráfego levam algumas semanas até estabilizar, e trocar de estratégia antes disso costuma jogar fora o aprendizado.',
   },
   {
     q: 'Quanto tempo leva para iniciar?',
-    a: `Após o planejamento estratégico aprovado, sua estrutura de base entra no ar em média dentro de ${site.prazoEntrega}.`,
+    a: `Após o planejamento aprovado, sua estrutura de base entra no ar em média em ${site.prazoEntrega}.`,
   },
 ];
 

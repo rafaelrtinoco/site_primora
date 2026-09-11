@@ -34,6 +34,18 @@ export type Setor = {
   nota: string;
 };
 
+export type Ferramenta = {
+  /**
+   * Casa com uma chave de src/lib/brandGlyphs.ts (logo real) OU com um dos
+   * ícones Phosphor tratados como fallback em Ferramentas.tsx, para as
+   * marcas sem glifo disponível no pacote de origem (hoje: Canva, CapCut).
+   */
+  slug: string;
+  nome: string;
+  /** O que a Praxis faz com essa ferramenta, não o que a ferramenta faz sozinha. */
+  faz: string;
+};
+
 export type Plano = {
   nome: string;
   /**
@@ -42,18 +54,21 @@ export type Plano = {
    * negócio dele, não como cesta de unidades.
    */
   chamada: string;
-  /** Em reais. `null` exibe "Sob medida" em vez de omitir o preço. */
-  precoInicial: number | null;
   /**
    * Especificação em prosa, exibida em corpo menor.
    * As quantidades continuam declaradas — sem elas o cliente não consegue
-   * julgar o preço —, mas como lastro do valor, não como argumento de venda.
+   * julgar o valor —, mas como lastro da oferta, não como argumento de venda.
    * Contar posts na chamada principal colocaria a Praxis competindo em volume
    * com freelancer, que é o jogo errado.
    */
   inclui: string;
   destaque?: boolean;
   badge?: string;
+  /**
+   * Marca o plano sem valor de partida (hoje só o PERSONALIZADO). O card
+   * não mostra preço nenhum e o rótulo do CTA muda para "Montar meu plano".
+   */
+  sobMedida?: boolean;
 };
 
 export const site = {
@@ -76,7 +91,7 @@ export const site = {
     whatsapp: '5511976487829' as string | null,
     /** Mensagem que já vem escrita quando o visitante abre a conversa. */
     whatsappMensagem:
-      'Olá! Vim pelo site da Praxis Digital e gostaria de saber mais sobre os planos.',
+      'Olá! Vi o site da Praxis Digital e quero saber mais sobre os planos.',
     cidade: 'São Paulo, SP',
   },
 
@@ -99,7 +114,7 @@ export const site = {
   setores: [
     {
       nome: 'Corretoras de seguros',
-      nota: 'produto que ninguém procura por impulso — a campanha precisa educar antes de vender',
+      nota: 'produto que ninguém procura por impulso: a campanha precisa educar antes de vender',
     },
     {
       nome: 'Imobiliárias',
@@ -111,13 +126,64 @@ export const site = {
     },
     {
       nome: 'Advocacia',
-      nota: 'anúncios que informam, não captam — Provimento 205/2021 da OAB',
+      nota: 'anúncios que informam, não captam, conforme o Provimento 205/2021 da OAB',
     },
     {
       nome: 'Serviços administrativos',
       nota: 'venda consultiva e ciclo longo, com conteúdo que sustenta a decisão',
     },
   ] as Setor[],
+
+  /**
+   * Ferramentas operadas no dia a dia, exibidas na cena 3D da seção
+   * Ferramentas (entre IA e Como Funciona).
+   *
+   * TODO(dono): confirmar ou podar essa lista. Citar produto por nome afirma
+   * qual é o stack real da agência. As sete abaixo já estão implicadas na
+   * copy existente: Solutions cita Instagram e Facebook, trafego.escopos cita
+   * Google Ads e Meta Ads, e os planos citam atendimento automatizado no
+   * WhatsApp. Nenhuma é claim novo, mas o dono precisa validar cada uma.
+   *
+   * Lista vazia = a seção inteira não renderiza, mesma regra do resto deste
+   * arquivo.
+   */
+  ferramentas: [
+    {
+      slug: 'instagram',
+      nome: 'Instagram',
+      faz: 'Feed, Stories e Reels publicados no horário planejado.',
+    },
+    {
+      slug: 'facebook',
+      nome: 'Facebook',
+      faz: 'Página e catálogo atualizados junto com o Instagram.',
+    },
+    {
+      slug: 'meta',
+      nome: 'Meta Ads',
+      faz: 'Campanha, público e criativo, com a verba na sua conta.',
+    },
+    {
+      slug: 'googleAds',
+      nome: 'Google Ads',
+      faz: 'Anúncio para quem já está procurando o seu serviço.',
+    },
+    {
+      slug: 'canva',
+      nome: 'Canva',
+      faz: 'Arte de post, story e banner na sua identidade.',
+    },
+    {
+      slug: 'capcut',
+      nome: 'CapCut',
+      faz: 'Corte, legenda e trilha dos vídeos e Reels.',
+    },
+    {
+      slug: 'whatsapp',
+      nome: 'WhatsApp',
+      faz: 'Atendimento automatizado com resposta fixa por menu.',
+    },
+  ] as Ferramenta[],
 
   /**
    * Faixa de métricas do Hero.
@@ -138,19 +204,26 @@ export const site = {
    */
   depoimentos: [] as Depoimento[],
 
+  /**
+   * Valor de partida exibido uma única vez, no cabeçalho da seção de planos.
+   *
+   * Os cards não mostram mais preço individual: o valor de cada plano sai da
+   * análise do cliente, feita no diagnóstico gratuito. Manter um número fixo
+   * por card cobrava a Praxis de honrar um preço antes de conhecer o escopo
+   * real do negócio.
+   */
+  precoInicialPlanos: 497,
+
   planos: [
     {
       nome: 'START',
-      chamada: 'Para quem está montando a presença digital agora.',
-      precoInicial: 497,
+      chamada: 'Para começar sua presença digital agora.',
       inclui:
         'Perfis otimizados, 8 posts e 8 stories por mês, landing page e suporte.',
     },
     {
       nome: 'GROWTH',
-      chamada:
-        'Para quem já tem movimento e precisa de estrutura para sustentar o crescimento.',
-      precoInicial: 1097,
+      chamada: 'Para dar estrutura a um negócio que já está crescendo.',
       destaque: true,
       badge: 'Mais completo',
       inclui:
@@ -158,20 +231,16 @@ export const site = {
     },
     {
       nome: 'PRO',
-      chamada:
-        'Para quem quer volume e consistência em todos os canais, com estratégia acompanhada de perto.',
-      precoInicial: 1997,
+      chamada: 'Para ter volume e consistência em todos os canais.',
       inclui:
         '16 posts e 16 stories por mês, 4 vídeos, site completo, atendimento automatizado no WhatsApp e consultoria estratégica.',
     },
     {
       nome: 'PERSONALIZADO',
       chamada: 'Para quem precisa de um recorte diferente dos três.',
-      /* Sem preço de partida de propósito: o valor sai do escopo, e não o
-         contrário. */
-      precoInicial: null,
+      sobMedida: true,
       inclui:
-        'Conteúdo, site, atendimento automatizado, consultoria e gestão de tráfego combinados na medida da sua operação — inclusive só uma dessas frentes.',
+        'Conteúdo, site, atendimento automatizado, consultoria e gestão de tráfego, combinados na medida da sua operação. Inclusive só uma dessas frentes.',
     },
   ] as Plano[],
 
@@ -184,11 +253,20 @@ export const site = {
    * obrigaria a cobrá-lo de quem só quer conteúdo.
    */
   trafego: {
-    faixas: [
-      { escopo: 'Google Ads ou Meta Ads', preco: 897 },
-      { escopo: 'Google Ads + Meta Ads', preco: 1297 },
-      { escopo: '+ criativos e landing pages dedicadas', preco: 1797 },
-    ] as { escopo: string; preco: number }[],
+    /**
+     * Valor de partida exibido no topo do bloco de preço. As faixas abaixo
+     * não têm mais preço individual: o valor final sai da análise do
+     * cliente, feita no diagnóstico gratuito, e varia com o escopo real
+     * (quantas plataformas, quanto de criativo) mais do que uma tabela fixa
+     * conseguiria refletir.
+     */
+    precoInicial: 897,
+
+    escopos: [
+      'Google Ads ou Meta Ads',
+      'Google Ads + Meta Ads',
+      '+ criativos e landing pages dedicadas',
+    ] as string[],
 
     /**
      * Verba mínima recomendada, em reais por mês.

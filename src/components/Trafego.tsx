@@ -21,8 +21,6 @@ const formatPreco = (valor: number) =>
     maximumFractionDigits: 0,
   });
 
-const menorPreco = Math.min(...site.trafego.faixas.map((f) => f.preco));
-
 const frentes = [
   {
     icon: MagnifyingGlass,
@@ -90,19 +88,19 @@ export default function Trafego() {
             id="trafego-title"
             className="text-[clamp(2rem,1.4rem+2.4vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-on-dark"
           >
-            Conteúdo constrói autoridade.
+            Conteúdo constrói reputação.
             <br />
             <span className="text-on-dark-accent">
-              Anúncio traz gente hoje.
+              Anúncio traz cliente hoje.
             </span>
           </h2>
         </Reveal>
 
         <Reveal as="p" delay={0.1} className="mt-6 text-lg text-on-dark-body">
-          As duas coisas resolvem problemas diferentes, e é por isso que uma não
-          substitui a outra. Enquanto o conteúdo amadurece, o anúncio coloca sua
-          oferta na frente de quem está decidindo agora — desde que a campanha
-          seja montada para gerar contato, e não alcance.
+          As duas coisas resolvem problemas diferentes. Uma não substitui a
+          outra. Enquanto o conteúdo amadurece, o anúncio coloca sua oferta na
+          frente de quem já está decidindo. Desde que a campanha seja montada
+          para gerar contato, não alcance.
         </Reveal>
       </div>
 
@@ -150,7 +148,7 @@ export default function Trafego() {
               </h3>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-on-dark-body">
                 Quatro dos cinco segmentos que atendemos têm norma própria de
-                publicidade. Campanha reprovada não é só verba perdida — em
+                publicidade. Campanha reprovada não é só verba perdida: em
                 advocacia, é processo no Tribunal de Ética.
               </p>
 
@@ -179,7 +177,7 @@ export default function Trafego() {
                 Quanto custa a gestão
               </p>
               <p className="mt-3 text-2xl font-bold text-on-dark">
-                a partir de {formatPreco(menorPreco)}
+                a partir de {formatPreco(site.trafego.precoInicial)}
                 <span className="text-lg font-medium text-on-dark-muted">
                   /mês
                 </span>
@@ -194,8 +192,8 @@ export default function Trafego() {
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-on-dark-body">
                   O fee acima é o nosso trabalho. A verba é o que vai para o
-                  Google e para a Meta, e você paga direto a eles, no seu cartão
-                  — a conta de anúncios é sua, e o histórico dela também.
+                  Google e para a Meta, e você paga direto a eles, no seu
+                  cartão. A conta de anúncios é sua, com o histórico também.
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-on-dark-muted">
                   Para o algoritmo sair do modo de aprendizado, recomendamos ao
@@ -228,24 +226,28 @@ export default function Trafego() {
               </Button>
             </div>
 
-            <dl className="w-full lg:w-96">
-              {site.trafego.faixas.map((faixa, i) => (
-                <div
-                  key={faixa.escopo}
-                  className={`flex items-baseline justify-between gap-4 py-3 ${
-                    i > 0 ? 'border-t border-white/10' : ''
-                  }`}
-                >
-                  <dt className="text-sm text-on-dark-muted">{faixa.escopo}</dt>
-                  <dd className="shrink-0 font-semibold tabular-nums text-on-dark">
-                    {formatPreco(faixa.preco)}
-                    <span className="text-sm font-normal text-on-dark-muted">
-                      /mês
-                    </span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <div className="w-full lg:w-96">
+              <p className="eyebrow text-on-dark-accent">
+                O que muda o investimento
+              </p>
+              <ul className="mt-4 space-y-3">
+                {site.trafego.escopos.map((escopo) => (
+                  <li
+                    key={escopo}
+                    className="flex items-start gap-2.5 text-sm text-on-dark-body"
+                  >
+                    <span
+                      className="mt-2 size-1.5 shrink-0 rounded-full bg-acid-400"
+                      aria-hidden="true"
+                    />
+                    {escopo}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 text-sm leading-relaxed text-on-dark-muted">
+                O valor final é definido com você, no diagnóstico gratuito.
+              </p>
+            </div>
           </div>
         </div>
       </Reveal>

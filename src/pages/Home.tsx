@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import Solutions from '../components/Solutions';
 import Trafego from '../components/Trafego';
 import Ia from '../components/Ia';
+import Ferramentas from '../components/Ferramentas';
 import Process from '../components/Process';
 import Plans from '../components/Plans';
 import Testimonials from '../components/Testimonials';
@@ -27,12 +28,14 @@ export default function Home() {
 
       {/* A ordem conta a história na sequência em que o cliente decide:
           o que fazemos → o que traz gente hoje → como produzimos →
-          em quantas etapas → quanto custa → o que ainda ficou em dúvida. */}
+          com quais ferramentas → em quantas etapas → quanto custa → o que
+          ainda ficou em dúvida. */}
       <main id="main" tabIndex={-1}>
         <Hero />
         <Solutions />
         <Trafego />
         <Ia />
+        <Ferramentas />
         <Process />
         <Plans />
         <Testimonials />

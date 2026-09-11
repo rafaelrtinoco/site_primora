@@ -105,8 +105,8 @@ export default function CookieConsent() {
               <p className="grow text-sm leading-relaxed text-ink-muted">
                 Usamos armazenamento essencial para o site funcionar. Com a sua
                 autorização, também usaremos cookies para entender como o site é
-                usado e para medir campanhas. Você escolhe — e pode mudar
-                quando quiser.{' '}
+                usado e para medir campanhas. Você escolhe, e pode mudar de
+                ideia quando quiser.{' '}
                 <a
                   href="/privacidade.html"
                   className="font-semibold text-ink-accent underline underline-offset-2"

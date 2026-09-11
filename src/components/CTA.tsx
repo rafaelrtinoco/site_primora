@@ -25,12 +25,11 @@ const campoClasses =
   'w-full rounded-frame border border-line bg-surface px-4 py-3 text-ink-body ' +
   'placeholder:text-ink-muted/70 transition-colors duration-200 focus:border-moss-700';
 
-/* Verde do WhatsApp. É a terceira cor fora da paleta (junto do vermelho de
-   erro) e existe pelo mesmo motivo: comunica o destino da ação, não decora.
-   O texto por cima é escuro nos dois estados: branco daria 1.98:1 sobre
-   #25D366 e 3.10:1 sobre o #1DA851 do hover, reprovando em ambos. */
-const BOTAO_WHATSAPP =
-  'bg-[#25D366] text-carbon-950 hover:bg-[#1DA851]';
+/* Antes era o verde do WhatsApp, fora da paleta da marca. Trocado pelo limão
+   do tema para manter as cinco cores da Praxis em todo botão de ação:
+   carbon-950 sobre acid-400 é a mesma combinação usada no Button primary,
+   15.15:1 de contraste. */
+const BOTAO_WHATSAPP = 'bg-acid-400 text-carbon-950 hover:bg-acid-500';
 
 /**
  * Monta a mensagem em primeira pessoa: quem envia é o lead, do WhatsApp dele
@@ -108,13 +107,13 @@ export default function CTA() {
               id="cta-title"
               className="text-[clamp(2rem,1.4rem+2.2vw,3.25rem)] font-bold leading-tight text-on-dark"
             >
-              Descubra como está sua presença digital.
+              Vamos ver como está sua presença digital?
             </h2>
           </RevealItem>
 
           <RevealItem as="p" className="mt-6 max-w-lg text-lg text-on-dark-body">
-            Fazemos um diagnóstico gratuito para identificar onde você está
-            perdendo cliente hoje — no conteúdo, no site ou na campanha.
+            Fazemos um diagnóstico gratuito para achar onde você está
+            perdendo cliente hoje: no conteúdo, no site ou na campanha.
           </RevealItem>
 
           <RevealItem>
@@ -178,7 +177,7 @@ export default function CTA() {
                   </p>
                   <p className="mt-1 text-sm text-ink-muted">
                     {popupBloqueado
-                      ? 'O navegador bloqueou a abertura automática — use o botão abaixo.'
+                      ? 'O navegador bloqueou a abertura automática. Use o botão abaixo.'
                       : 'É só tocar em enviar na conversa que abriu.'}
                   </p>
 
@@ -305,7 +304,7 @@ export default function CTA() {
                   <option value="">Ainda não sei</option>
                   {site.planos.map((p) => (
                     <option key={p.nome} value={p.nome}>
-                      {p.precoInicial === null
+                      {p.sobMedida
                         ? 'Plano personalizado'
                         : `Conteúdo · ${p.nome}`}
                     </option>
@@ -350,7 +349,7 @@ export default function CTA() {
               </button>
 
               <p className="text-center text-xs text-ink-muted">
-                Sua mensagem abre já preenchida no WhatsApp — é só tocar em
+                Sua mensagem abre já preenchida no WhatsApp. É só tocar em
                 enviar.
               </p>
             </form>

@@ -86,8 +86,6 @@
       ]
     },
     "mode": "opusplan",
-
     "cleanupPeriodDays": 14,
-
     "enableAllProjectMcpServers": false
 }

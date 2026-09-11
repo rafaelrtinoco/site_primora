@@ -13,6 +13,10 @@ const formatPreco = (valor: number) =>
     maximumFractionDigits: 0,
   });
 
+/* Preço de partida único da seção, não mais por card: o valor de cada plano
+   sai da análise do cliente, no diagnóstico gratuito. */
+const precoInicialPlanos = formatPreco(site.precoInicialPlanos);
+
 export default function Plans() {
   /* Os botões eram "Selecionar Plano" apontando para o mesmo #cta, sem
      informar qual plano foi escolhido — nem para o usuário, nem para o leitor
@@ -26,8 +30,8 @@ export default function Plans() {
       <SectionHeader
         id="plans-title"
         eyebrow="Planos de conteúdo"
-        title="Escolha a solução ideal para a sua fase"
-        description="Planos pensados para negócios em estágios diferentes — do primeiro perfil organizado à operação com presença consistente em todos os canais."
+        title="Escolha onde você está hoje"
+        description={`Do primeiro perfil organizado à presença consistente em todos os canais. Planos a partir de ${precoInicialPlanos} por mês, com o valor final definido na sua análise.`}
       />
 
       <RevealGroup
@@ -44,7 +48,7 @@ export default function Plans() {
             className={`relative flex h-full flex-col rounded-card p-7 ${
               plano.destaque
                 ? 'z-10 bg-white/[0.08] ring-2 ring-acid-400'
-                : plano.precoInicial === null
+                : plano.sobMedida
                   ? /* Plano sob medida: borda tracejada sinaliza que é um
                        recorte aberto, não mais um degrau da escada. */
                     'border-2 border-dashed border-white/25 bg-white/[0.02]'
@@ -64,20 +68,13 @@ export default function Plans() {
               {plano.chamada}
             </p>
 
+            {/* O valor deixou de ser fixo por card: cada plano é precificado
+                na análise do cliente, no diagnóstico gratuito. O preço de
+                partida da seção inteira aparece uma vez, no cabeçalho. */}
             <div className="mt-6 border-t border-white/10 pt-6">
-              {plano.precoInicial === null ? (
-                <p className="text-2xl font-bold text-on-dark">Sob medida</p>
-              ) : (
-                <p>
-                  <span className="text-sm text-on-dark-muted">
-                    a partir de{' '}
-                  </span>
-                  <span className="text-3xl font-bold text-on-dark">
-                    {formatPreco(plano.precoInicial)}
-                  </span>
-                  <span className="text-sm text-on-dark-muted">/mês</span>
-                </p>
-              )}
+              <p className="text-sm font-medium text-on-dark-muted">
+                Valor definido no diagnóstico gratuito
+              </p>
             </div>
 
             {/* Especificação como lastro, em corpo menor — as quantidades
@@ -91,7 +88,7 @@ export default function Plans() {
               href="#cta"
               onClick={() => selecionar(plano.nome)}
               aria-label={
-                plano.precoInicial === null
+                plano.sobMedida
                   ? 'Solicitar contato para montar um plano personalizado'
                   : `Solicitar contato sobre o plano ${plano.nome}`
               }
@@ -101,9 +98,7 @@ export default function Plans() {
                   : 'border border-white/20 text-on-dark hover:border-acid-400 hover:text-acid-400'
               }`}
             >
-              {plano.precoInicial === null
-                ? 'Montar meu plano'
-                : `Selecionar ${plano.nome}`}
+              {plano.sobMedida ? 'Montar meu plano' : `Quero o ${plano.nome}`}
             </a>
           </RevealItem>
         ))}
@@ -118,9 +113,9 @@ export default function Plans() {
             Precisa de resultado antes do conteúdo amadurecer?
           </p>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-on-dark-muted">
-            A gestão de tráfego pago é contratada à parte, porque o valor dela
-            acompanha o número de plataformas e o volume de mídia, não o volume
-            de conteúdo. Pode entrar junto de qualquer um dos planos acima ou
+            A gestão de tráfego pago é contratada à parte. O valor dela
+            acompanha o número de plataformas e o volume de mídia, não o
+            volume de conteúdo. Pode entrar com qualquer plano acima ou
             sozinha.
           </p>
           <a
@@ -137,8 +132,8 @@ export default function Plans() {
         as="p"
         className="mx-auto mt-8 max-w-2xl text-center text-sm text-on-dark-muted"
       >
-        Os valores acima são o ponto de partida de cada plano. O escopo final —
-        volume de conteúdo e páginas do site — é fechado junto com você no
+        Os planos começam em {precoInicialPlanos} por mês. O valor de cada
+        um, com volume de conteúdo e páginas do site, é fechado com você no
         diagnóstico gratuito.
       </Reveal>
     </Section>

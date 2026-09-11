@@ -6,8 +6,9 @@ import { site } from '../content/site';
 /**
  * Botão flutuante de WhatsApp.
  *
- * O texto sobre o verde é escuro: branco sobre #25D366 dá 1.98:1 e reprova,
- * mesmo sendo a combinação da própria marca do WhatsApp.
+ * Usa o limão do tema (acid-400/carbon-950), não o verde da marca do
+ * WhatsApp: mantém as cinco cores da Praxis em todo botão de ação, em vez de
+ * uma sexta cor isolada só para este componente.
  *
  * Só é renderizado quando existe um número real em `site.contato.whatsapp` —
  * um botão de contato que não leva a lugar nenhum é pior que a ausência dele.
@@ -46,7 +47,7 @@ export default function WhatsAppFab() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 12 }}
           transition={{ duration: 0.25 }}
-          className="group fixed bottom-5 right-5 z-[85] flex items-center gap-0 overflow-hidden rounded-control bg-[#25D366] py-4 pl-4 pr-4 text-carbon-950 shadow-e3 transition-[gap,padding,background-color] duration-300 hover:bg-[#1DA851] md:hover:gap-2.5 md:hover:pr-5"
+          className="group fixed bottom-5 right-5 z-[85] flex items-center gap-0 overflow-hidden rounded-control bg-acid-400 py-4 pl-4 pr-4 text-carbon-950 shadow-e3 transition-[gap,padding,background-color] duration-300 hover:bg-acid-500 md:hover:gap-2.5 md:hover:pr-5"
         >
           <WhatsAppIcon size={26} />
           {/* O rótulo se revela no hover em telas grandes; no toque, o ícone

@@ -15,8 +15,12 @@
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+/* fileURLToPath, e não `.pathname`: o caminho do projeto pode conter espaço,
+   e `.pathname` devolveria o `%20` da URL sem decodificar, o que fazia o
+   scandir de src/ falhar com ENOENT. Mesma resolução de gen-brand-glyphs.mjs. */
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 
 const TARGET_EXT = new Set(['.ts', '.tsx']);
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git']);

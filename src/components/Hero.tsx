@@ -2,7 +2,10 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from '@phosphor-icons/react';
 import Button from './ui/Button';
 import Counter from './ui/Counter';
-import Simbolo from '/praxis-simbolo.png';
+/* Derivado WebP de 720px do praxis-simbolo.png (1080px, 567 kB). O símbolo é
+   textura a 14% de opacidade e nunca passa de 640px na tela, então o original
+   custava ~550 kB de banda acima da dobra sem ganho visível nenhum. */
+import Simbolo from '/praxis-simbolo-720.webp';
 import { site } from '../content/site';
 import { DUR, EASE } from '../lib/motion';
 
@@ -98,10 +101,17 @@ export default function Hero() {
 
       {/* Símbolo da marca girando devagar atrás do título. Fica em opacidade
           muito baixa de propósito: ele é textura, não ilustração. */}
+      {/* width/height reservam a proporção antes do decode (o símbolo é
+          quadrado), e fetchPriority baixo tira a imagem da disputa com o h1,
+          que é o elemento de LCP da página. */}
       <img
         src={Simbolo}
         alt=""
         aria-hidden="true"
+        width={720}
+        height={720}
+        decoding="async"
+        fetchPriority="low"
         className="hero-symbol -right-[18%] top-[6%] w-[min(78vw,640px)] md:-right-[8%]"
       />
 

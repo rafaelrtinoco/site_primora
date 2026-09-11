@@ -36,7 +36,7 @@ const faqs = [
     q: 'Vocês usam IA para produzir o meu conteúdo?',
     /* A resposta precisa ser afirmativa e delimitada: negar seria falso, e
        afirmar sem limite sugere conteúdo publicado sem revisão. */
-    a: 'Usamos, em toda a cadeia: pesquisa, primeiras versões de texto e arte, e leitura dos números. A IA entrega velocidade e volume de opções, nunca a palavra final. Toda peça é editada, checada e aprovada por uma pessoa antes de ir ao ar.',
+    a: 'Usamos, em toda a cadeia: pesquisa, primeiras versões de texto e arte, e leitura dos números. A IA entrega velocidade e volume de opções. Toda peça é editada, checada e aprovada por uma pessoa antes de ir ao ar.',
   },
   {
     q: 'Como funciona o atendimento automatizado no WhatsApp?',

@@ -2,7 +2,9 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/praxis-simbolo.png" />
+    <!-- 96px, 10 kB. Apontava para praxis-simbolo.png, de 1080px e 567 kB, que
+         o navegador baixava inteiro em toda visita só para desenhar a aba. -->
+    <link rel="icon" type="image/png" href="/praxis-favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#070905" />
 
@@ -10,16 +12,35 @@
     <title>Praxis Digital | Marketing, Conteúdo e Tráfego Pago</title>
     <meta name="description" content="Conteúdo, site e anúncio para corretoras, imobiliárias, contabilidade, advocacia e serviços administrativos. Com IA no processo e gente aprovando o que vai ao ar." />
 
-    <!-- Open Graph / Twitter Cards básicos -->
-    <meta property="og:title" content="Praxis Digital" />
-    <meta property="og:description" content="Marketing digital para quem vende com confiança: conteúdo, site e anúncio." />
+    <!-- Open Graph / Twitter Cards
+         TODO(dono): og:image e og:url precisam de URL absoluta com o domínio
+         real. Facebook, LinkedIn e WhatsApp descartam caminho relativo, então
+         hoje o link compartilhado sai sem imagem. Falta o domínio para
+         preencher, e o mesmo valor resolve os [A DEFINIR] das páginas legais. -->
+    <meta property="og:site_name" content="Praxis Digital" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Praxis Digital | Marketing, Conteúdo e Tráfego Pago" />
+    <meta property="og:description" content="Conteúdo, site e anúncio para corretoras, imobiliárias, contabilidade, advocacia e serviços administrativos." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/praxis-horizontal-escuro.png" />
+    <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Google Fonts: Montserrat -->
+    <!-- Google Fonts: Montserrat.
+         Só 400/600/800: o peso 300 vinha na URL e nenhuma classe do site usa,
+         então era um arquivo baixado à toa. O par preload + onload tira a
+         folha do caminho de renderização, e o <noscript> cobre quem está sem
+         JS. `display=swap` já garante texto visível enquanto a fonte carrega. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    >
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

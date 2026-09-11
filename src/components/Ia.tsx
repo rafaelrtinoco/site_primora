@@ -84,13 +84,12 @@ export default function Ia() {
           <IconFrame icon={Robot} size="sm" tone="invert" />
           <p className="text-sm leading-relaxed text-on-dark-body">
             <span className="font-semibold text-on-dark">
-              Uma distinção honesta:
+              A IA é ferramenta nossa, de bastidor.
             </span>{' '}
-            a IA é ferramenta nossa, de bastidor. O atendimento automatizado
-            no WhatsApp funciona com respostas fixas: o cliente escolhe uma
-            opção do menu e recebe a informação na hora. Quando a dúvida sai
-            do roteiro, a conversa vai para uma pessoa. Não vendemos agente
-            autônomo.
+            O atendimento automatizado no WhatsApp funciona com respostas
+            fixas: o cliente escolhe uma opção do menu e recebe a informação
+            na hora. Quando a dúvida sai do roteiro, a conversa vai para uma
+            pessoa. Não vendemos agente autônomo.
           </p>
         </div>
       </Reveal>

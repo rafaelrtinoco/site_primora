@@ -104,11 +104,14 @@ export default function Ferramentas() {
         description="Cada rede, cada gerenciador de anúncio e cada editor tem uma lógica própria. A gente opera todos eles todo dia. Você não precisa aprender nenhum."
       />
 
+      {/* Sem moldura: nem borda, nem fundo próprio, nem grade quadriculada. A
+          cena fica direto sobre o fundo da seção. A altura é menor que a
+          largura de propósito, e a câmera acompanha: construirCena.ts observa
+          o container e recalcula `camera.aspect` a cada reflow. */}
       <div
         ref={hostRef}
-        className="relative isolate mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-panel border border-white/10 bg-carbon-900/40"
+        className="relative isolate mx-auto aspect-[5/4] w-full max-w-3xl overflow-hidden sm:aspect-[16/9]"
       >
-        <div className="hero-grid" aria-hidden="true" />
         {cena3dPermitida ? (
           <Suspense fallback={<GradeEstatica ferramentas={site.ferramentas} />}>
             <CenaFerramentas

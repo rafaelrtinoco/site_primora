@@ -97,10 +97,10 @@ export default function Trafego() {
         </Reveal>
 
         <Reveal as="p" delay={0.1} className="mt-6 text-lg text-on-dark-body">
-          As duas coisas resolvem problemas diferentes. Uma não substitui a
-          outra. Enquanto o conteúdo amadurece, o anúncio coloca sua oferta na
-          frente de quem já está decidindo. Desde que a campanha seja montada
-          para gerar contato, não alcance.
+          As duas coisas resolvem problemas diferentes. Enquanto o conteúdo
+          amadurece, o anúncio coloca sua oferta na frente de quem já está
+          decidindo. Para isso a campanha precisa ser montada para gerar
+          contato, em vez de alcance.
         </Reveal>
       </div>
 

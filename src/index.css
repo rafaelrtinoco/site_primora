@@ -245,7 +245,7 @@
   /* Headline editorial. A Montserrat tem tracking largo demais nesse corpo —
      sem o letter-spacing negativo o efeito editorial não acontece. */
   .hero-title {
-    font-size: clamp(2.5rem, 1.2rem + 6.2vw, 6.5rem);
+    font-size: clamp(2.5rem, 1.2rem + 6.2vw, 4.5rem);
     line-height: 0.95;
     letter-spacing: -0.03em;
     font-weight: 800;

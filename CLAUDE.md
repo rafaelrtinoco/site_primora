@@ -16,13 +16,15 @@ Services sold: content/social media, sites and landing pages, digital art, and *
 npm install
 npm run dev         # Vite dev server
 npm run build       # tsc -b && check:copy && vite build (type-checks first)
-npm run check:copy  # scripts/check-copy.mjs: no em dash / banned jargon in visible text
+npm run check:copy  # scripts/check-copy.mjs: no em dash / banned jargon / known placeholder in visible text
 npm run gen:glyphs  # regenerates src/lib/brandGlyphs.ts from simple-icons (see below)
 npm run lint        # eslint .
 npm run preview
 ```
 
 There are no tests. Verification is `build` + `lint` + manual checks (see below).
+
+There is no standalone `npm run typecheck`: the type-check is the `tsc -b` step inside `build`, above. `.claude/settings.json` pre-authorizes `Bash(npm run typecheck:*)` anyway (it's shared boilerplate from the starter pack, see "Tooling that isn't the site's"); running it just fails with "missing script".
 
 ## Architecture
 
@@ -48,7 +50,7 @@ Two layers under `src/components/`:
 
 The event is always an enhancement, never a dependency: the CTA `<select>` stays a fully usable manual control if the event never fires. Keep new cross-component signals on this pattern, with the same `praxis:` prefix.
 
-**Overlay z-index ladder** — collisions here are invisible until two overlays actually stack, so keep new fixed/sticky elements off these values: navbar (`z-50`) → WhatsApp FAB (`z-[85]`) → cookie banner (`z-[90]`) → cookie preferences dialog (`z-[95]`) → skip-to-content link (`z-[100]`).
+**Overlay z-index ladder** — collisions here are invisible until two overlays actually stack, so keep new fixed/sticky elements off these values: navbar (`z-50`) → WhatsApp FAB (`z-[85]`) → Ceci's chat panel (`z-[86]`, anchored above the FAB that opens it) → cookie banner (`z-[90]`) → cookie preferences dialog (`z-[95]`) → skip-to-content link (`z-[100]`).
 
 ### Rules that matter here
 
@@ -69,6 +71,8 @@ The event is always an enhancement, never a dependency: the CTA `<select>` stays
 **The logo files are full-colour** (lime wordmark + gradient "P"). The old Primora logo was flat navy and needed `brightness-0 invert` over dark surfaces; **applying that filter to these files flattens the gradient into a white blob.** Pick the file that suits the surface instead: `praxis-horizontal-lime.png` on dark, `praxis-horizontal-escuro.png` on light.
 
 **Two files in `public/` are derivatives, not brand masters.** `praxis-favicon.png` (96px) is the tab icon, and `praxis-simbolo-720.webp` is the decorative symbol behind the hero headline. Both come from `praxis-simbolo.png`, the 1080px master, which weighs 567 kB and was previously served raw for both jobs: it is the largest asset in the project and neither use needs a pixel of that resolution. Regenerate the derivatives from the master if the mark ever changes, and don't point markup back at the master.
+
+**Six more files in `public/` (`praxis-simbolo-mono.png`, `praxis-vertical-lime.png`, `praxis-vertical-escuro.png`, `praxis-wordmark-lime.png`, `praxis-wordmark-escuro.png`, `praxis-wordmark-branco.png`, ~740 kB together) have zero references anywhere in `src/` or the two legal pages.** Vite copies everything under `public/` into `dist/` regardless, so they ship on every build without being linked. Treat them as a brand kit kept on purpose, not dead weight to delete on sight; if a task calls for removing unused assets, confirm with the project owner first.
 
 Do not introduce: gradients on buttons or text, `filter: blur()` backdrops, `rounded-3xl`/`shadow-2xl`, `transition-all`, or decorative colour palettes per card. These were removed deliberately — they were what made the site read as AI-generated.
 
@@ -107,9 +111,9 @@ Two claims must stay precisely worded:
 - **Paid traffic.** The management fee and the media budget are separate, and the site says so. The media budget is paid by the client directly to Google/Meta, on their own account. `trafego.verbaMinima` is stated as a recommendation, not a requirement.
 - **AI.** The agency uses AI *in its own process* — research, first drafts, reading numbers — with a person approving what ships. The WhatsApp chatbot bundled with the plans is a **fixed-response flow, not an AI agent**, and `Ia.tsx` says that explicitly. Copy must never blur the two.
 
-Legal pages are static HTML in `public/` (`privacidade.html`, `termos.html`), since adding a router for two text pages is disproportionate. Both still contain `[A DEFINIR]` fields and need a lawyer's review.
+Legal pages are static HTML in `public/` (`privacidade.html`, `termos.html`), since adding a router for two text pages is disproportionate. Both still contain `[A DEFINIR]` fields and need a lawyer's review. The same missing value blocks a second thing: `index.html`'s `og:image` and `og:url` are relative paths, and Facebook/LinkedIn/WhatsApp discard relative paths when unfurling a shared link, so the link currently shares without an image. One production domain resolves both the `[A DEFINIR]` fields and the Open Graph tags.
 
-**Voice.** Copy is pt-BR, second person (`você`), short sentences, no em dash in anything a visitor reads (JSX text, `alt`, `aria-label`, `meta description`). Code comments are exempt — they aren't visible text. `scripts/check-copy.mjs` (`npm run check:copy`, wired into `build`) enforces the em-dash rule plus a banned-jargon list ("solução completa", "excelência", "parceiro estratégico"...) across `src/**/*.{ts,tsx}` and `index.html`, skipping comment lines. Two subagents in `.claude/agents/` carry the fuller ruleset: `copywriter-conversao` for rewriting copy, `landing-page-cro` for section-level conversion structure (promessa → prova → oferta → objeção → ação). Both know the two non-negotiable claims below and the empty-proof-social rule, so invoking them doesn't require repeating this file.
+**Voice.** Copy is pt-BR, second person (`você`), short sentences, no em dash in anything a visitor reads (JSX text, `alt`, `aria-label`, `meta description`). Code comments are exempt — they aren't visible text, **except in `index.html`**: `check-copy.mjs`'s comment-stripping only understands JS comment syntax (`//`, `/* */`), not HTML's `<!-- -->`, so an em dash or banned word inside an HTML comment there still fails the check. `scripts/check-copy.mjs` (`npm run check:copy`, wired into `build`) enforces the em-dash rule plus a banned-jargon list ("solução completa", "excelência", "parceiro estratégico"...) plus two known-placeholder patterns (a `99999-9999` phone, "João Silva") across `src/**/*.{ts,tsx}` and `index.html`, skipping comment lines. Two subagents in `.claude/agents/` carry the fuller ruleset: `copywriter-conversao` for rewriting copy, `landing-page-cro` for section-level conversion structure (promessa → prova → oferta → objeção → ação). Both know the two non-negotiable claims below and the empty-proof-social rule, so invoking them doesn't require repeating this file.
 
 `README.md` documents nothing about this site: it is the README of the B2 Tech Claude Code Starter Pack, which rides along in this repository. See "Tooling that isn't the site's".
 
@@ -127,7 +131,9 @@ The repository carries a second, unrelated artifact: the **B2 Tech Claude Code S
 
 **Its skills assume another stack.** `code-review-b2` applies a Vertical Slice / DDD / Flask checklist, and `security-check` and `spec-driven-development` presume a backend that doesn't exist here. Invoking them on this codebase reviews it against the wrong criteria. The `threejs-*` skills are the ones with a plausible use, in Ferramentas.
 
-**The hooks in `.claude/settings.json` do change the agent loop, so know what they do.** `post-edit-format.sh` runs on every `Write|Edit`: it calls `eslint --fix` on the edited file and **exits 2 when eslint fails**, which returns as an error to Claude. A hook error right after an edit is usually a lint rule, not a badly written file. It also calls `npx --no-install prettier`, but prettier is not a dependency here, so that branch silently no-ops: **there is no formatter in this repository** and style is held by convention. `pre-bash-guard.sh` blocks destructive Bash patterns (`rm -rf /`, `curl | sh`, `git push --force origin main`, `DROP TABLE`) before they run, and `pre-commit-secrets.sh` scans staged files on `git commit`/`git push`.
+**The hooks in `.claude/settings.json` do change the agent loop, so know what they do.** `post-edit-format.sh` runs on every `Write|Edit`: it calls `eslint --fix` on the edited file and **exits 2 when eslint fails**, which returns as an error to Claude. A hook error right after an edit is usually a lint rule, not a badly written file. It also calls `npx --no-install prettier`, but prettier is not a dependency here, so that branch silently no-ops: **there is no formatter in this repository** and style is held by convention. `pre-bash-guard.sh` blocks destructive Bash patterns (`rm -rf /`, `curl | sh`, `git push --force origin main`, `DROP TABLE`) before they run, and `pre-commit-secrets.sh` scans staged files on `git commit`/`git push`. A fourth file, `block-secrets.sh`, sits in `.claude/hooks/` but isn't wired into any hook in `settings.json`; it doesn't run.
+
+`.claude/skills/commit/SKILL.md` is also starter-pack boilerplate, not site-specific: it's the generic `/commit` slash command (stage, generate a conventional-commit message, commit, never push).
 
 ## Manual verification
 
@@ -146,6 +152,7 @@ grep -rn "text-acid\|border-acid\|ring-acid" src/
 grep -rn "wa.me/[0-9]" src/
 
 # no analytics/pixel outside the consent gate in src/lib/consent.ts
+# (expect one legitimate hit: setPixelRatio in construirCena.ts, a Three.js API, not tracking)
 grep -rniE "gtag|googletagmanager|fbq|analytics|pixel" src/ index.html
 ```
 

@@ -7,6 +7,8 @@
  * e o "+24%" do dashboard acabaram publicados.
  */
 
+import { INTERESSE_TRAFEGO } from '../lib/planoSelecionado';
+
 export type Stat = {
   value: number;
   label: string;
@@ -44,6 +46,21 @@ export type Ferramenta = {
   nome: string;
   /** O que a Praxis faz com essa ferramenta, não o que a ferramenta faz sozinha. */
   faz: string;
+};
+
+export type OpcaoTriagem = {
+  /** O que entra na mensagem do WhatsApp. */
+  valor: string;
+  /** O que aparece no botão da pergunta. Igual a `valor` na maioria dos casos. */
+  rotulo: string;
+};
+
+export type PerguntaTriagem = {
+  /** Texto da pergunta, exibido acima das opções. */
+  pergunta: string;
+  /** Rótulo do campo na mensagem final (ex.: "Segmento" vira "*Segmento:*"). */
+  rotuloMensagem: string;
+  opcoes: OpcaoTriagem[];
 };
 
 export type Plano = {
@@ -88,7 +105,7 @@ export const site = {
      * Enquanto for `null`, o botão flutuante não é renderizado e o formulário
      * não tem para onde enviar.
      */
-    whatsapp: '5511976487829' as string | null,
+    whatsapp: '5511962660439' as string | null,
     /** Mensagem que já vem escrita quando o visitante abre a conversa. */
     whatsappMensagem:
       'Olá! Vi o site da Praxis Digital e quero saber mais sobre os planos.',
@@ -277,5 +294,85 @@ export const site = {
      * na reunião, depois de terem ancorado nos R$ 897.
      */
     verbaMinima: 1500,
+  },
+
+  /**
+   * Perguntas do bot de triagem, a alternativa ao formulário da CTA para
+   * quem chega sem saber por onde começar. Escolha única, sem texto livre
+   * além do nome no passo final: a opção escolhida vira uma linha pronta da
+   * mensagem que abre no WhatsApp.
+   *
+   * As opções da segunda pergunta usam o mesmo vocabulário do <select> do
+   * formulário, inclusive `INTERESSE_TRAFEGO`, para os dois caminhos
+   * produzirem o mesmo texto no campo de interesse.
+   */
+  triagem: {
+    perguntas: [
+      {
+        pergunta: 'Qual é o seu segmento?',
+        rotuloMensagem: 'Segmento',
+        opcoes: [
+          { valor: 'Corretora de seguros', rotulo: 'Corretora de seguros' },
+          { valor: 'Imobiliária', rotulo: 'Imobiliária' },
+          { valor: 'Contabilidade', rotulo: 'Contabilidade' },
+          { valor: 'Advocacia', rotulo: 'Advocacia' },
+          {
+            valor: 'Serviços administrativos',
+            rotulo: 'Serviços administrativos',
+          },
+          { valor: 'Outro segmento', rotulo: 'Outro' },
+        ],
+      },
+      {
+        pergunta: 'O que você precisa agora?',
+        rotuloMensagem: 'Preciso de',
+        opcoes: [
+          {
+            valor: 'Conteúdo para redes sociais',
+            rotulo: 'Conteúdo para redes sociais',
+          },
+          { valor: 'Site ou landing page', rotulo: 'Site ou landing page' },
+          { valor: INTERESSE_TRAFEGO, rotulo: INTERESSE_TRAFEGO },
+          {
+            valor: 'Ainda não sei, quero orientação',
+            rotulo: 'Ainda não sei',
+          },
+        ],
+      },
+      {
+        pergunta: 'Como está sua presença digital hoje?',
+        rotuloMensagem: 'Hoje eu tenho',
+        opcoes: [
+          {
+            valor: 'Já tenho perfil ativo nas redes',
+            rotulo: 'Perfil ativo nas redes',
+          },
+          {
+            valor: 'Tenho site, mas preciso melhorar',
+            rotulo: 'Site que precisa melhorar',
+          },
+          {
+            valor: 'Já anuncio e quero mais resultado',
+            rotulo: 'Já anuncio',
+          },
+          {
+            valor: 'Ainda não tenho nada disso',
+            rotulo: 'Ainda não tenho nada disso',
+          },
+        ],
+      },
+      {
+        pergunta: 'Quando você quer começar?',
+        rotuloMensagem: 'Quero começar',
+        opcoes: [
+          { valor: 'Agora', rotulo: 'Agora' },
+          { valor: 'Nos próximos meses', rotulo: 'Nos próximos meses' },
+          {
+            valor: 'Só estou pesquisando por enquanto',
+            rotulo: 'Só pesquisando',
+          },
+        ],
+      },
+    ] as PerguntaTriagem[],
   },
 };

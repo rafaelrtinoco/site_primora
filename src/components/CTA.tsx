@@ -3,8 +3,11 @@ import { CheckCircle, Envelope } from '@phosphor-icons/react';
 import WhatsAppIcon from './ui/WhatsAppIcon';
 import Section from './ui/Section';
 import { RevealGroup, RevealItem } from './ui/Reveal';
+import { campoClasses, BOTAO_WHATSAPP } from './ui/estilosCompartilhados';
+import BotTriagem from './triagem/BotTriagem';
 import { site } from '../content/site';
 import { PLANO_EVENT, INTERESSE_TRAFEGO } from '../lib/planoSelecionado';
+import { montarLinkWhatsApp, abrirWhatsApp } from '../lib/whatsapp';
 
 /* Checklist que era a seção FreeAudit inteira: ela ficava imediatamente antes
    desta, com a mesma mensagem, e seu único CTA rolava 300px até aqui. */
@@ -17,19 +20,8 @@ const checklist = [
 ];
 
 type Status = 'idle' | 'sucesso';
-
-/* Sem focus:outline-none: o :focus-visible global do index.css é o indicador
-   de foco de todo o site, e anulá-lo aqui abriria uma exceção justamente nos
-   campos onde ele mais importa. */
-const campoClasses =
-  'w-full rounded-frame border border-line bg-surface px-4 py-3 text-ink-body ' +
-  'placeholder:text-ink-muted/70 transition-colors duration-200 focus:border-moss-700';
-
-/* Antes era o verde do WhatsApp, fora da paleta da marca. Trocado pelo limão
-   do tema para manter as cinco cores da Praxis em todo botão de ação:
-   carbon-950 sobre acid-400 é a mesma combinação usada no Button primary,
-   15.15:1 de contraste. */
-const BOTAO_WHATSAPP = 'bg-acid-400 text-carbon-950 hover:bg-acid-500';
+/** Formulário curto para quem já sabe o que quer; bot para quem não sabe. */
+type Modo = 'formulario' | 'bot';
 
 /**
  * Monta a mensagem em primeira pessoa: quem envia é o lead, do WhatsApp dele
@@ -52,6 +44,7 @@ function montarMensagem(dados: FormData): string {
 
 export default function CTA() {
   const [status, setStatus] = useState<Status>('idle');
+  const [modo, setModo] = useState<Modo>('formulario');
   const [plano, setPlano] = useState('');
   /* Guardado para o caso de o navegador bloquear a aba: aí o link vira um
      botão que a pessoa clica manualmente. */
@@ -81,18 +74,14 @@ export default function CTA() {
 
     /* Honeypot: bots preenchem, humanos não veem. */
     if (dados.get('_honey')) return;
-    if (!site.contato.whatsapp) return;
 
-    const href = `https://wa.me/${site.contato.whatsapp}?text=${encodeURIComponent(
-      montarMensagem(dados),
-    )}`;
+    const href = montarLinkWhatsApp(montarMensagem(dados));
+    if (!href) return;
 
-    /* window.open precisa acontecer dentro do gesto do clique — se viesse
-       depois de qualquer await, o navegador bloquearia a aba. */
-    const janela = window.open(href, '_blank', 'noopener');
+    const popupFoiBloqueado = abrirWhatsApp(href);
 
     setLinkWhatsApp(href);
-    setPopupBloqueado(janela === null);
+    setPopupBloqueado(popupFoiBloqueado);
     setStatus('sucesso');
     form.reset();
     setPlano('');
@@ -212,12 +201,22 @@ export default function CTA() {
                   setStatus('idle');
                   setLinkWhatsApp(null);
                   setPopupBloqueado(false);
+                  setModo('formulario');
                 }}
                 className="mt-5 block w-full text-sm font-semibold text-ink-accent underline underline-offset-4"
               >
                 Enviar outra solicitação
               </button>
             </div>
+          ) : modo === 'bot' ? (
+            <BotTriagem
+              onVoltarFormulario={() => setModo('formulario')}
+              onEnviar={(href, bloqueado) => {
+                setLinkWhatsApp(href);
+                setPopupBloqueado(bloqueado);
+                setStatus('sucesso');
+              }}
+            />
           ) : (
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               {/* Honeypot: fora da tela e fora da ordem de tabulação — não
@@ -352,6 +351,14 @@ export default function CTA() {
                 Sua mensagem abre já preenchida no WhatsApp. É só tocar em
                 enviar.
               </p>
+
+              <button
+                type="button"
+                onClick={() => setModo('bot')}
+                className="block w-full text-center text-sm font-semibold text-ink-accent underline underline-offset-4"
+              >
+                Não sei por onde começar
+              </button>
             </form>
           )}
         </RevealItem>

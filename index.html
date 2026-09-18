@@ -26,20 +26,23 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Google Fonts: Montserrat.
-         Só 400/600/800: o peso 300 vinha na URL e nenhuma classe do site usa,
-         então era um arquivo baixado à toa. O par preload + onload tira a
-         folha do caminho de renderização, e o <noscript> cobre quem está sem
-         JS. `display=swap` já garante texto visível enquanto a fonte carrega. -->
+         400/500/600/700/800: o site usa font-medium (500) e font-bold (700)
+         além dos pesos base, e sem eles o navegador caía no peso carregado
+         mais próximo em vez do peso pedido pela classe. O 300 fica de fora,
+         porque nenhuma classe do site usa e seria um arquivo baixado à toa.
+         O par preload + onload tira a folha do caminho de renderização, e o
+         noscript cobre quem está sem JS. display=swap já garante texto
+         visível enquanto a fonte carrega. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     >
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     </noscript>
   </head>
   <body>

@@ -46,9 +46,13 @@ export default function Footer() {
                   degradê do símbolo. */}
               <img src={Logo} alt="Praxis Digital" className="h-10 w-auto" />
             </a>
+            {/* A promessa de privacidade aqui não é slogan: ela tem que casar
+                com o que a public/privacidade.html afirma. Se algum dia a
+                calculadora passar a transmitir dado, esta frase cai junto. */}
             <p className="text-sm leading-relaxed text-on-dark-muted">
-              Conteúdo, site e tráfego pago para corretoras, imobiliárias,
-              contabilidade, advocacia e serviços administrativos.
+              Calculadora de custo e preço de venda para quem imprime em 3D.
+              Gratuita, roda no seu navegador e não guarda nada do que você
+              digita.
             </p>
           </div>
 
@@ -73,8 +77,10 @@ export default function Footer() {
           <div>
             <h2 className="mb-6 font-semibold text-on-dark">Contato</h2>
             <ul className="space-y-4 text-sm text-on-dark-muted">
-              {/* Cada linha só existe com dado real. O atendimento hoje é todo
-                  por WhatsApp — o botão flutuante é o canal principal. */}
+              {/* Cada linha só existe com dado real. Com o WhatsAppFab fora da
+                  composição, este link é o único canal de contato da página, e
+                  é o mesmo que a Política de Privacidade aponta como canal do
+                  titular dos dados. Não remova sem trocar a política junto. */}
               {site.contato.email && (
                 <li className="flex items-center gap-3">
                   <Envelope

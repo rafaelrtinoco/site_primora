@@ -106,9 +106,15 @@ export const site = {
      * não tem para onde enviar.
      */
     whatsapp: '5511962660439' as string | null,
-    /** Mensagem que já vem escrita quando o visitante abre a conversa. */
+    /**
+     * Mensagem que já vem escrita quando o visitante abre a conversa.
+     *
+     * Citava "os planos", que saíram da página junto com as seções de
+     * marketing. Mensagem pré-escrita falando de coisa inexistente faz o
+     * visitante abrir a conversa perguntando por algo que ninguém vende.
+     */
     whatsappMensagem:
-      'Olá! Vi o site da Praxis Digital e quero saber mais sobre os planos.',
+      'Olá! Vi a calculadora de impressão 3D da Praxis Digital e queria falar com vocês.',
     cidade: 'São Paulo, SP',
   },
 

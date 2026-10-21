@@ -33,3 +33,8 @@ dist-ssr
 .claude/.cache/
 
 aula-wsl-claude-code-starter.md
+
+# Capturas de referência usadas durante o desenvolvimento. Ficam fora do git
+# porque o repositório é público e esse tipo de print costuma trazer e-mail e
+# dado de sessão visíveis na interface capturada.
+calculadora.png

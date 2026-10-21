@@ -1,18 +1,19 @@
 import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import Solutions from '../components/Solutions';
-import Trafego from '../components/Trafego';
-import Ia from '../components/Ia';
-import Ferramentas from '../components/Ferramentas';
-import Process from '../components/Process';
-import Plans from '../components/Plans';
-import Testimonials from '../components/Testimonials';
-import Faq from '../components/Faq';
-import CTA from '../components/CTA';
+import HeroCalculadora from '../components/calculadora/HeroCalculadora';
+import Calculadora from '../components/calculadora/Calculadora';
 import Footer from '../components/Footer';
 import CookieConsent from '../components/CookieConsent';
-import WhatsAppFab from '../components/WhatsAppFab';
 
+/**
+ * A página é a calculadora.
+ *
+ * As seções de marketing da agência (Solutions, Trafego, Ia, Ferramentas,
+ * Process, Plans, Testimonials, Faq, CTA) saíram da composição quando o projeto
+ * mudou de rumo. Os arquivos continuam em `src/components/`, sem referência:
+ * nada foi apagado, então voltar qualquer uma é reinserir o import. O
+ * `WhatsAppFab` (com o chat da Ceci e o bot de triagem) também saiu, porque a
+ * mensagem pré-escrita dele falava de planos que a página não oferece mais.
+ */
 export default function Home() {
   return (
     <div className="min-h-screen bg-surface-dark">
@@ -26,27 +27,12 @@ export default function Home() {
 
       <Navbar />
 
-      {/* A ordem conta a história na sequência em que o cliente decide:
-          o que fazemos → o que traz gente hoje → como produzimos →
-          com quais ferramentas → em quantas etapas → quanto custa → o que
-          ainda ficou em dúvida. */}
       <main id="main" tabIndex={-1}>
-        <Hero />
-        <Solutions />
-        <Trafego />
-        <Ia />
-        <Ferramentas />
-        <Process />
-        <Plans />
-        <Testimonials />
-        <Faq />
-        {/* FreeAudit foi fundida aqui: era uma seção inteira com a mesma
-            mensagem, imediatamente antes, cujo único botão rolava até esta. */}
-        <CTA />
+        <HeroCalculadora />
+        <Calculadora />
       </main>
 
       <Footer />
-      <WhatsAppFab />
       <CookieConsent />
     </div>
   );

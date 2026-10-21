@@ -2,169 +2,181 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project
+Este arquivo é escrito em pt-BR, como o resto do projeto. Caminhos, comandos, identificadores de código e tokens de design ficam no original.
 
-Praxis Digital — a single-page marketing site (Portuguese, pt-BR) for a digital agency. React 19 + Vite + TypeScript + Tailwind CSS v4 + framer-motion. No backend, no router, no test runner.
+## Projeto
 
-The audience is five segments of consultative-sale businesses: insurance brokers, real-estate agencies, accounting firms, law firms and administrative-services companies. **Four of the five have their own advertising rules** — that is content, not trivia, and it lives in `site.setores`.
+Praxis Digital, site de uma página (pt-BR) para uma agência digital. React 19 + Vite + TypeScript + Tailwind CSS v4 + framer-motion. Sem backend, sem router, sem runner de teste.
 
-Services sold: content/social media, sites and landing pages, digital art, and **paid traffic management**. The agency previously sold insurance back-office support ("assessoria operacional"); that service was discontinued and its section replaced by `Trafego.tsx`. Do not reintroduce it.
+O público são cinco segmentos de venda consultiva: corretoras de seguros, imobiliárias, contabilidade, advocacia e serviços administrativos. **Quatro dos cinco têm regra própria de publicidade**, e isso é conteúdo, não curiosidade: vive em `site.setores`.
 
-## Commands
+Serviços vendidos: conteúdo e redes sociais, sites e landing pages, arte digital e **gestão de tráfego pago**. A agência vendia antes um apoio operacional para seguros ("assessoria operacional"); esse serviço foi descontinuado e a seção dele deu lugar a `Trafego.tsx`. Não reintroduza.
+
+## Comandos
 
 ```bash
 npm install
 npm run dev         # Vite dev server
-npm run build       # tsc -b && check:copy && vite build (type-checks first)
-npm run check:copy  # scripts/check-copy.mjs: no em dash / banned jargon / known placeholder in visible text
-npm run gen:glyphs  # regenerates src/lib/brandGlyphs.ts from simple-icons (see below)
+npm run build       # tsc -b && check:copy && vite build (checa tipos primeiro)
+npm run check:copy  # scripts/check-copy.mjs: sem travessão, jargão ou placeholder conhecido em texto visível
+npm run gen:glyphs  # regenera src/lib/brandGlyphs.ts a partir do simple-icons (ver abaixo)
 npm run lint        # eslint .
 npm run preview
 ```
 
-There are no tests. Verification is `build` + `lint` + manual checks (see below).
+Não há teste. A verificação é `build` + `lint` + conferência manual (ver abaixo).
 
-There is no standalone `npm run typecheck`: the type-check is the `tsc -b` step inside `build`, above. `.claude/settings.json` pre-authorizes `Bash(npm run typecheck:*)` anyway (it's shared boilerplate from the starter pack, see "Tooling that isn't the site's"); running it just fails with "missing script".
+Não existe um `npm run typecheck` isolado: a checagem de tipos é a etapa `tsc -b` de dentro do `build`, acima. O `.claude/settings.json` pré-autoriza `Bash(npm run typecheck:*)` de qualquer forma (é boilerplate compartilhado do starter pack, ver "Ferramental que não é do site"); rodar só devolve "missing script".
 
-## Architecture
+## Arquitetura
 
-`src/main.tsx` → `src/App.tsx` → `src/pages/Home.tsx`. `Home.tsx` composes every section in scroll order; navigation is same-page anchors only.
+`src/main.tsx` → `src/App.tsx` → `src/pages/Home.tsx`. O `Home.tsx` compõe todas as seções na ordem de rolagem; a navegação é só por âncora na mesma página.
 
-The order is Hero → Solutions → Trafego → Ia → Ferramentas → Process → Plans → Testimonials → Faq → CTA. **Filenames are English, the copy and some anchor ids are not**: `Solutions.tsx` is the "Serviços" section (`id="solutions"`), one of the two `tone="light"` exceptions. `Testimonials` and `Ferramentas` render nothing while their lists in `site.ts` are empty, so a section vanishing from the page is usually content, not a bug. The old FreeAudit section was merged into `CTA` (same message, and its only button scrolled to CTA anyway) and should not come back.
+A ordem é Hero → Solutions → Trafego → Ia → Ferramentas → Process → Plans → Testimonials → Faq → CTA. **Os nomes de arquivo estão em inglês, a copy e parte dos ids de âncora não**: `Solutions.tsx` é a seção "Serviços" (`id="solutions"`), uma das duas exceções em `tone="light"`. `Testimonials` e `Ferramentas` não renderizam nada enquanto as listas correspondentes de `site.ts` estiverem vazias, então uma seção que desapareceu da página normalmente é conteúdo, não bug. A antiga seção FreeAudit foi fundida no `CTA` (mesma mensagem, e o único botão dela rolava até o CTA de qualquer forma) e não deve voltar.
 
-Two layers under `src/components/`:
+Duas camadas em `src/components/`:
 
-- **`src/components/ui/`** — primitives with no copy in them. `Section`, `SectionHeader`, `Button`, `IconFrame`, `Reveal`/`RevealGroup`/`RevealItem`, `Counter`, `WhatsAppIcon`.
-- **`src/components/`** — one file per page section, each consuming those primitives.
+- **`src/components/ui/`**: primitivos, sem copy dentro. `Section`, `SectionHeader`, `Button`, `IconFrame`, `Reveal`/`RevealGroup`/`RevealItem`, `Counter`, `WhatsAppIcon`.
+- **`src/components/`**: um arquivo por seção da página, cada um consumindo esses primitivos.
 
-`src/lib/motion.ts` holds the animation variants, easing and viewport config. `src/content/site.ts` holds all disputed content (contact details, sectors, metrics, testimonials, plan and traffic prices).
+`src/lib/motion.ts` guarda as variantes de animação, o easing e a config de viewport. `src/content/site.ts` guarda todo o conteúdo disputável (contato, setores, métricas, depoimentos, preços de plano e de tráfego).
 
-### No backend, no router
+### Sem backend, sem router
 
-**The contact form is a `wa.me` deep link, not a submission.** `CTA.tsx`'s `handleSubmit` builds the message text with `montarMensagem` and calls `window.open` *synchronously inside the click handler* — no `await` may sit before that call, or the browser blocks the popup. The resulting URL is also kept in state, so a blocked popup degrades to a manual "open WhatsApp" button instead of a dead end. A honeypot field (`_honey`) sits off-screen via absolute positioning rather than `display:none`, since some bots special-case the latter. No data leaves the visitor's browser until they press send inside WhatsApp itself — the Política de Privacidade is written on that premise, so it isn't just a UX choice.
+**O formulário de contato é um deep link `wa.me`, não um envio.** O `handleSubmit` do `CTA.tsx` monta o texto da mensagem com `montarMensagem` e chama `window.open` *de forma síncrona, dentro do handler do clique*: nenhum `await` pode ficar antes dessa chamada, ou o navegador bloqueia o popup. A URL resultante também fica em estado, então um popup bloqueado degrada para um botão manual de "abrir WhatsApp" em vez de virar beco sem saída. Um campo honeypot (`_honey`) fica fora da tela por posicionamento absoluto, e não com `display:none`, porque alguns bots tratam o segundo caso de forma especial. Nenhum dado sai do navegador do visitante até ele apertar enviar dentro do próprio WhatsApp, e a Política de Privacidade está escrita sobre essa premissa: não é só escolha de UX.
 
-**Cross-section communication is namespaced window `CustomEvent`s**, because there's no router and no shared store. Two `src/lib/` modules exist purely as event contracts:
+**A comunicação entre seções usa `CustomEvent` de window com namespace**, porque não há router nem store compartilhada. Dois módulos de `src/lib/` existem só para servir de contrato de evento:
 
-- `planoSelecionado.ts` — `PLANO_EVENT` (`praxis:plano-selecionado`), dispatched from Plans and Trafego when a plan/traffic tier is clicked, consumed by CTA to pre-fill the form's plan `<select>`.
-- `consent.ts` — `ABRIR_PREFERENCIAS_EVENT`, dispatched from the footer's "cookie preferences" link, consumed by `CookieConsent` to reopen its panel.
+- `planoSelecionado.ts`: `PLANO_EVENT` (`praxis:plano-selecionado`), disparado por Plans e Trafego quando um plano ou faixa de tráfego é clicado, consumido pelo CTA para pré-selecionar o `<select>` de plano do formulário.
+- `consent.ts`: `ABRIR_PREFERENCIAS_EVENT`, disparado pelo link de "preferências de cookies" do rodapé, consumido pelo `CookieConsent` para reabrir o painel.
 
-The event is always an enhancement, never a dependency: the CTA `<select>` stays a fully usable manual control if the event never fires. Keep new cross-component signals on this pattern, with the same `praxis:` prefix.
+O evento é sempre melhoria, nunca dependência: o `<select>` do CTA continua um controle manual plenamente usável se o evento nunca chegar. Mantenha qualquer sinal novo entre componentes nesse padrão, com o mesmo prefixo `praxis:`.
 
-**Overlay z-index ladder** — collisions here are invisible until two overlays actually stack, so keep new fixed/sticky elements off these values: navbar (`z-50`) → WhatsApp FAB (`z-[85]`) → Ceci's chat panel (`z-[86]`, anchored above the FAB that opens it) → cookie banner (`z-[90]`) → cookie preferences dialog (`z-[95]`) → skip-to-content link (`z-[100]`).
+**Escada de z-index das camadas sobrepostas.** Colisão aqui é invisível até duas camadas realmente se empilharem, então mantenha qualquer novo elemento fixo ou sticky fora destes valores: navbar (`z-50`) → FAB do WhatsApp (`z-[85]`) → painel de chat da Ceci (`z-[86]`, ancorado logo acima do FAB que o abre) → banner de cookie (`z-[90]`) → diálogo de preferências de cookie (`z-[95]`) → link de pular para o conteúdo (`z-[100]`).
 
-### Rules that matter here
+### Regras que importam aqui
 
-**Styling is Tailwind v4, CSS-first.** All tokens live in the `@theme` block of `src/index.css`. There is no `tailwind.config.js` and none should be added — v4 with `@tailwindcss/postcss` does not auto-load one, so a config file would be silently dead and become a second source of truth.
+**O estilo é Tailwind v4, CSS-first.** Todos os tokens vivem no bloco `@theme` de `src/index.css`. Não existe `tailwind.config.js` e nenhum deve ser adicionado: o v4 com `@tailwindcss/postcss` não carrega esse arquivo sozinho, então um config seria código morto em silêncio e uma segunda fonte de verdade.
 
-**The palette is five brand colours plus four derived tones.** `#ffffff`, `#171915`, `#2e3823`, `#070905`, `#DBEB17`, exposed as `carbon-950/900/800`, `moss-700/600` and `acid-400/500/800`, with semantic tokens on top (`ink-strong/body/muted/accent`, `on-dark*`, `surface*`, `line*`). The namespaces deliberately avoid Tailwind's own `lime-*`/`stone-*`: overriding a native namespace would silently repaint legacy classes, whereas any surviving `brand-*`/`blue-*`/`gray-*` is legacy that greps cleanly. `--color-danger-*` is the only colour outside the palette, and it's functional (error states), never decorative.
+**A paleta é cinco cores de marca mais quatro tons derivados.** `#ffffff`, `#171915`, `#2e3823`, `#070905`, `#DBEB17`, expostos como `carbon-950/900/800`, `moss-700/600` e `acid-400/500/800`, com tokens semânticos em cima (`ink-strong/body/muted/accent`, `on-dark*`, `surface*`, `line*`). Os namespaces evitam de propósito os `lime-*`/`stone-*` do próprio Tailwind: sobrescrever um namespace nativo repintaria em silêncio qualquer classe legada, enquanto qualquer `brand-*`/`blue-*`/`gray-*` sobrevivente é legado que aparece limpo num grep. `--color-danger-*` é a única cor fora da paleta, e é funcional (estado de erro), nunca decorativa.
 
-**The single most important colour rule: `#DBEB17` is 1.32:1 on white.** On light sections it is never text, never a thin icon, never a border — it appears only as a *fill* with `carbon-950` on top (15.15:1). The textual accent on light is `ink-accent` (#5a6b00, 5.94:1) or `moss-700` (12.31:1). On the dark surfaces the lime is 15.15:1 / 13.86:1 / 9.33:1 and is the accent everywhere.
+**A regra de cor mais importante de todas: `#DBEB17` tem 1,32:1 sobre branco.** Nas seções claras ele nunca é texto, nunca é ícone fino, nunca é borda: aparece só como *preenchimento*, com `carbon-950` em cima (15,15:1). O acento textual no claro é `ink-accent` (#5a6b00, 5,94:1) ou `moss-700` (12,31:1). Nas superfícies escuras o limão dá 15,15:1 / 13,86:1 / 9,33:1 e é o acento em tudo.
 
-**WhatsApp action buttons use the theme's lime, not WhatsApp's brand green.** `CTA.tsx`'s `BOTAO_WHATSAPP` constant and the FAB in `WhatsAppFab.tsx` were originally hardcoded to `#25D366`/`#1DA851`, a sixth colour outside the palette; both now use `bg-acid-400 text-carbon-950 hover:bg-acid-500`, the same combination as the primary `Button` variant (15.15:1 contrast). This was a deliberate choice to keep every action button inside the five-colour palette, even though it drops the widely-recognized WhatsApp-green affordance — don't reintroduce `#25D366` to "restore brand accuracy" without checking with the project owner first.
+**Os botões de ação do WhatsApp usam o limão do tema, não o verde da marca WhatsApp.** A constante `BOTAO_WHATSAPP` do `CTA.tsx` e o FAB do `WhatsAppFab.tsx` eram originalmente `#25D366`/`#1DA851` fixos no código, uma sexta cor fora da paleta; hoje os dois usam `bg-acid-400 text-carbon-950 hover:bg-acid-500`, a mesma combinação da variante primária do `Button` (contraste 15,15:1). Foi escolha deliberada para manter todo botão de ação dentro das cinco cores, mesmo perdendo o reconhecimento imediato do verde do WhatsApp. Não reintroduza `#25D366` para "resgatar a fidelidade da marca" sem falar antes com o dono do projeto.
 
-**Brand logos are the one deliberate exception to the five-colour palette, and it's scoped to a single section.** `Ferramentas.tsx` extrudes the real logo of each day-to-day tool (Instagram, Facebook, Meta Ads, Google Ads, Canva, CapCut, WhatsApp) onto a 3D tile, in that brand's own official hex — including `#25D366` for the WhatsApp glyph there, which is fine precisely because it's identifying a tool, not a call-to-action button. This is treated like `--color-danger-*`: a colour outside the palette, admitted only because it's functional. The containment rule: brand colour shows up **only in the logo glyph itself** (`src/lib/brandGlyphs.ts`, generated, see below). Tile face, bevel, rim light, chip background, section background, every other pixel stays `carbon-*`/`moss-*`/`acid-*`. Don't extend this exception elsewhere without checking with the project owner.
+**Os logos de marca são a única exceção deliberada à paleta de cinco cores, e ela está contida numa seção só.** O `Ferramentas.tsx` extruda o logo real de cada ferramenta do dia a dia (Instagram, Facebook, Meta Ads, Google Ads, Canva, CapCut, WhatsApp) sobre um tile 3D, no hex oficial da marca, inclusive o `#25D366` do glifo do WhatsApp ali, que é aceitável justamente porque identifica uma ferramenta e não é botão de ação. Isso é tratado como o `--color-danger-*`: cor fora da paleta, admitida só por ser funcional. A regra de contenção: a cor de marca aparece **só no glifo do logo** (`src/lib/brandGlyphs.ts`, gerado, ver abaixo). Face do tile, chanfro, luz de borda, fundo do chip, fundo da seção e todo o resto seguem `carbon-*`/`moss-*`/`acid-*`. Não estenda essa exceção para outro lugar sem falar com o dono do projeto.
 
-**The page is dark-dominant.** `Section` defaults to `tone="dark"`; Serviços and FAQ are the declared light exceptions. `Section` has five tones total — `light`, `muted`, `dark`, `darkAlt`, `moss` — used for subtle variation between consecutive dark sections (Process, Testimonials and Trafego use `darkAlt`; Ia uses `moss`). `<html>` and `<body>` carry the dark background so iOS overscroll doesn't flash white.
+**A página é predominantemente escura.** O `Section` tem `tone="dark"` por padrão; Serviços e FAQ são as exceções claras declaradas. O `Section` tem cinco tons no total (`light`, `muted`, `dark`, `darkAlt`, `moss`), usados para variação discreta entre seções escuras consecutivas (Process, Testimonials e Trafego usam `darkAlt`; Ia usa `moss`). `<html>` e `<body>` carregam o fundo escuro para o overscroll do iOS não piscar branco.
 
-**Radius and elevation are also bespoke tokens**, for the same reason as the colour namespaces: redefining `--radius-lg` would silently repaint legacy `rounded-lg` without showing in a diff. `--radius-control` (pill, for buttons/badges), `--radius-frame` (14px, icon frames and inputs), `--radius-card` (18px) and `--radius-panel` (24px) are the only radii to use. Elevation is `--shadow-e1/e2/e3`, and **nothing goes above e3** — that ceiling is what makes `shadow-2xl` a rule violation rather than a taste call. `.card` (light) and `.card-dark` (dark) in `@layer components` are the standard card surfaces; on dark, separation comes from border + a slightly lighter background rather than shadow, because shadow doesn't read against `carbon-950`.
+**Raio e elevação também são tokens próprios**, pelo mesmo motivo dos namespaces de cor: redefinir `--radius-lg` repintaria em silêncio qualquer `rounded-lg` legado, sem aparecer no diff. `--radius-control` (pílula, para botão e badge), `--radius-frame` (14px, moldura de ícone e input), `--radius-card` (18px) e `--radius-panel` (24px) são os únicos raios a usar. A elevação é `--shadow-e1/e2/e3`, e **nada passa de e3**: esse teto é o que faz de `shadow-2xl` uma violação de regra, não uma questão de gosto. `.card` (claro) e `.card-dark` (escuro), em `@layer components`, são as superfícies de card padrão; no escuro a separação vem de borda mais um fundo um pouco mais claro, e não de sombra, porque sombra não se lê sobre `carbon-950`.
 
-**The logo files are full-colour** (lime wordmark + gradient "P"). The old Primora logo was flat navy and needed `brightness-0 invert` over dark surfaces; **applying that filter to these files flattens the gradient into a white blob.** Pick the file that suits the surface instead: `praxis-horizontal-lime.png` on dark, `praxis-horizontal-escuro.png` on light.
+**Os arquivos de logo são coloridos** (wordmark limão e "P" com gradiente). O logo antigo da Primora era azul-marinho chapado e precisava de `brightness-0 invert` sobre superfície escura; **aplicar esse filtro nos arquivos atuais achata o gradiente num borrão branco.** Escolha o arquivo adequado à superfície: `praxis-horizontal-lime.png` no escuro, `praxis-horizontal-escuro.png` no claro.
 
-**Two files in `public/` are derivatives, not brand masters.** `praxis-favicon.png` (96px) is the tab icon, and `praxis-simbolo-720.webp` is the decorative symbol behind the hero headline. Both come from `praxis-simbolo.png`, the 1080px master, which weighs 567 kB and was previously served raw for both jobs: it is the largest asset in the project and neither use needs a pixel of that resolution. Regenerate the derivatives from the master if the mark ever changes, and don't point markup back at the master.
+**Dois arquivos de `public/` são derivados, não masters da marca.** `praxis-favicon.png` (96px) é o ícone da aba, e `praxis-simbolo-720.webp` é o símbolo decorativo atrás do título do Hero. Os dois saem de `praxis-simbolo.png`, o master de 1080px, que pesa 567 kB e antes era servido cru para os dois usos: é o maior asset do projeto e nenhum dos dois usos precisa de um pixel dessa resolução. Se a marca mudar, regere os derivados a partir do master, e não aponte a marcação de volta para o master.
 
-**Six more files in `public/` (`praxis-simbolo-mono.png`, `praxis-vertical-lime.png`, `praxis-vertical-escuro.png`, `praxis-wordmark-lime.png`, `praxis-wordmark-escuro.png`, `praxis-wordmark-branco.png`, ~740 kB together) have zero references anywhere in `src/` or the two legal pages.** Vite copies everything under `public/` into `dist/` regardless, so they ship on every build without being linked. Treat them as a brand kit kept on purpose, not dead weight to delete on sight; if a task calls for removing unused assets, confirm with the project owner first.
+**Outros seis arquivos de `public/` (`praxis-simbolo-mono.png`, `praxis-vertical-lime.png`, `praxis-vertical-escuro.png`, `praxis-wordmark-lime.png`, `praxis-wordmark-escuro.png`, `praxis-wordmark-branco.png`, cerca de 740 kB no total) não têm referência nenhuma em `src/` nem nas duas páginas legais.** O Vite copia tudo que está em `public/` para `dist/` de qualquer forma, então eles vão para produção em todo build sem estar linkados. Trate como um kit de marca mantido de propósito, não como peso morto para apagar de primeira; se uma tarefa pedir remoção de asset não usado, confirme antes com o dono do projeto.
 
-Do not introduce: gradients on buttons or text, `filter: blur()` backdrops, `rounded-3xl`/`shadow-2xl`, `transition-all`, or decorative colour palettes per card. These were removed deliberately — they were what made the site read as AI-generated.
+Não introduza: gradiente em botão ou em texto, fundo com `filter: blur()`, `rounded-3xl`/`shadow-2xl`, `transition-all`, nem paleta decorativa por card. Tudo isso foi removido de propósito: era o que fazia o site parecer gerado por IA.
 
-**Icons.** Always go through `<IconFrame>`, which scales the Phosphor size with the frame. `@phosphor-icons/react` at `weight="duotone"`; the duotone layer is what gives the icon mass instead of a thin 1.5px stroke.
+**Ícones.** Sempre pelo `<IconFrame>`, que escala o tamanho do Phosphor junto com a moldura. `@phosphor-icons/react` com `weight="duotone"`; é a camada duotone que dá massa ao ícone, em vez do traço fino de 1,5px.
 
-### Animation
+### Animação
 
-`<MotionConfig reducedMotion="user">` in `App.tsx` handles `prefers-reduced-motion` globally **for framer-motion only**. Use `<Reveal>`/`<RevealGroup>` rather than hand-writing `initial`/`whileInView`.
+O `<MotionConfig reducedMotion="user">` do `App.tsx` resolve `prefers-reduced-motion` de forma global **só para o framer-motion**. Use `<Reveal>`/`<RevealGroup>` em vez de escrever `initial`/`whileInView` à mão.
 
-**Four animations are declared in CSS and are therefore outside MotionConfig's reach**: `.hero-mesh`, `.hero-symbol` (the brand mark rotating behind the headline), `.marquee-track` (the sector ticker) and `scroll-behavior`. Each carries its own `@media (prefers-reduced-motion: no-preference)` in `index.css`. Any new CSS animation must do the same — `grep -o "prefers-reduced-motion" dist/assets/*.css | wc -l` should match the number of CSS animations (4 today). Use `grep -o | wc -l`, not `grep -c`: the built CSS is minified onto a single line, so `grep -c` counts that one line and prints `1` no matter how many queries survived.
+Para escalonar a entrada de uma lista, use `staggerDelay` de `src/lib/motion.ts`, que já tem teto embutido (`Math.min(index, max)`, no máximo 0,30s). Era exatamente o `index * 0.1` sem teto que fazia o último card de uma grade de dez aparecer quase 1s depois dos outros.
 
-`Counter` is the other exception: it reads `useReducedMotion()` directly, because it must jump to the final value rather than animate slower.
+**Quatro animações são declaradas em CSS e por isso ficam fora do alcance do MotionConfig**: `.hero-mesh`, `.hero-symbol` (a marca girando atrás do título), `.marquee-track` (a faixa de setores) e `scroll-behavior`. Cada uma carrega seu próprio `@media (prefers-reduced-motion: no-preference)` no `index.css`. Toda animação nova em CSS precisa fazer o mesmo: `grep -o "prefers-reduced-motion" dist/assets/*.css | wc -l` tem que casar com o número de animações em CSS (hoje 4). Use `grep -o | wc -l`, e não `grep -c`: o CSS buildado é minificado numa linha só, então `grep -c` conta essa linha e imprime `1` independente de quantas consultas sobreviveram.
 
-The Ferramentas 3D scene is a further exception: its `requestAnimationFrame` loop is plain JS driven by Three.js, not framer-motion, so `MotionConfig` doesn't touch it either. See "The Ferramentas 3D scene" below for how it's paused instead.
+O `Counter` é a outra exceção: ele lê `useReducedMotion()` direto, porque precisa saltar para o valor final em vez de animar mais devagar.
 
-**Spacing and anchors** are owned by `<Section>`: it sets the vertical rhythm and the `scroll-mt` that compensates the fixed navbar. Don't set `py-*` on a section directly.
+A cena 3D de Ferramentas é mais uma exceção: o loop de `requestAnimationFrame` dela é JS puro guiado pelo Three.js, não framer-motion, então o `MotionConfig` também não a alcança. Ver "A cena 3D de Ferramentas", abaixo, para como ela é pausada.
 
-### The Ferramentas 3D scene
+**Espaçamento e âncora pertencem ao `<Section>`**: é ele que define o ritmo vertical e o `scroll-mt` que compensa a navbar fixa. Não coloque `py-*` direto numa seção.
 
-`Ferramentas.tsx` (between `Ia` and `Process`) is the one section with a WebGL canvas: the seven tools the agency operates day to day, as logos extruded onto tiles that orbit slowly, built with vanilla Three.js rather than react-three-fiber, one dependency instead of three, and direct control of the render loop, which is exactly what has to stop under reduced motion, offscreen, and with the tab hidden.
+### A cena 3D de Ferramentas
 
-**`three` must never land in the main bundle.** `src/components/ferramentas/CenaFerramentas.tsx` is the only file that imports `three`, and `Ferramentas.tsx` reaches it only through `React.lazy(() => import(...))`, gated on `useInView`, `!useReducedMotion()` and a WebGL feature check. After touching anything here, confirm with `npm run build && grep -c WebGLRenderer dist/assets/index-*.js`, which must print `0`. The symbol should only exist in the separate `CenaFerramentas-*.js` chunk.
+`Ferramentas.tsx` (entre `Ia` e `Process`) é a única seção com canvas WebGL: as sete ferramentas que a agência opera no dia a dia, como logos extrudados em tiles que orbitam devagar, feito com Three.js puro em vez de react-three-fiber. Uma dependência em vez de três, e controle direto do loop de render, que é exatamente o que tem que parar sob movimento reduzido, fora da tela e com a aba oculta.
 
-**`src/lib/brandGlyphs.ts` is generated, not hand-written.** `npm run gen:glyphs` (`scripts/gen-brand-glyphs.mjs`) pulls each brand's official SVG path and hex from the `simple-icons` devDependency (CC0-1.0 licensed), and falls back to a Phosphor `weight="fill"` glyph, coloured with the theme's `acid-400` instead of a brand hex, for tools absent from that package (Canva and CapCut today). Re-run the script after bumping either `simple-icons` or `@phosphor-icons/react`; it throws rather than silently emitting a blank tile if a slug it expects has disappeared. Never hand-edit the generated file.
+**O `three` não pode cair no bundle principal.** O único `import * as THREE from 'three'` do projeto está em `src/components/ferramentas/construirCena.ts`. O `src/components/ferramentas/CenaFerramentas.tsx` é a fronteira do chunk: ele importa `construirCena` e o `Ferramentas.tsx` só chega nele por `React.lazy(() => import(...))`, condicionado a `useInView`, `!useReducedMotion()` e uma checagem de suporte a WebGL. Depois de mexer em qualquer coisa aqui, confirme com `npm run build && grep -c WebGLRenderer dist/assets/index-*.js`, que tem que imprimir `0`. O símbolo só deve existir no chunk separado `CenaFerramentas-*.js`.
 
-**Dispose is not optional.** React 19's StrictMode double-mounts every component in dev. Without the explicit `renderer.dispose()` / `forceContextLoss()` / geometry-and-material disposal that `construirCena.ts` runs in the `dispose()` it returns, that mounts two WebGL contexts and leaks the first one.
+**Ferramenta sem glifo desaparece da cena, sem erro nenhum.** O `Ferramentas.tsx` monta a lista da cena com `site.ferramentas.filter((f) => f.slug in brandGlyphs)`. Se você adicionar uma ferramenta em `site.ts` sem rodar `npm run gen:glyphs`, ela ganha um chip na lista de baixo (sem glifo, porque o componente `Glifo` devolve `null` para slug desconhecido) e **nenhum tile na cena 3D**, em silêncio. Mexer na lista de `site.ferramentas` implica mexer em `MARCAS`/`FALLBACKS` de `scripts/gen-brand-glyphs.mjs` e rodar o gerador.
 
-### Content policy
+**A camada acessível dessa seção não é a cena.** O host da cena é `aria-hidden="true"`, e a `GradeEstatica` (fallback para quem não tem WebGL, para movimento reduzido e para o Suspense) também. Quem carrega a informação é a lista de chips com `aria-pressed` mais o parágrafo `role="status" aria-live="polite"` que descreve a ferramenta ativa, e esses dois existem nos três estados. A cena é decoração; o texto é o conteúdo. Não mova informação para dentro do canvas.
 
-`src/content/site.ts` is the single source for contact info, sectors, metrics, testimonials and prices. **A `null` field or empty array means the data is not confirmed, and the consuming block must not render.** Never substitute a plausible-looking placeholder — fabricated testimonials, a `(11) 99999-9999` phone and an invented "+24%" metric all shipped that way before. A rating claim additionally needs a `source` URL; without one it is misleading advertising, not just a design issue.
+**`src/lib/brandGlyphs.ts` é gerado, não escrito à mão.** O `npm run gen:glyphs` (`scripts/gen-brand-glyphs.mjs`) puxa o SVG oficial e o hex de cada marca da devDependency `simple-icons` (licença CC0-1.0), e cai num glifo Phosphor com `weight="fill"`, colorido com o `acid-400` do tema em vez de um hex de marca, para as ferramentas ausentes desse pacote (hoje Canva e CapCut). Rode o script de novo depois de subir a versão do `simple-icons` ou do `@phosphor-icons/react`; ele lança erro em vez de emitir um tile em branco em silêncio se um slug que ele espera tiver desaparecido. Nunca edite o arquivo gerado à mão.
 
-Currently `null`/empty on purpose: `contato.email` (the site is WhatsApp-only), `contato.telefone`, `redes.*`, `metricas`, `depoimentos`.
+**Descartar não é opcional.** O StrictMode do React 19 monta todo componente duas vezes em dev. Sem o `renderer.dispose()` / `forceContextLoss()` / descarte de geometria e material explícitos que o `construirCena.ts` roda no `dispose()` que ele devolve, isso cria dois contextos WebGL e vaza o primeiro.
 
-Two claims must stay precisely worded:
+### Política de conteúdo
 
-- **Paid traffic.** The management fee and the media budget are separate, and the site says so. The media budget is paid by the client directly to Google/Meta, on their own account. `trafego.verbaMinima` is stated as a recommendation, not a requirement.
-- **AI.** The agency uses AI *in its own process* — research, first drafts, reading numbers — with a person approving what ships. The WhatsApp chatbot bundled with the plans is a **fixed-response flow, not an AI agent**, and `Ia.tsx` says that explicitly. Copy must never blur the two.
+`src/content/site.ts` é a fonte única de contato, setores, métricas, depoimentos e preços. **Campo `null` ou lista vazia significa que o dado não está confirmado, e o bloco que o consome não deve renderizar.** Nunca coloque um placeholder de aparência plausível no lugar: depoimento inventado, um telefone `(11) 99999-9999` e uma métrica fictícia de "+24%" já foram publicados exatamente assim. Uma claim de nota ou avaliação precisa, além disso, de uma URL em `source`; sem ela é publicidade enganosa, não apenas um problema de design.
 
-Legal pages are static HTML in `public/` (`privacidade.html`, `termos.html`), since adding a router for two text pages is disproportionate. Both still contain `[A DEFINIR]` fields and need a lawyer's review. The same missing value blocks a second thing: `index.html`'s `og:image` and `og:url` are relative paths, and Facebook/LinkedIn/WhatsApp discard relative paths when unfurling a shared link, so the link currently shares without an image. One production domain resolves both the `[A DEFINIR]` fields and the Open Graph tags.
+Hoje estão `null` ou vazios de propósito: `contato.email` (o atendimento é só por WhatsApp), `contato.telefone`, `redes.*`, `metricas`, `depoimentos`.
 
-**Voice.** Copy is pt-BR, second person (`você`), short sentences, no em dash in anything a visitor reads (JSX text, `alt`, `aria-label`, `meta description`). Code comments are exempt — they aren't visible text, **except in `index.html`**: `check-copy.mjs`'s comment-stripping only understands JS comment syntax (`//`, `/* */`), not HTML's `<!-- -->`, so an em dash or banned word inside an HTML comment there still fails the check. `scripts/check-copy.mjs` (`npm run check:copy`, wired into `build`) enforces the em-dash rule plus a banned-jargon list ("solução completa", "excelência", "parceiro estratégico"...) plus two known-placeholder patterns (a `99999-9999` phone, "João Silva") across `src/**/*.{ts,tsx}` and `index.html`, skipping comment lines. Two subagents in `.claude/agents/` carry the fuller ruleset: `copywriter-conversao` for rewriting copy, `landing-page-cro` for section-level conversion structure (promessa → prova → oferta → objeção → ação). Both know the two non-negotiable claims below and the empty-proof-social rule, so invoking them doesn't require repeating this file.
+Duas claims precisam continuar redigidas com precisão:
 
-`README.md` documents nothing about this site: it is the README of the B2 Tech Claude Code Starter Pack, which rides along in this repository. See "Tooling that isn't the site's".
+- **Tráfego pago.** O fee de gestão e a verba de mídia são separados, e o site diz isso. A verba o cliente paga direto para Google ou Meta, na conta dele. `trafego.verbaMinima` é apresentada como recomendação, não como exigência.
+- **IA.** A agência usa IA *no processo próprio*: pesquisa, primeiro rascunho, leitura de números, com uma pessoa aprovando o que vai ao ar. O chatbot de WhatsApp incluído nos planos é um **fluxo de resposta fixa, não um agente de IA**, e o `Ia.tsx` diz isso explicitamente. A copy nunca pode misturar os dois.
 
-### Consent (LGPD)
+**O preço é um valor de partida por bloco, não preço por card.** `precoInicialPlanos` e `trafego.precoInicial` aparecem uma vez cada, no cabeçalho da respectiva seção. Os cards não mostram preço individual, por decisão registrada no próprio `site.ts`: o valor final sai do diagnóstico gratuito, e fixar um número por card obrigaria a agência a honrar um preço antes de conhecer o escopo real. A flag `sobMedida` (hoje só no plano PERSONALIZADO) esconde qualquer preço e troca o rótulo do CTA para "Montar meu plano". Não "devolva os preços aos cards" sem falar com o dono do projeto.
 
-`src/lib/consent.ts` is a gate built ahead of what it gates: the site currently loads **zero** analytics and zero pixels, and `CookieConsent.tsx` says so to the user. The rule from the module's own header still applies to any future addition: **no script in an optional category (`analise`, `marketing`) may load before `getConsent(categoria)` returns `true` for it.** Adding GA or the Meta Pixel is therefore never a `<script>` tag dropped into `index.html` — it's a consent-conditional load gated on `getConsent`.
+As páginas legais são HTML estático em `public/` (`privacidade.html`, `termos.html`), já que adicionar um router para duas páginas de texto é desproporcional. As duas ainda têm campos `[A DEFINIR]` e precisam de revisão de um advogado. O mesmo dado que falta bloqueia uma segunda coisa: o `og:image` e o `og:url` do `index.html` são caminhos relativos, e Facebook, LinkedIn e WhatsApp descartam caminho relativo ao desdobrar um link compartilhado, então hoje o link é compartilhado sem imagem. Um domínio de produção resolve ao mesmo tempo os campos `[A DEFINIR]` e as tags Open Graph.
 
-`VERSAO_CONSENTIMENTO` must be bumped whenever the tracked categories change; bumping it invalidates every stored choice, which is correct — a consent given under an old category set (or, as happened at the Primora→Praxis rebrand, under a different data controller) doesn't carry forward. `lerConsentimento` treats a blocked/unavailable `localStorage` as "hasn't decided yet" rather than throwing, so the banner simply reappears next visit instead of breaking the page. The preferences panel is a real modal — focus trap, `Esc` to close, focus restored to the opener on close.
+**Voz.** A copy é pt-BR, segunda pessoa (`você`), frases curtas, sem travessão em nada que o visitante leia (texto em JSX, `alt`, `aria-label`, `meta description`). Comentário de código está isento, porque não é texto visível, **exceto no `index.html`**: a remoção de comentário do `check-copy.mjs` só entende sintaxe de comentário de JS (`//`, `/* */`), não o `<!-- -->` do HTML, então um travessão ou palavra proibida dentro de comentário HTML ali continua reprovando o check. O `scripts/check-copy.mjs` (`npm run check:copy`, ligado no `build`) aplica a regra do travessão, uma lista de jargão proibido ("solução completa", "excelência", "parceiro estratégico"...) e duas regras de placeholder conhecido (um telefone `99999-9999` e "João Silva"), varrendo `src/**/*.{ts,tsx}` e `index.html`, e pulando linha de comentário. Dois subagentes em `.claude/agents/` carregam o conjunto completo de regras: `copywriter-conversao` para reescrever copy, `landing-page-cro` para estrutura de conversão por seção (promessa → prova → oferta → objeção → ação). Os dois já conhecem as duas claims não negociáveis acima e a regra da prova social vazia, então acioná-los não exige repetir este arquivo.
 
-## Tooling that isn't the site's
+O `README.md` não documenta nada sobre este site: ele é o README do B2 Tech Claude Code Starter Pack, que pega carona neste repositório. Ver "Ferramental que não é do site".
 
-The repository carries a second, unrelated artifact: the **B2 Tech Claude Code Starter Pack**, a generic agent setup for Python/Flask + Next.js/GCP projects. `README.md`, `claude-lendo.png`, `.claude-plugin/plugin.json` (`name: b2tech-starter`), `.claude/skills/` and `.claude/hooks/` all belong to it, not to this site. When mapping the site's architecture, those paths are noise.
+### Consentimento (LGPD)
 
-`.claude/agents/` is the exception: `copywriter-conversao`, `landing-page-cro` and `auditoria-tecnica` were written for this project. The first two are described under Voice, above; `auditoria-tecnica` runs the security, performance and accessibility sweep, and it knows which generic checklist items don't apply to a backend-less SPA.
+`src/lib/consent.ts` é um portão construído antes do que ele controla: o site hoje carrega **zero** analytics e zero pixel, e o `CookieConsent.tsx` diz isso ao usuário. A regra do cabeçalho do próprio módulo continua valendo para qualquer adição futura: **nenhum script de categoria opcional (`analise`, `marketing`) pode carregar antes de `getConsent(categoria)` devolver `true` para ela.** Adicionar GA ou o Meta Pixel, portanto, nunca é uma tag `<script>` jogada no `index.html`: é um carregamento condicional ao consentimento, atrás do `getConsent`.
 
-**Its skills assume another stack.** `code-review-b2` applies a Vertical Slice / DDD / Flask checklist, and `security-check` and `spec-driven-development` presume a backend that doesn't exist here. Invoking them on this codebase reviews it against the wrong criteria. The `threejs-*` skills are the ones with a plausible use, in Ferramentas.
+`VERSAO_CONSENTIMENTO` tem que subir sempre que as categorias rastreadas mudarem; subir invalida toda escolha armazenada, o que é correto: um consentimento dado sob outro conjunto de categorias (ou, como aconteceu no rebrand Primora → Praxis, sob outro controlador de dados) não se transfere. O `lerConsentimento` trata um `localStorage` bloqueado ou indisponível como "ainda não decidiu", em vez de lançar erro, então o banner simplesmente reaparece na próxima visita no lugar de quebrar a página. O painel de preferências é um modal de verdade: foco preso, `Esc` para fechar, e foco devolvido a quem o abriu ao fechar.
 
-**The hooks in `.claude/settings.json` do change the agent loop, so know what they do.** `post-edit-format.sh` runs on every `Write|Edit`: it calls `eslint --fix` on the edited file and **exits 2 when eslint fails**, which returns as an error to Claude. A hook error right after an edit is usually a lint rule, not a badly written file. It also calls `npx --no-install prettier`, but prettier is not a dependency here, so that branch silently no-ops: **there is no formatter in this repository** and style is held by convention. `pre-bash-guard.sh` blocks destructive Bash patterns (`rm -rf /`, `curl | sh`, `git push --force origin main`, `DROP TABLE`) before they run, and `pre-commit-secrets.sh` scans staged files on `git commit`/`git push`. A fourth file, `block-secrets.sh`, sits in `.claude/hooks/` but isn't wired into any hook in `settings.json`; it doesn't run.
+## Ferramental que não é do site
 
-`.claude/skills/commit/SKILL.md` is also starter-pack boilerplate, not site-specific: it's the generic `/commit` slash command (stage, generate a conventional-commit message, commit, never push).
+O repositório carrega um segundo artefato, sem relação com o site: o **B2 Tech Claude Code Starter Pack**, um setup genérico de agentes para projetos Python/Flask + Next.js/GCP. `README.md`, `claude-lendo.png`, `.claude-plugin/plugin.json` (`name: b2tech-starter`), `.claude/skills/` e `.claude/hooks/` pertencem a ele, não a este site. Quando o assunto é mapear a arquitetura do site, esses caminhos são ruído.
 
-## Manual verification
+`.claude/agents/` é a exceção: `copywriter-conversao`, `landing-page-cro` e `auditoria-tecnica` foram escritos para este projeto. Os dois primeiros estão descritos em "Voz", acima; `auditoria-tecnica` roda a varredura de segurança, desempenho e acessibilidade, e sabe quais itens do checklist genérico não se aplicam a uma SPA sem backend.
+
+**As skills dele pressupõem outra stack.** `code-review-b2` aplica um checklist de Vertical Slice / DDD / Flask, e `security-check` e `spec-driven-development` partem de um backend que não existe aqui. Acioná-las nesta base revisa o código contra o critério errado. As skills `threejs-*` são as que têm uso plausível, em Ferramentas.
+
+**Os hooks de `.claude/settings.json` mudam de fato o loop do agente, então vale saber o que eles fazem.** O `post-edit-format.sh` roda em todo `Write|Edit`: chama `eslint --fix` no arquivo editado e **sai com código 2 quando o eslint falha**, o que chega ao Claude como erro. Um erro de hook logo depois de uma edição normalmente é regra de lint, não arquivo malformado. Ele também chama `npx --no-install prettier`, mas o prettier não é dependência aqui, então esse caminho não faz nada em silêncio: **não há formatador neste repositório** e o estilo é sustentado por convenção. O `pre-bash-guard.sh` bloqueia padrões destrutivos de Bash (`rm -rf /`, `curl | sh`, `git push --force origin main`, `DROP TABLE`) antes de rodarem, e o `pre-commit-secrets.sh` varre os arquivos em stage no `git commit`/`git push`. Um quarto arquivo, `block-secrets.sh`, está em `.claude/hooks/` mas não está ligado a nenhum hook do `settings.json`; ele não roda.
+
+`.claude/skills/commit/SKILL.md` também é boilerplate do starter pack, não é específico do site: é o slash command `/commit` genérico (põe em stage, gera mensagem de conventional commit, commita, nunca faz push).
+
+## Verificação manual
 
 ```bash
-# these should return nothing but comments
+# estes não devem retornar nada além de comentários
 grep -rniE "primora" src/ index.html
 grep -rnE "(brand|blue|gray|slate|indigo|cyan|emerald)-[0-9]" src/
 grep -rn "brightness-0 invert" src/
 grep -rniE "assessor|apólice|sinistro|back-office" src/
 grep -rnE 'blur-\[|transition-all|rounded-3xl|href="#"' src/
 
-# every hit must sit on a dark surface — read them, don't just count
+# todo resultado tem que estar sobre superfície escura: leia, não apenas conte
 grep -rn "text-acid\|border-acid\|ring-acid" src/
 
-# WhatsApp numbers must come from site.contato.whatsapp, never inlined
+# número de WhatsApp tem que sair de site.contato.whatsapp, nunca escrito no código
 grep -rn "wa.me/[0-9]" src/
 
-# no analytics/pixel outside the consent gate in src/lib/consent.ts
-# (expect one legitimate hit: setPixelRatio in construirCena.ts, a Three.js API, not tracking)
+# nenhum analytics ou pixel fora do portão de consentimento em src/lib/consent.ts
+# (espere um resultado legítimo: setPixelRatio em construirCena.ts, API do Three.js, não rastreamento)
 grep -rniE "gtag|googletagmanager|fbq|analytics|pixel" src/ index.html
 ```
 
 ```bash
-npm run check:copy   # zero em dash / banned jargon in visible text
+npm run check:copy   # zero travessão, jargão ou placeholder conhecido em texto visível
 ```
 
-Both `scripts/*.mjs` resolve the project root with `fileURLToPath`, never with `new URL(...).pathname`. This checkout lives under a path containing a space, and `.pathname` hands back the URL's `%20` undecoded, which made `check:copy` die with `ENOENT` on `src/` and took `build` down with it.
+Os dois `scripts/*.mjs` resolvem a raiz do projeto com `fileURLToPath`, nunca com `new URL(...).pathname`. Este checkout fica num caminho que contém espaço, e o `.pathname` devolve o `%20` da URL sem decodificar, o que fazia o `check:copy` morrer com `ENOENT` em `src/` e levava o `build` junto.
 
 ```bash
-# three.js must stay out of the main chunk, only load when Ferramentas nears the viewport
-npm run build && grep -c WebGLRenderer dist/assets/index-*.js   # must print 0
+# o three.js tem que ficar fora do chunk principal, carregando só quando Ferramentas se aproxima da viewport
+npm run build && grep -c WebGLRenderer dist/assets/index-*.js   # tem que imprimir 0
 ```
 
-Then: logo legible in the navbar before *and* after scroll; Tab from top to bottom (the lime focus ring must be visible over dark *and* over white, FAQ opens, `Esc` closes the mobile menu, clicking a label focuses its input); widths 320/768/1024/1440 with no horizontal scroll (watch the marquee, which bleeds by design); DevTools → Rendering → emulate `prefers-reduced-motion: reduce` and confirm the hero mesh, the rotating symbol, the marquee **and the Ferramentas 3D scene** all stop (the scene should never even load its chunk under reduced motion, check Network), counters show final values, and the FAQ still opens.
+Com zero ocorrências, o `grep -c` imprime `0` e sai com código 1. O `0` impresso é o resultado desejado; o status de erro é esperado.
+
+Depois: logo legível na navbar antes *e* depois de rolar; Tab do topo até o fim (o anel de foco limão tem que ser visível sobre escuro *e* sobre branco, o FAQ abre, `Esc` fecha o menu mobile, clicar num label foca o input correspondente); larguras 320/768/1024/1440 sem rolagem horizontal (olho na marquee, que sangra de propósito); DevTools → Rendering → emular `prefers-reduced-motion: reduce` e confirmar que a mesh do hero, o símbolo girando, a marquee **e a cena 3D de Ferramentas** param todos (a cena não deve nem carregar o chunk sob movimento reduzido, confira na aba Network), que os contadores mostram o valor final e que o FAQ ainda abre.

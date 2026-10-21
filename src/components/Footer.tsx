@@ -9,13 +9,12 @@ import Logo from '/praxis-horizontal-lime.png';
 import { site } from '../content/site';
 import { abrirPreferencias } from '../lib/consent';
 
+/* Só as âncoras que existem na página. Os seis links das antigas seções de
+   marketing saíram junto com elas: link para id inexistente não dá erro, ele
+   apenas não rola, o que é pior que não existir. */
 const navegacao = [
-  { name: 'Serviços', href: '#solutions' },
-  { name: 'Tráfego pago', href: '#trafego' },
-  { name: 'IA no processo', href: '#ia' },
-  { name: 'Como Funciona', href: '#process' },
-  { name: 'Planos', href: '#plans' },
-  { name: 'FAQ', href: '#faq' },
+  { name: 'Custo da peça', href: '#calculadora' },
+  { name: 'Preço de venda', href: '#precificador' },
 ];
 
 type Rede = {

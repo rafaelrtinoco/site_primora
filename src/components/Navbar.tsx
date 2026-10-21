@@ -4,13 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
 import Logo from '/praxis-horizontal-lime.png';
 
+/* A página agora tem duas âncoras só. Os links das seções de marketing saíram
+   junto com as seções: link de menu apontando para id inexistente não dá erro,
+   ele simplesmente não rola, que é pior que não existir. */
 const navLinks = [
-  { name: 'Serviços', href: '#solutions' },
-  { name: 'Tráfego pago', href: '#trafego' },
-  { name: 'IA', href: '#ia' },
-  { name: 'Como Funciona', href: '#process' },
-  { name: 'Planos', href: '#plans' },
-  { name: 'FAQ', href: '#faq' },
+  { name: 'Custo da peça', href: '#calculadora' },
+  { name: 'Preço de venda', href: '#precificador' },
 ];
 
 export default function Navbar() {
@@ -71,8 +70,8 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
-            <Button href="#cta" size="md">
-              Diagnóstico gratuito
+            <Button href="#calculadora" size="md">
+              Calcular minha peça
             </Button>
           </nav>
 
@@ -118,13 +117,13 @@ export default function Navbar() {
                 </a>
               ))}
               <Button
-                href="#cta"
+                href="#calculadora"
                 size="md"
                 fullWidth
                 className="mt-3"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Diagnóstico gratuito
+                Calcular minha peça
               </Button>
             </nav>
           </motion.div>

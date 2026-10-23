@@ -228,9 +228,19 @@ export type ResultadoPreco = {
   faixaAplicada: FaixaTaxa | null;
   /**
    * O preço calculado cai numa faixa de taxa diferente da usada no cálculo, e
-   * as duas se alternam sem convergir. Acontece no degrau dos R$ 80 da Shopee,
-   * onde a comissão cai de 20% para 14% mas a taxa por item sobe de R$ 4 para
-   * R$ 16. A interface avisa em vez de esconder.
+   * as duas se alternam sem convergir.
+   *
+   * Na tabela de outubro de 2026 quem produz isso é o **Mercado Livre**, não a
+   * Shopee: a comissão é 14% dos dois lados e só a taxa por item muda, de
+   * R$ 6,50 para zero acima de R$ 79. Cobrir os R$ 6,50 empurra o preço acima
+   * de R$ 79, onde a taxa não existe, e sem ela o preço cai de volta para
+   * baixo de R$ 79. Varredura de custo, embalagem, margem e imposto encontra
+   * 3.042 casos no Mercado Livre e zero na Shopee e no TikTok Shop.
+   *
+   * Quando isso acontece, `precoVenda` sai calculado com a ÚLTIMA faixa
+   * testada, que pode não ser a faixa em que ele cai. No caso do Mercado Livre
+   * isso significa um preço R$ 6,50 abaixo do que cobriria a taxa real, e é
+   * por isso que a interface precisa avisar em vez de esconder.
    */
   faixaInstavel: boolean;
 };
@@ -257,8 +267,9 @@ function precoComTaxas(
  * preço, mas a faixa depende do preço, que é o que estamos calculando. A saída
  * é iterar: calcula com uma faixa, reavalia a faixa no preço obtido, repete
  * até estabilizar. Converge em duas ou três voltas no caso normal, e quando
- * não converge (degrau dos R$ 80) devolve o menor preço coerente e marca
- * `faixaInstavel`.
+ * não converge devolve o preço da última faixa testada e marca
+ * `faixaInstavel`. Ver a documentação desse campo em `ResultadoPreco`: na
+ * tabela de hoje quem não converge é o Mercado Livre, no degrau dos R$ 79.
  */
 export function calcularPrecoSugerido(entrada: EntradaPreco): ResultadoPreco {
   const manualCompleto = entrada.comissaoPct !== null && entrada.taxaFixa !== null;
@@ -381,6 +392,40 @@ export function lerNumero(texto: string): number {
   if (limpo === '') return 0;
   const valor = Number(limpo);
   return Number.isFinite(valor) && valor >= 0 ? valor : 0;
+}
+
+/**
+ * Tempo de impressão a partir de dois campos, horas e minutos.
+ *
+ * O slicer informa a duração como "5h 32min", e pedir que a pessoa converta
+ * 32 minutos em 0,533 h à mão é onde o erro entra: arredondar para 5,5 h já
+ * joga o custo de máquina 2% fora antes de qualquer taxa, e arredondar para
+ * 5 h perde meia hora de depreciação por peça.
+ *
+ * Minuto acima de 59 não é erro e não é truncado: quem digita 90 quis dizer
+ * 1,5 h, e é isso que a conta recebe.
+ */
+export function lerTempoHoras(horas: string, minutos: string): number {
+  return lerNumero(horas) + lerNumero(minutos) / 60;
+}
+
+/**
+ * Duração em texto, para a memória de cálculo.
+ *
+ * "5 h 30 min" lê melhor que "5,5 h" num painel cuja função é deixar a pessoa
+ * conferir o que digitou. Arredonda para o minuto, que é a menor unidade que
+ * o campo aceita.
+ */
+export function formatarDuracao(horasDecimais: number): string {
+  if (!Number.isFinite(horasDecimais) || horasDecimais <= 0) return '0 min';
+
+  const totalMinutos = Math.round(horasDecimais * 60);
+  const horas = Math.floor(totalMinutos / 60);
+  const minutos = totalMinutos % 60;
+
+  if (horas === 0) return `${minutos} min`;
+  if (minutos === 0) return `${horas.toLocaleString('pt-BR')} h`;
+  return `${horas.toLocaleString('pt-BR')} h ${minutos} min`;
 }
 
 const MOEDA = new Intl.NumberFormat('pt-BR', {

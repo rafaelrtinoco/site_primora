@@ -27,6 +27,7 @@ import {
   formatarBRL,
   formatarPct,
   lerNumero,
+  lerTempoHoras,
 } from '../../lib/calculadora';
 
 /** Valores que a referência traz como recomendados. */
@@ -41,6 +42,7 @@ const EXEMPLO = {
   pesoPeca: '120',
   precoRolo: '120',
   tempoHoras: '5',
+  tempoMinutos: '30',
 };
 
 /** Bloco de campos com título, para separar filamento, máquina e margens. */
@@ -75,7 +77,12 @@ function Grupo({
 export default function Calculadora() {
   const [pesoPeca, setPesoPeca] = useState('');
   const [precoRolo, setPrecoRolo] = useState('');
+  /* Horas e minutos em estados separados, como a pessoa digita. A conversão
+     para horas decimais acontece uma vez, em `lerTempoHoras`, logo antes de
+     entrar na conta: 32 minutos convertidos à mão viram 0,5 h e jogam o custo
+     de máquina fora. */
   const [tempoHoras, setTempoHoras] = useState('');
+  const [tempoMinutos, setTempoMinutos] = useState('');
   const [reservaFalhas, setReservaFalhas] = useState(PADRAO.reservaFalhas);
   const [lucroDesejado, setLucroDesejado] = useState(PADRAO.lucroDesejado);
 
@@ -118,17 +125,19 @@ export default function Calculadora() {
     if (nova) setPrecoMaquina(String(nova.precoBrl));
   }
 
+  const tempoDecimal = lerTempoHoras(tempoHoras, tempoMinutos);
+
   const custo = useMemo(
     () =>
       calcularCusto({
         pesoPecaG: lerNumero(pesoPeca),
         precoRoloKg: lerNumero(precoRolo),
-        tempoHoras: lerNumero(tempoHoras),
+        tempoHoras: tempoDecimal,
         custoHora: custoHoraEfetivo,
         reservaFalhasPct: lerNumero(reservaFalhas),
         lucroDesejadoPct: lerNumero(lucroDesejado),
       }),
-    [pesoPeca, precoRolo, tempoHoras, custoHoraEfetivo, reservaFalhas, lucroDesejado],
+    [pesoPeca, precoRolo, tempoDecimal, custoHoraEfetivo, reservaFalhas, lucroDesejado],
   );
 
   /* A peça só conta como informada quando tem custo de verdade. Sem isso, um
@@ -139,6 +148,7 @@ export default function Calculadora() {
     setPesoPeca('');
     setPrecoRolo('');
     setTempoHoras('');
+    setTempoMinutos('');
     setReservaFalhas(PADRAO.reservaFalhas);
     setLucroDesejado(PADRAO.lucroDesejado);
     trocarImpressora(IMPRESSORA_INICIAL.id);
@@ -152,6 +162,7 @@ export default function Calculadora() {
     setPesoPeca(EXEMPLO.pesoPeca);
     setPrecoRolo(EXEMPLO.precoRolo);
     setTempoHoras(EXEMPLO.tempoHoras);
+    setTempoMinutos(EXEMPLO.tempoMinutos);
   }
 
   return (
@@ -220,6 +231,9 @@ export default function Calculadora() {
               custoHora={custoHoraCalculado}
               tempoHoras={tempoHoras}
               onTempoHoras={setTempoHoras}
+              tempoMinutos={tempoMinutos}
+              onTempoMinutos={setTempoMinutos}
+              tempoDecimal={tempoDecimal}
             />
           </Grupo>
 

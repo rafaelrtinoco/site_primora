@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Lightning, SlidersHorizontal } from '@phosphor-icons/react';
 import CampoNumero from './CampoNumero';
 import CampoSelect from './CampoSelect';
+import CampoTempo from './CampoTempo';
 import {
   IMPRESSORA_MANUAL,
   MULTIPLICADOR_MATERIAL,
@@ -9,7 +10,11 @@ import {
   type Impressora,
   type Material,
 } from '../../content/impressoras';
-import { formatarBRL, lerNumero, type ResultadoCustoHora } from '../../lib/calculadora';
+import {
+  formatarBRL,
+  formatarDuracao,
+  type ResultadoCustoHora,
+} from '../../lib/calculadora';
 
 type Props = {
   impressoraId: string;
@@ -27,9 +32,14 @@ type Props = {
   /** `null` no modo manual, quando não há modelo escolhido. */
   impressora: Impressora | null;
   custoHora: ResultadoCustoHora | null;
-  /** Horas desta peça. Mora aqui porque é tempo de máquina. */
+  /* Tempo desta peça. Mora aqui porque é tempo de máquina. Horas e minutos
+     viajam separados, como a pessoa digita; o decimal já resolvido vem junto
+     para a memória de cálculo não refazer a conversão. */
   tempoHoras: string;
   onTempoHoras: (valor: string) => void;
+  tempoMinutos: string;
+  onTempoMinutos: (valor: string) => void;
+  tempoDecimal: number;
 };
 
 const OPCOES_IMPRESSORA = [
@@ -59,11 +69,13 @@ export default function SeletorImpressora({
   custoHora,
   tempoHoras,
   onTempoHoras,
+  tempoMinutos,
+  onTempoMinutos,
+  tempoDecimal,
 }: Props) {
   const [ajustando, setAjustando] = useState(false);
   const manual = impressoraId === IMPRESSORA_MANUAL;
   const fatorMaterial = MULTIPLICADOR_MATERIAL[material];
-  const horas = lerNumero(tempoHoras);
 
   return (
     <>
@@ -75,13 +87,12 @@ export default function SeletorImpressora({
         ajuda="Preenche sozinho o consumo de energia e a depreciação por hora."
       />
 
-      <CampoNumero
-        rotulo="Tempo de impressão"
-        valor={tempoHoras}
-        onChange={onTempoHoras}
-        sufixo="horas"
-        placeholder="5"
-        ajuda="Duração total informada pelo slicer."
+      <CampoTempo
+        horas={tempoHoras}
+        onHoras={onTempoHoras}
+        minutos={tempoMinutos}
+        onMinutos={onTempoMinutos}
+        ajuda="Duração total informada pelo slicer. Dá para colar 5:30 no campo de horas."
       />
 
       {manual ? (
@@ -118,11 +129,11 @@ export default function SeletorImpressora({
               {Math.round(custoHora.consumoW)} W médios, mais{' '}
               {formatarBRL(custoHora.custoDepreciacaoHora)} de depreciação.
             </p>
-            {horas > 0 && (
+            {tempoDecimal > 0 && (
               <p className="mt-2 border-t border-white/10 pt-2 text-xs text-on-dark-body">
-                Nesta peça, {horas.toLocaleString('pt-BR')} h de máquina custam{' '}
+                Nesta peça, {formatarDuracao(tempoDecimal)} de máquina custam{' '}
                 <strong className="font-semibold text-on-dark">
-                  {formatarBRL(custoHora.custoHora * horas)}
+                  {formatarBRL(custoHora.custoHora * tempoDecimal)}
                 </strong>
                 .
               </p>

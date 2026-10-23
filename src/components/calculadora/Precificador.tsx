@@ -267,10 +267,25 @@ export default function Precificador({ custoProducao }: Props) {
                     aria-hidden="true"
                     className="mt-0.5 shrink-0 text-acid-400"
                   />
+                  {/* Três referências a não reintroduzir aqui:
+                      1. "o cartão da plataforma" era o CartaoPlataforma, que
+                         saiu da composição.
+                      2. "o campo ao lado": o formulário só fica ao lado a
+                         partir de lg, e abaixo disso está acima, empilhado.
+                         "O preço acima" vale em qualquer largura.
+                      3. "a comissão cai e a taxa sobe" descreve o degrau dos
+                         R$ 80 da Shopee, que na prática nunca dispara este
+                         aviso. Quem dispara é o Mercado Livre, onde a comissão
+                         é a mesma 14% dos dois lados e só a taxa por item muda.
+                      O texto fica genérico porque a tabela das plataformas
+                      muda, e o aviso serve as três. */}
                   <span>
-                    Esse preço cai bem no degrau de faixa da plataforma, onde a comissão
-                    muda junto com a taxa por item. Confira a faixa no cartão da
-                    plataforma e, se precisar, fixe a comissão no campo ao lado.
+                    Esse preço cai bem num degrau de faixa da plataforma. Cobrir a taxa
+                    da faixa de baixo empurra o preço para a faixa de cima, onde a taxa é
+                    menor, e aí ele volta a cair: não existe preço estável nessa região.
+                    O preço acima usa a última faixa testada e pode ficar abaixo do que a
+                    plataforma vai cobrar. Para fechar um valor, preencha a comissão e a
+                    taxa por item na mão, no formulário.
                   </span>
                 </p>
               )}

@@ -11,10 +11,14 @@ import { abrirPreferencias } from '../lib/consent';
 
 /* Só as âncoras que existem na página. Os seis links das antigas seções de
    marketing saíram junto com elas: link para id inexistente não dá erro, ele
-   apenas não rola, o que é pior que não existir. */
+   apenas não rola, o que é pior que não existir.
+
+   Os rótulos repetem os eyebrows das seções ("Passo 1", "Passo 2") de
+   propósito: o rodapé é onde alguém cai depois de rolar a página inteira, e
+   numerar lembra que são duas contas em sequência, não dois atalhos soltos. */
 const navegacao = [
-  { name: 'Custo da peça', href: '#calculadora' },
-  { name: 'Preço de venda', href: '#precificador' },
+  { name: 'Passo 1, custo da peça', href: '#calculadora' },
+  { name: 'Passo 2, preço no marketplace', href: '#precificador' },
 ];
 
 type Rede = {
@@ -51,14 +55,15 @@ export default function Footer() {
                 calculadora passar a transmitir dado, esta frase cai junto. */}
             <p className="text-sm leading-relaxed text-on-dark-muted">
               Calculadora de custo e preço de venda para quem imprime em 3D.
-              Gratuita, roda no seu navegador e não guarda nada do que você
-              digita.
+              Filamento, energia, desgaste da impressora e taxa de marketplace
+              entram na mesma conta. Gratuita, roda no seu navegador e não
+              guarda nada do que você digita.
             </p>
           </div>
 
           <nav aria-labelledby="footer-nav">
             <h2 id="footer-nav" className="mb-6 font-semibold text-on-dark">
-              Navegação
+              A calculadora
             </h2>
             <ul className="space-y-4">
               {navegacao.map((link) => (
@@ -114,7 +119,7 @@ export default function Footer() {
                 </li>
               )}
               {site.contato.whatsapp && (
-                <li className="flex items-center gap-3">
+                <li className="flex flex-col gap-1.5">
                   <a
                     href={`https://wa.me/${site.contato.whatsapp}?text=${encodeURIComponent(
                       site.contato.whatsappMensagem,
@@ -125,6 +130,14 @@ export default function Footer() {
                   >
                     Falar no WhatsApp
                   </a>
+                  {/* O motivo mais útil de alguém escrever é taxa que mudou.
+                      Dizer isso em voz alta é o que mantém `vigenteDesde` dos
+                      marketplaces perto da realidade: a correção chega de quem
+                      vende todo dia, não de quem mantém a tabela. */}
+                  <span className="text-xs leading-relaxed">
+                    Achou uma taxa diferente da que a calculadora mostra? Avise,
+                    que a gente corrige.
+                  </span>
                 </li>
               )}
               <li className="flex items-start gap-3">
@@ -163,7 +176,19 @@ export default function Footer() {
           )}
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
+        {/* A mesma ressalva da cláusula 3 do termos.html, dita onde todo mundo
+            passa. Precificação é decisão de negócio: a conta devolve estimativa
+            a partir do que foi digitado, e as taxas das três plataformas já
+            mudaram uma vez em 2026. Se uma premissa do cálculo mudar, esta
+            frase e a cláusula mudam juntas. */}
+        <p className="border-t border-white/10 pt-8 text-xs leading-relaxed text-on-dark-muted">
+          Os valores são estimativa, calculada a partir do que você informa, e
+          não substituem orientação contábil. Consumo de energia é média medida
+          imprimindo, não potência de placa. Taxa de marketplace muda sem aviso:
+          confirme na central do vendedor antes de anunciar.
+        </p>
+
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-on-dark-muted">
             © {new Date().getFullYear()} {site.nome}. Todos os direitos
             reservados.
